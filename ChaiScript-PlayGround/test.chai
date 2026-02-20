@@ -1,4 +1,0 @@
-cup name = "Zishan";
-cup age = 20
-
-serveChai("Your Name is: " + name + "\nYour age isL " + age );

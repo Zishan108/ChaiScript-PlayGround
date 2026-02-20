@@ -210,8 +210,13 @@ class Lexer:
     while self.current_char != None:
       if self.current_char in ' \t':
         self.advance()
-      elif self.current_char == '\n':
-        if self.brace_level == 0:  # Only add NEWLINE outside braces
+      elif self.current_char in '\r\n':
+        # Handle Windows \r\n properly
+        if self.current_char == '\r':
+            self.advance()
+            continue
+
+        if self.brace_level == 0:
             tokens.append(Token(TT_NEWLINE, pos_start=self.pos))
         self.advance()
       elif self.current_char == '#':

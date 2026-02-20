@@ -9,3 +9,6 @@ def run_chai(request):
         code = request.POST.get("code", "")
         output = run_web(code)
         return JsonResponse({"output": output})
+    
+
+

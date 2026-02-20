@@ -1,0 +1,218 @@
+program
+    : NEWLINE* statements NEWLINE*
+    ;
+
+statements
+    : statement (NEWLINE+ statement)*
+    ;
+
+
+# -----------------------------
+# Statements
+# -----------------------------
+
+statement
+    : return-stmt
+    | continue-stmt
+    | break-stmt
+    | try-expr
+    | expr
+    ;
+
+return-stmt
+    : KEYWORD:return_chai expr?
+    ;
+
+continue-stmt
+    : KEYWORD:continue_chai
+    ;
+
+break-stmt
+    : KEYWORD:break_chai
+    ;
+
+
+# -----------------------------
+# Expressions
+# -----------------------------
+
+expr
+    : var-assign
+    | logic-expr
+    ;
+
+var-assign
+    : KEYWORD:cup IDENTIFIER EQ expr
+    ;
+
+logic-expr
+    : comp-expr ((KEYWORD:and | KEYWORD:or) comp-expr)*
+    ;
+
+
+# -----------------------------
+# Comparisons
+# -----------------------------
+
+comp-expr
+    : KEYWORD:not comp-expr
+    | arith-expr ((EE | LT | GT | LTE | GTE) arith-expr)*
+    ;
+
+
+# -----------------------------
+# Arithmetic
+# -----------------------------
+
+arith-expr
+    : term ((PLUS | MINUS) term)*
+    ;
+
+term
+    : factor ((MUL | DIV) factor)*
+    ;
+
+factor
+    : (PLUS | MINUS) factor
+    | power
+    ;
+
+power
+    : call (POW factor)*
+    ;
+
+
+# -----------------------------
+# Function Calls
+# -----------------------------
+
+call
+    : atom (LPAREN (expr (COMMA expr)*)? RPAREN)?
+    ;
+
+
+# -----------------------------
+# Core Values (Atoms)
+# -----------------------------
+
+atom
+    : INT
+    | FLOAT
+    | STRING
+    | IDENTIFIER
+    | LPAREN expr RPAREN
+    | list-expr
+    | dict-expr
+    | if-expr
+    | for-expr
+    | while-expr
+    | func-def
+    ;
+
+
+# -----------------------------
+# Lists
+# -----------------------------
+
+list-expr
+    : LSQUARE (expr (COMMA expr)*)? RSQUARE
+    ;
+
+
+# -----------------------------
+# Dictionaries
+# -----------------------------
+
+dict-expr
+    : LBRACE (dict-pair (COMMA dict-pair)*)? RBRACE
+    ;
+
+dict-pair
+    : (STRING | IDENTIFIER) COLON expr
+    ;
+
+
+# -----------------------------
+# If / Else If / Else
+# -----------------------------
+
+if-expr
+    : KEYWORD:hot expr KEYWORD:then_chai if-body
+      (elif-expr)*
+      (else-expr)?
+    ;
+
+elif-expr
+    : KEYWORD:mild expr KEYWORD:then_chai if-body
+    ;
+
+else-expr
+    : KEYWORD:chilled if-body
+    ;
+
+if-body
+    : statement
+    | NEWLINE statements KEYWORD:sip
+    ;
+
+
+# -----------------------------
+# For Loop
+# -----------------------------
+
+for-expr
+    : KEYWORD:for_chai IDENTIFIER EQ expr
+      KEYWORD:to_chai expr
+      (KEYWORD:STEP expr)?
+      KEYWORD:then_chai loop-body
+    ;
+
+loop-body
+    : statement
+    | NEWLINE statements KEYWORD:sip
+    ;
+
+
+# -----------------------------
+# While Loop
+# -----------------------------
+
+while-expr
+    : KEYWORD:while_chai expr
+      KEYWORD:then_chai loop-body
+    ;
+
+
+# -----------------------------
+# Try / Catch
+# -----------------------------
+
+try-expr
+    : KEYWORD:try_chai KEYWORD:then_chai
+      try-body
+      KEYWORD:catch_chai KEYWORD:then_chai
+      catch-body
+      KEYWORD:sip
+    ;
+
+try-body
+    : statement
+    | NEWLINE statements
+    ;
+
+catch-body
+    : statement
+    | NEWLINE statements
+    ;
+
+
+# -----------------------------
+# Function Definition
+# -----------------------------
+
+func-def
+    : KEYWORD:brew IDENTIFIER?
+      LPAREN (IDENTIFIER (COMMA IDENTIFIER)*)? RPAREN
+      (ARROW expr
+       | NEWLINE statements KEYWORD:sip)
+    ;

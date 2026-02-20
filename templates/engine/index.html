@@ -339,6 +339,27 @@
             min-height: 0;        
         }
 
+                /* ===============================
+        FORCE MONACO TO MATCH OUTPUT
+        =============================== */
+
+        /* Editor background */
+        .monaco-editor,
+        .monaco-editor-background,
+        .monaco-editor .margin {
+            background-color: var(--bg-editor) !important;
+        }
+
+        /* Cursor line */
+        .monaco-editor .current-line {
+            background-color: rgba(255, 255, 255, 0.04) !important;
+        }
+
+        /* Line numbers */
+        .monaco-editor .line-numbers {
+            color: var(--text-muted) !important;
+        }
+
     </style>
 </head>
 
@@ -382,13 +403,14 @@
 <!-- APP (UNCHANGED CONTENT) -->
 <div id="app">
     <div class="panel">
-        <textarea id="code" placeholder="Write ChaiScript here..."></textarea>
+        <div id="editor" style="height:100%; width:100%;"></div>
     </div>
 
     <div class="panel">
         <pre id="output">ChaiScript v-1.1.0</pre>
     </div>
 </div>
+
 
 <script>
     // INTRO (UNCHANGED)
@@ -404,6 +426,9 @@
             "theme",
             document.body.classList.contains("dark") ? "dark" : "light"
         );
+        monaco.editor.setTheme(
+        document.body.classList.contains("dark") ? "vs-dark" : "vs"
+);
     }
 
     if (localStorage.getItem("theme") === "dark") {
@@ -412,7 +437,7 @@
 
     // RUN CODE (UNCHANGED)
     function runCode() {
-        const code = document.getElementById("code").value;
+        const code = window.editor.getValue();
         fetch("/engine/run/", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -433,6 +458,141 @@
     });
 
 
+</script>
+
+<script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
+
+<script>
+require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.45.0/min/vs' } });
+
+require(['vs/editor/editor.main'], function () {
+
+    /* ===============================
+       1️⃣ LANGUAGE REGISTRATION
+       =============================== */
+    monaco.languages.register({ id: 'chaiscript' });
+
+    /* ===============================
+       2️⃣ KEYWORDS & BUILT-INS
+       =============================== */
+
+    const CHAI_KEYWORDS = [
+        'cup','and','or','not',
+        'hot','mild','chilled',
+        'for_chai','to_chai','STEP',
+        'while_chai',
+        'brew','then_chai','sip',
+        'return_chai','continue_chai','break_chai', 'try_chai', 'catch_chai'
+    ];
+
+    const CHAI_FUNCTIONS = [
+        // Utility
+        'serveChai','serve_ret','orderChai','orderChai_int',
+        'clean','cls','type_chai','current_date_time',
+        'list_len','str_len','len','int','str','float','time_freeze',
+
+        // Boolean
+        'is_chai_num','is_chai_str','is_chai_list',
+        'is_brew','is_empty',
+
+        // String
+        'to_lower','to_upper','char_at','index_of','slice',
+        'starts_with','ends_with','trim','replace',
+        'split_to_list','capitalize','title','is_equals',
+
+        // List
+        'append','pop','extend','sort_list','reverse_list',
+        'range','element_at','join_to_str',
+
+        // Math constants
+        'Math_PI','Math_E',
+
+        // Math core
+        'Math_mod_div','Math_factorial','Math_sqrt',
+        'Math_floor','Math_ceil','Math_round','Math_absoluteval',
+        'Math_random_chai',
+
+        // Trigonometry
+        'Math_sin','Math_cos','Math_tan','Math_sec','Math_cosec','Math_cot',
+        'Math_arcsin','Math_arccos','Math_arctan',
+        'Math_arcsec','Math_arccosec','Math_arccot',
+
+        // Hyperbolic
+        'Math_sinh','Math_cosh','Math_tanh','Math_sech','Math_cosech','Math_coth',
+        'Math_arcsinh','Math_arccosh','Math_arctanh',
+        'Math_arcsech','Math_arccosech','Math_arccoth'
+    ];
+
+    /* ===============================
+       3️⃣ SYNTAX HIGHLIGHTING
+       =============================== */
+    monaco.languages.setMonarchTokensProvider('chaiscript', {
+        keywords: CHAI_KEYWORDS,
+        functions: CHAI_FUNCTIONS,
+
+        tokenizer: {
+            root: [
+                [/[a-zA-Z_][\w_]*/, {
+                    cases: {
+                        '@keywords': 'keyword',
+                        '@functions': 'type.identifier',
+                        '@default': 'identifier'
+                    }
+                }],
+                [/\d+(\.\d+)?/, 'number'],
+                [/".*?"/, 'string'],
+                [/[{}()\[\]]/, '@brackets'],
+                [/[+\-*\/^=<>!]+/, 'operator'],
+                [/#.*$/, 'comment']
+            ]
+        }
+    });
+
+    /* ===============================
+       4️⃣ AUTOCOMPLETE
+       =============================== */
+    monaco.languages.registerCompletionItemProvider('chaiscript', {
+        provideCompletionItems: () => ({
+            suggestions: [
+
+                ...CHAI_KEYWORDS.map(k => ({
+                    label: k,
+                    kind: monaco.languages.CompletionItemKind.Keyword,
+                    insertText: k
+                })),
+
+                ...CHAI_FUNCTIONS.map(fn => ({
+                    label: fn,
+                    kind: monaco.languages.CompletionItemKind.Function,
+                    insertText: fn + '('
+                }))
+            ]
+        })
+    });
+
+    /* ===============================
+       5️⃣ EDITOR CREATION (LAST)
+       =============================== */
+    window.editor = monaco.editor.create(
+        document.getElementById('editor'),
+        {
+            value: '',
+            language: 'chaiscript',
+            theme: document.body.classList.contains('dark') ? 'vs-dark' : 'vs',
+            fontSize: 16,
+            automaticLayout: true,
+            minimap: { enabled: false }
+        }
+    );
+
+    // Ctrl + Enter inside editor
+    window.editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+        function () {
+            runCode();
+        }
+    );
+});
 </script>
 
 </body>
