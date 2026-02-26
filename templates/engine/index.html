@@ -552,24 +552,98 @@ require(['vs/editor/editor.main'], function () {
        4️⃣ AUTOCOMPLETE
        =============================== */
     monaco.languages.registerCompletionItemProvider('chaiscript', {
-        provideCompletionItems: () => ({
-            suggestions: [
+    triggerCharacters: ['f', 'w', 'b', 'h', 'c', 'm'],
+    provideCompletionItems: () => ({
+        suggestions: [
 
-                ...CHAI_KEYWORDS.map(k => ({
-                    label: k,
-                    kind: monaco.languages.CompletionItemKind.Keyword,
-                    insertText: k
-                })),
+            // 🔁 FOR LOOP
+            {
+                label: 'for',
+                kind: monaco.languages.CompletionItemKind.Snippet,
+                insertTextRules:
+                    monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                insertText:
+`for_chai \${1:i} = \${2:start} to_chai \${3:end} then_chai
+    \${4:# code block}
+sip`,
+                documentation: 'ChaiScript for loop'
+            },
 
-                ...CHAI_FUNCTIONS.map(fn => ({
-                    label: fn,
-                    kind: monaco.languages.CompletionItemKind.Function,
-                    insertText: fn + '('
-                }))
-            ]
-        })
-    });
+            // 🔄 WHILE LOOP
+            {
+                label: 'while',
+                kind: monaco.languages.CompletionItemKind.Snippet,
+                insertTextRules:
+                    monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                insertText:
+`while_chai \${1:condition} then_chai
+    \${2:# code block}
+sip`,
+                documentation: 'ChaiScript while loop'
+            },
 
+            // 🍵 FUNCTION
+            {
+                label: 'brew',
+                kind: monaco.languages.CompletionItemKind.Snippet,
+                insertTextRules:
+                    monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                insertText:
+`brew \${1:functionName}(\${2:params})
+    \${3: #code block}
+sip`,
+                documentation: 'ChaiScript function'
+            },
+
+            {
+    label: 'hot-mild-chilled',
+    kind: monaco.languages.CompletionItemKind.Snippet,
+    insertTextRules:
+        monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+    insertText:
+`hot \${1: statement 1} > \${2: statement 2} then_chai
+    #code block ;
+
+mild \${3: statement 1} < \${4: statement 2} then_chai
+    #code block ;
+
+chilled
+    #code block ;
+sip;`,
+    documentation: 'ChaiScript hot–mild–chilled conditional'
+},
+
+    {
+    label: 'hot-chilled',
+    kind: monaco.languages.CompletionItemKind.Snippet,
+    insertTextRules:
+        monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+    insertText:
+`hot \${1: statement 1} > \${2:statement 2} then_chai
+    #code block ;
+
+chilled
+    #code block ;
+sip;`,
+    documentation: 'ChaiScript hot–chilled conditional'
+},
+
+            // ✨ keep normal keywords
+            ...CHAI_KEYWORDS.map(k => ({
+                label: k,
+                kind: monaco.languages.CompletionItemKind.Keyword,
+                insertText: k
+            })),
+
+            // 🧠 functions
+            ...CHAI_FUNCTIONS.map(fn => ({
+                label: fn,
+                kind: monaco.languages.CompletionItemKind.Function,
+                insertText: fn + '('
+            }))
+        ]
+    })
+});
     /* ===============================
        5️⃣ EDITOR CREATION (LAST)
        =============================== */
