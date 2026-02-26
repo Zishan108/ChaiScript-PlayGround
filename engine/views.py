@@ -7,8 +7,9 @@ from Interpreter.ChaiScript import run_web
 def run_chai(request):
     if request.method == "POST":
         code = request.POST.get("code", "")
-        output = run_web(code)
-        return JsonResponse({"output": output})
+        output, trace = run_web(code)
+        return JsonResponse({
+            "output": output,
+            "trace": trace
+        })
     
-
-

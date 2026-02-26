@@ -9,6 +9,42 @@ import random
 import time
 import datetime
 
+# ===============================
+# EXECUTION TRACE (FOR VISUALIZER)
+# ===============================
+
+EXECUTION_TRACE = []
+
+# ===============================
+# EXECUTION SNAPSHOT
+# ===============================
+
+# ===============================
+# EXECUTION SNAPSHOT
+# ===============================
+
+def snapshot(node, context):
+    user_symbols = {}
+
+    if context and context.symbol_table:
+        for k, v in context.symbol_table.symbols.items():
+            # hide built-ins and constants
+            if k in ("null", "true", "false"):
+                continue
+            if k.startswith("Math_"):
+                continue
+            if str(v).startswith("<built-in function"):
+                continue
+
+            user_symbols[k] = str(v)
+
+    EXECUTION_TRACE.append({
+        "node": type(node).__name__,
+        "line": node.pos_start.ln + 1 if node and node.pos_start else None,
+        "scope": context.display_name if context else None,
+        "symbols": user_symbols
+    })
+
 #######################################
 # CONSTANTS
 #######################################
@@ -3726,7 +3762,25 @@ class Interpreter:
   def visit(self, node, context):
     method_name = f'visit_{type(node).__name__}'
     method = getattr(self, method_name, self.no_visit_method)
-    return method(node, context)
+
+    node_name = type(node).__name__
+
+    # 🔹 Snapshot control-flow nodes BEFORE execution
+    if node_name in ("IfNode", "ForNode", "WhileNode"):
+        snapshot(node, context)
+
+    result = method(node, context)
+
+    # 🔹 Snapshot other meaningful nodes AFTER execution
+    if node_name in (
+        "VarAssignNode",
+        "FuncDefNode",
+        "CallNode",
+        "ReturnNode"
+    ):
+        snapshot(node, context)
+
+    return result
 
   def no_visit_method(self, node, context):
     raise Exception(f'No visit_{type(node).__name__} method defined')
@@ -4307,34 +4361,41 @@ def run(fn, text):
 import sys
 import io
 
-def run_web(text: str) -> str:
+def run_web(text: str):
     """
     Web-safe execution wrapper around run()
-    Captures printed output and returns string
+    Captures printed output AND execution trace
     """
+    import sys
+    import io
+
+    # 🔁 reset execution trace for this run
+    EXECUTION_TRACE.clear()
+
     old_stdout = sys.stdout
     sys.stdout = buffer = io.StringIO()
 
     try:
         value, error = run("<web>", text)
 
+        # ❌ error case
         if error:
-            return error.as_string()
+            return error.as_string(), EXECUTION_TRACE
 
         printed_output = buffer.getvalue()
 
-        # If something was printed, return that
+        # 🖨️ printed output has priority
         if printed_output.strip():
-            return printed_output
+            return printed_output, EXECUTION_TRACE
 
-        # Otherwise return evaluated value
+        # 📦 return evaluated value if present
         if value is not None:
-            return str(value)
+            return str(value), EXECUTION_TRACE
 
-        return "null"
+        return "null", EXECUTION_TRACE
 
     except Exception as e:
-        return f"[Internal Error] {e}"
+        return f"[Internal Error] {e}", EXECUTION_TRACE
 
     finally:
         sys.stdout = old_stdout

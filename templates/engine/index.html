@@ -408,11 +408,34 @@
 
     <div class="panel">
         <pre id="output">ChaiScript v-1.1.0</pre>
+
+        <div id="viz"
+     style="margin-top:12px;
+            padding:12px;
+            border:1px solid var(--border-soft);
+            border-radius:8px;
+            background:var(--bg-output);
+            font-size:14px;">
+    <strong>Execution Step</strong>
+
+    <div id="viz-content" style="margin-top:8px; color:var(--text-muted);">
+        Run code to see execution
+    </div>
+
+    <div style="margin-top:10px; display:flex; gap:8px;">
+    <button onclick="prevStep()">⏮ Prev</button>
+    <button onclick="nextStep()">⏭ Next</button>
+</div>
+</div>
     </div>
 </div>
 
 
 <script>
+
+    let executionTrace = [];
+    let currentStep = 0;
+
     // INTRO (UNCHANGED)
     setTimeout(() => {
         document.getElementById("intro").style.display = "none";
@@ -446,6 +469,13 @@
         .then(res => res.json())
         .then(data => {
             document.getElementById("output").textContent = data.output;
+
+            executionTrace = data.trace || [];
+            currentStep = 0;
+
+            console.log("Execution Trace:", executionTrace);
+
+            renderStep();
         });
     }
 
@@ -456,6 +486,49 @@
             runCode();
         }
     });
+
+
+    function renderStep() {
+    const box = document.getElementById("viz-content");
+
+    if (!executionTrace.length) {
+        box.textContent = "No execution steps";
+        return;
+    }
+
+    const step = executionTrace[currentStep];
+
+    let html = `
+        <div><b>Step:</b> ${currentStep + 1} / ${executionTrace.length}</div>
+        <div><b>Node:</b> ${step.node}</div>
+        <div><b>Line:</b> ${step.line}</div>
+        <div style="margin-top:6px;"><b>Variables:</b></div>
+    `;
+
+    if (Object.keys(step.symbols).length === 0) {
+        html += `<div style="margin-left:10px;">(none)</div>`;
+    } else {
+        for (const k in step.symbols) {
+            html += `<div style="margin-left:10px;">${k} = ${step.symbols[k]}</div>`;
+        }
+    }
+
+    box.innerHTML = html;
+}
+
+function nextStep() {
+    if (currentStep < executionTrace.length - 1) {
+        currentStep++;
+        renderStep();
+    }
+}
+
+function prevStep() {
+    if (currentStep > 0) {
+        currentStep--;
+        renderStep();
+    }
+}
 
 
 </script>
