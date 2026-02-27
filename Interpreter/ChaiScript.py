@@ -4358,37 +4358,182 @@ def run(fn, text):
 
 
 
-import sys
-import io
-
 def run_web(text: str):
     """
     Web-safe execution wrapper around run()
     Captures printed output AND execution trace
     """
+
     import sys
     import io
 
-    # 🔁 reset execution trace for this run
+    # reset execution trace
     EXECUTION_TRACE.clear()
 
+    # reset global symbol table
+    global global_symbol_table
+    global_symbol_table = SymbolTable()
+
+    # =========================
+    # CORE CONSTANTS
+    # =========================
+    global_symbol_table.set("null", Number.null)
+    global_symbol_table.set("false", Number.false)
+    global_symbol_table.set("true", Number.true)
+
+    # =========================
+    # BASIC I/O
+    # =========================
+    global_symbol_table.set("serveChai", BuiltInFunction.print)
+    global_symbol_table.set("serve_ret", BuiltInFunction.print_ret)
+    global_symbol_table.set("orderChai", BuiltInFunction.input)
+    global_symbol_table.set("orderChai_int", BuiltInFunction.input_int)
+
+    # =========================
+    # SYSTEM
+    # =========================
+    global_symbol_table.set("clean", BuiltInFunction.clear)
+    global_symbol_table.set("cls", BuiltInFunction.clear)
+    global_symbol_table.set("type_chai", BuiltInFunction("type"))
+    global_symbol_table.set("current_date_time", BuiltInFunction("current_date_time"))
+    global_symbol_table.set("time_freeze", BuiltInFunction("time_freeze"))
+
+    # =========================
+    # LENGTH / TYPE
+    # =========================
+    global_symbol_table.set("list_len", BuiltInFunction.list_len)
+    global_symbol_table.set("str_len", BuiltInFunction.str_len)
+    global_symbol_table.set("len", BuiltInFunction.len)
+
+    global_symbol_table.set("int", BuiltInFunction("int"))
+    global_symbol_table.set("str", BuiltInFunction("str"))
+    global_symbol_table.set("float", BuiltInFunction("float"))
+
+    # =========================
+    # TYPE CHECK
+    # =========================
+    global_symbol_table.set("is_chai_num", BuiltInFunction.is_number)
+    global_symbol_table.set("is_chai_str", BuiltInFunction.is_string)
+    global_symbol_table.set("is_chai_list", BuiltInFunction.is_list)
+    global_symbol_table.set("is_brew", BuiltInFunction.is_function)
+    global_symbol_table.set("is_empty", BuiltInFunction("is_empty"))
+
+    # =========================
+    # LIST FUNCTIONS
+    # =========================
+    global_symbol_table.set("append", BuiltInFunction.append)
+    global_symbol_table.set("pop", BuiltInFunction.pop)
+    global_symbol_table.set("extend", BuiltInFunction.extend)
+    global_symbol_table.set("sort_list", BuiltInFunction("sort"))
+    global_symbol_table.set("reverse_list", BuiltInFunction("reverse"))
+    global_symbol_table.set("range", BuiltInFunction("range"))
+    global_symbol_table.set("element_at", BuiltInFunction("element_at"))
+    global_symbol_table.set("join_to_str", BuiltInFunction("join"))
+
+    # =========================
+    # RUN FILE
+    # =========================
+    global_symbol_table.set("run", BuiltInFunction.run)
+
+    # =========================
+    # STRING FUNCTIONS
+    # =========================
+    global_symbol_table.set("to_lower", BuiltInFunction("to_lower"))
+    global_symbol_table.set("to_upper", BuiltInFunction("to_upper"))
+    global_symbol_table.set("char_at", BuiltInFunction("char_at"))
+    global_symbol_table.set("index_of", BuiltInFunction("index_of"))
+    global_symbol_table.set("slice", BuiltInFunction("slice"))
+    global_symbol_table.set("starts_with", BuiltInFunction("starts_with"))
+    global_symbol_table.set("ends_with", BuiltInFunction("ends_with"))
+    global_symbol_table.set("trim", BuiltInFunction("trim"))
+    global_symbol_table.set("replace", BuiltInFunction("replace"))
+    global_symbol_table.set("split_to_list", BuiltInFunction("split"))
+    global_symbol_table.set("capitalize", BuiltInFunction("capitalize"))
+    global_symbol_table.set("title", BuiltInFunction("title"))
+    global_symbol_table.set("is_equals", BuiltInFunction("is_equals"))
+
+    # =========================
+    # MATH CONSTANTS
+    # =========================
+    global_symbol_table.set("Math_PI", Number.math_PI)
+    global_symbol_table.set("Math_E", Number.math_E)
+
+    # =========================
+    # TRIGONOMETRY
+    # =========================
+    global_symbol_table.set("Math_sin", BuiltInFunction("sin"))
+    global_symbol_table.set("Math_cos", BuiltInFunction("cos"))
+    global_symbol_table.set("Math_tan", BuiltInFunction("tan"))
+    global_symbol_table.set("Math_cot", BuiltInFunction("cot"))
+    global_symbol_table.set("Math_sec", BuiltInFunction("sec"))
+    global_symbol_table.set("Math_cosec", BuiltInFunction("cosec"))
+
+    global_symbol_table.set("Math_arcsin", BuiltInFunction("arcsin"))
+    global_symbol_table.set("Math_arccos", BuiltInFunction("arccos"))
+    global_symbol_table.set("Math_arctan", BuiltInFunction("arctan"))
+    global_symbol_table.set("Math_arccot", BuiltInFunction("arccot"))
+    global_symbol_table.set("Math_arccosec", BuiltInFunction("arccosec"))
+    global_symbol_table.set("Math_arcsec", BuiltInFunction("arcsec"))
+
+    # =========================
+    # HYPERBOLIC
+    # =========================
+    global_symbol_table.set("Math_sinh", BuiltInFunction("sinh"))
+    global_symbol_table.set("Math_cosh", BuiltInFunction("cosh"))
+    global_symbol_table.set("Math_tanh", BuiltInFunction("tanh"))
+    global_symbol_table.set("Math_sech", BuiltInFunction("sech"))
+    global_symbol_table.set("Math_cosech", BuiltInFunction("cosech"))
+    global_symbol_table.set("Math_coth", BuiltInFunction("coth"))
+
+    global_symbol_table.set("Math_arcsinh", BuiltInFunction("arcsinh"))
+    global_symbol_table.set("Math_arccosh", BuiltInFunction("arccosh"))
+    global_symbol_table.set("Math_arctanh", BuiltInFunction("arctanh"))
+    global_symbol_table.set("Math_arcsech", BuiltInFunction("arcsech"))
+    global_symbol_table.set("Math_arccosech", BuiltInFunction("arccosech"))
+    global_symbol_table.set("Math_arccoth", BuiltInFunction("arccot"))
+
+    # =========================
+    # MATH UTILITIES
+    # =========================
+    global_symbol_table.set("Math_factorial", BuiltInFunction("factorial"))
+    global_symbol_table.set("Math_sqrt", BuiltInFunction("sqrt"))
+    global_symbol_table.set("Math_floor", BuiltInFunction("floor"))
+    global_symbol_table.set("Math_ceil", BuiltInFunction("ceil"))
+    global_symbol_table.set("Math_round", BuiltInFunction("round"))
+    global_symbol_table.set("Math_absoluteval", BuiltInFunction("abs"))
+    global_symbol_table.set("Math_random_chai", BuiltInFunction("randint"))
+    global_symbol_table.set("Math_mod_div", BuiltInFunction("mod_div"))
+
+    # =========================
+    # DICTIONARY
+    # =========================
+    global_symbol_table.set("dict_has", BuiltInFunction("has"))
+    global_symbol_table.set("dict_keys", BuiltInFunction("keys"))
+    global_symbol_table.set("dict_values", BuiltInFunction("values"))
+    global_symbol_table.set("dict_items", BuiltInFunction("items"))
+    global_symbol_table.set("dict_get", BuiltInFunction("get"))
+    global_symbol_table.set("dict_pop", BuiltInFunction("pop"))
+    global_symbol_table.set("dict_update", BuiltInFunction("update"))
+    global_symbol_table.set("dict_clear", BuiltInFunction("clear"))
+    global_symbol_table.set("dict_copy", BuiltInFunction("copy"))
+
+    # =========================
+    # CAPTURE OUTPUT
+    # =========================
     old_stdout = sys.stdout
     sys.stdout = buffer = io.StringIO()
 
     try:
         value, error = run("<web>", text)
 
-        # ❌ error case
         if error:
             return error.as_string(), EXECUTION_TRACE
 
         printed_output = buffer.getvalue()
 
-        # 🖨️ printed output has priority
         if printed_output.strip():
             return printed_output, EXECUTION_TRACE
 
-        # 📦 return evaluated value if present
         if value is not None:
             return str(value), EXECUTION_TRACE
 

@@ -360,6 +360,25 @@
             color: var(--text-muted) !important;
         }
 
+
+        .execution-line {
+        background: rgba(246, 196, 83, 0.25);
+        border-left: 3px solid var(--accent-yellow);
+        }
+
+        .var-changed {
+            background: rgba(79, 209, 165, 0.25);
+            border-left: 3px solid var(--accent-green);
+            padding-left: 6px;
+            border-radius: 3px;
+            animation: pulseVar 0.6s ease;
+        }
+
+        @keyframes pulseVar {
+            0% { background: rgba(79, 209, 165, 0.6); }
+            100% { background: rgba(79, 209, 165, 0.25); }
+        }
+
     </style>
 </head>
 
@@ -435,6 +454,7 @@
 
     let executionTrace = [];
     let currentStep = 0;
+    let highlightDecoration = [];
 
     // INTRO (UNCHANGED)
     setTimeout(() => {
@@ -489,32 +509,55 @@
 
 
     function renderStep() {
-    const box = document.getElementById("viz-content");
+        const box = document.getElementById("viz-content");
 
-    if (!executionTrace.length) {
-        box.textContent = "No execution steps";
-        return;
-    }
-
-    const step = executionTrace[currentStep];
-
-    let html = `
-        <div><b>Step:</b> ${currentStep + 1} / ${executionTrace.length}</div>
-        <div><b>Node:</b> ${step.node}</div>
-        <div><b>Line:</b> ${step.line}</div>
-        <div style="margin-top:6px;"><b>Variables:</b></div>
-    `;
-
-    if (Object.keys(step.symbols).length === 0) {
-        html += `<div style="margin-left:10px;">(none)</div>`;
-    } else {
-        for (const k in step.symbols) {
-            html += `<div style="margin-left:10px;">${k} = ${step.symbols[k]}</div>`;
+        if (!executionTrace.length) {
+            box.textContent = "No execution steps";
+            return;
         }
-    }
 
-    box.innerHTML = html;
-}
+        const step = executionTrace[currentStep];
+
+        // Highlight current executing line in Monaco
+        highlightLine(step.line);
+
+        let html = `
+            <div><b>Step:</b> ${currentStep + 1} / ${executionTrace.length}</div>
+            <div><b>Node:</b> ${step.node}</div>
+            <div><b>Line:</b> ${step.line}</div>
+            <div style="margin-top:6px;"><b>Variables:</b></div>
+        `;
+
+        if (Object.keys(step.symbols).length === 0) {
+            html += `<div style="margin-left:10px;">(none)</div>`;
+        } else {
+
+            let prevSymbols = {};
+
+            if (currentStep > 0) {
+                prevSymbols = executionTrace[currentStep - 1].symbols || {};
+            }
+
+            for (const k in step.symbols) {
+
+                let changed = false;
+
+                if (!(k in prevSymbols)) {
+                    changed = true;
+                } else if (prevSymbols[k] !== step.symbols[k]) {
+                    changed = true;
+                }
+
+                html += `
+                    <div class="${changed ? 'var-changed' : ''}" style="margin-left:10px;">
+                        ${k} = ${step.symbols[k]}
+                    </div>
+                `;
+            }
+        }
+
+        box.innerHTML = html;
+    }
 
 function nextStep() {
     if (currentStep < executionTrace.length - 1) {
@@ -530,6 +573,24 @@ function prevStep() {
     }
 }
 
+function highlightLine(lineNumber) {
+    if (!window.editor) return;
+
+    highlightDecoration = window.editor.deltaDecorations(
+        highlightDecoration,
+        [
+            {
+                range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+                options: {
+                    isWholeLine: true,
+                    className: "execution-line"
+                }
+            }
+        ]
+    );
+
+    window.editor.revealLineInCenter(lineNumber);
+}
 
 </script>
 
