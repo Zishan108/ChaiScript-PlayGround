@@ -4361,7 +4361,7 @@ def run(fn, text):
 def run_web(text: str):
     """
     Web-safe execution wrapper around run()
-    Captures printed output AND execution trace
+    Captures printed output, execution trace, and AST
     """
 
     import sys
@@ -4459,88 +4459,53 @@ def run_web(text: str):
     global_symbol_table.set("Math_E", Number.math_E)
 
     # =========================
-    # TRIGONOMETRY
-    # =========================
-    global_symbol_table.set("Math_sin", BuiltInFunction("sin"))
-    global_symbol_table.set("Math_cos", BuiltInFunction("cos"))
-    global_symbol_table.set("Math_tan", BuiltInFunction("tan"))
-    global_symbol_table.set("Math_cot", BuiltInFunction("cot"))
-    global_symbol_table.set("Math_sec", BuiltInFunction("sec"))
-    global_symbol_table.set("Math_cosec", BuiltInFunction("cosec"))
-
-    global_symbol_table.set("Math_arcsin", BuiltInFunction("arcsin"))
-    global_symbol_table.set("Math_arccos", BuiltInFunction("arccos"))
-    global_symbol_table.set("Math_arctan", BuiltInFunction("arctan"))
-    global_symbol_table.set("Math_arccot", BuiltInFunction("arccot"))
-    global_symbol_table.set("Math_arccosec", BuiltInFunction("arccosec"))
-    global_symbol_table.set("Math_arcsec", BuiltInFunction("arcsec"))
-
-    # =========================
-    # HYPERBOLIC
-    # =========================
-    global_symbol_table.set("Math_sinh", BuiltInFunction("sinh"))
-    global_symbol_table.set("Math_cosh", BuiltInFunction("cosh"))
-    global_symbol_table.set("Math_tanh", BuiltInFunction("tanh"))
-    global_symbol_table.set("Math_sech", BuiltInFunction("sech"))
-    global_symbol_table.set("Math_cosech", BuiltInFunction("cosech"))
-    global_symbol_table.set("Math_coth", BuiltInFunction("coth"))
-
-    global_symbol_table.set("Math_arcsinh", BuiltInFunction("arcsinh"))
-    global_symbol_table.set("Math_arccosh", BuiltInFunction("arccosh"))
-    global_symbol_table.set("Math_arctanh", BuiltInFunction("arctanh"))
-    global_symbol_table.set("Math_arcsech", BuiltInFunction("arcsech"))
-    global_symbol_table.set("Math_arccosech", BuiltInFunction("arccosech"))
-    global_symbol_table.set("Math_arccoth", BuiltInFunction("arccot"))
-
-    # =========================
-    # MATH UTILITIES
-    # =========================
-    global_symbol_table.set("Math_factorial", BuiltInFunction("factorial"))
-    global_symbol_table.set("Math_sqrt", BuiltInFunction("sqrt"))
-    global_symbol_table.set("Math_floor", BuiltInFunction("floor"))
-    global_symbol_table.set("Math_ceil", BuiltInFunction("ceil"))
-    global_symbol_table.set("Math_round", BuiltInFunction("round"))
-    global_symbol_table.set("Math_absoluteval", BuiltInFunction("abs"))
-    global_symbol_table.set("Math_random_chai", BuiltInFunction("randint"))
-    global_symbol_table.set("Math_mod_div", BuiltInFunction("mod_div"))
-
-    # =========================
-    # DICTIONARY
-    # =========================
-    global_symbol_table.set("dict_has", BuiltInFunction("has"))
-    global_symbol_table.set("dict_keys", BuiltInFunction("keys"))
-    global_symbol_table.set("dict_values", BuiltInFunction("values"))
-    global_symbol_table.set("dict_items", BuiltInFunction("items"))
-    global_symbol_table.set("dict_get", BuiltInFunction("get"))
-    global_symbol_table.set("dict_pop", BuiltInFunction("pop"))
-    global_symbol_table.set("dict_update", BuiltInFunction("update"))
-    global_symbol_table.set("dict_clear", BuiltInFunction("clear"))
-    global_symbol_table.set("dict_copy", BuiltInFunction("copy"))
-
-    # =========================
     # CAPTURE OUTPUT
     # =========================
     old_stdout = sys.stdout
     sys.stdout = buffer = io.StringIO()
 
     try:
+
+        # =========================
+        # LEXER
+        # =========================
+        lexer = Lexer("<web>", text)
+        tokens, error = lexer.make_tokens()
+
+        if error:
+            return error.as_string(), EXECUTION_TRACE, None
+
+        # =========================
+        # PARSER
+        # =========================
+        parser = Parser(tokens)
+        ast = parser.parse()
+
+        if ast.error:
+            return ast.error.as_string(), EXECUTION_TRACE, None
+
+        ast_node = ast.node
+
+        # =========================
+        # EXECUTION
+        # =========================
         value, error = run("<web>", text)
 
         if error:
-            return error.as_string(), EXECUTION_TRACE
+            return error.as_string(), EXECUTION_TRACE, ast_node
 
         printed_output = buffer.getvalue()
 
         if printed_output.strip():
-            return printed_output, EXECUTION_TRACE
+            return printed_output, EXECUTION_TRACE, ast_node
 
         if value is not None:
-            return str(value), EXECUTION_TRACE
+            return str(value), EXECUTION_TRACE, ast_node
 
-        return "null", EXECUTION_TRACE
+        return "null", EXECUTION_TRACE, ast_node
 
     except Exception as e:
-        return f"[Internal Error] {e}", EXECUTION_TRACE
+        return f"[Internal Error] {e}", EXECUTION_TRACE, None
 
     finally:
         sys.stdout = old_stdout
