@@ -818,6 +818,158 @@
             font-size: 0.85rem;
         }
 
+        /* ===============================
+           RIGHT PANEL TABS
+           =============================== */
+        #right-tab-bar {
+            display: flex;
+            gap: 4px;
+            padding: 8px 12px 0;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border-soft);
+            flex-shrink: 0;
+            overflow-x: auto;
+        }
+        .right-tab {
+            padding: 5px 14px;
+            border-radius: 6px 6px 0 0;
+            border: 1px solid var(--border-soft);
+            border-bottom: none;
+            background: var(--bg-editor);
+            color: var(--text-muted);
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .right-tab.active {
+            background: var(--bg-panel);
+            color: var(--accent-green);
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-green);
+        }
+        .right-tab-content {
+            display: none;
+            padding: 14px;
+            height: calc(100vh - 108px - 38px);
+            max-height: calc(100vh - 108px - 38px);
+            overflow-y: auto;
+            box-sizing: border-box;
+            flex: 1;
+        }
+        .right-tab-content.active { display: flex; flex-direction: column; }
+
+        /* every direct child of a tab fills remaining space */
+        .right-tab-content.active > * { flex-shrink: 0; }
+        .right-tab-content.active > pre,
+        .right-tab-content.active > div { flex: 1; }
+
+        /* output pre fills its tab fully */
+        #rtab-output pre {
+            height: 100%;
+            min-height: unset;
+            max-height: unset;
+            box-sizing: border-box;
+        }
+
+        /* ===============================
+           MOBILE BOTTOM NAV
+           =============================== */
+        #mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 54px;
+            background: var(--bg-navbar);
+            border-top: 1px solid var(--border-soft);
+            z-index: 50;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .mob-tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px 0;
+            gap: 2px;
+            border: none;
+            background: none;
+        }
+        .mob-tab .mob-icon { font-size: 18px; line-height: 1; }
+        .mob-tab.active { color: var(--accent-green); }
+        .mob-tab.active .mob-icon { transform: scale(1.15); }
+
+        /* ===============================
+           RESPONSIVE
+           =============================== */
+        @media (max-width: 768px) {
+
+            #navbar {
+                padding: 0 12px;
+            }
+            .brand { font-size: 1rem; }
+            .nav-right .nav-btn:not(:last-child) { display: none; }
+            #nav-img { height: 24px; }
+
+            #runbar {
+                grid-template-columns: auto 1fr auto;
+                padding: 0 8px;
+                height: 44px;
+            }
+            #font-slider-wrap { display: none; }
+            #exec-timer { display: none; }
+            #brew-counter { display: none; }
+            .shortcut { display: none; }
+
+            #app {
+                margin-top: 104px;
+                height: calc(100vh - 104px - 54px);
+                flex-direction: column;
+            }
+
+            .panel {
+                width: 100%;
+                flex: none;
+                height: 100%;
+            }
+
+            /* show only active mobile panel */
+            .panel { display: none; }
+            .panel.mob-active { display: flex; }
+
+            #right-tab-bar { display: none; }
+
+            #mobile-nav { display: flex; }
+
+            #perf-monitor { bottom: 64px; }
+        }
+
+        @media (min-width: 769px) {
+            #mobile-nav { display: none !important; }
+            .panel { display: flex !important; }
+        }
+
+        
+
+        /* FORCE FULL HEIGHT ON ALL TAB CONTENTS */
+        #rtab-output { padding: 14px; }
+        #rtab-output pre { height: calc(100vh - 108px - 38px - 28px); max-height: unset; }
+
+        #rtab-ast { padding: 14px; }
+        #rtab-ast #ast-tree { height: calc(100vh - 108px - 38px - 60px) !important; }
+
+        #rtab-graph { padding: 14px; }
+        #rtab-graph #var-graph-svg { height: calc(100vh - 108px - 38px - 160px) !important; }
+
+        #rtab-trace, #rtab-stack { padding: 14px; }
+
     </style>
 </head>
 
@@ -929,49 +1081,49 @@
         <div id="editor" style="flex:1; width:100%; min-height:0;"></div>
     </div>
 
-    <div class="panel">
-        <pre id="output">ChaiScript v-1.1.0</pre>
+    <div class="panel" style="padding:0; overflow:hidden;">
 
-        <div id="viz"
-            style="margin-top:12px;
-                    padding:12px;
-                    border:1px solid var(--border-soft);
-                    border-radius:8px;
-                    background:var(--bg-output);
-                    font-size:14px;">
-            <strong>Execution Step</strong>
-
-            <div id="viz-content" style="margin-top:8px; color:var(--text-muted);">
-                Run code to see execution
-            </div>
-
-            <div style="margin-top:10px; display:flex; gap:8px;">
-            <button onclick="prevStep()">⏮ Prev</button>
-            <button onclick="nextStep()">⏭ Next</button>
+        <!-- RIGHT PANEL TAB BAR -->
+        <div id="right-tab-bar">
+            <div class="right-tab active" onclick="switchRightTab('output')">📤 Output</div>
+            <div class="right-tab" onclick="switchRightTab('trace')">👣 Trace</div>
+            <div class="right-tab" onclick="switchRightTab('ast')">🌳 AST</div>
+            <div class="right-tab" onclick="switchRightTab('graph')">📈 Graph</div>
+            <div class="right-tab" onclick="switchRightTab('stack')">📚 Stack</div>
         </div>
 
-            <hr style="margin:12px 0; opacity:0.3">
+        <!-- OUTPUT TAB -->
+        <div id="rtab-output" class="right-tab-content active">
+            <pre id="output" style="margin:0; height:calc(100vh - 220px); min-height:200px;">ChaiScript v-1.1.0</pre>
+        </div>
 
-            <strong>AST</strong>
-
-            <div id="ast-tree"
-                style="
-                    height:400px;
-                    margin-top:8px;
-                    font-size:13px;
-                    color:var(--text-muted);
-                    line-height:1.5;
-                ">
-            Run code to see AST
+        <!-- TRACE TAB -->
+        <div id="rtab-trace" class="right-tab-content">
+            <div style="font-size:14px;">
+                <strong>Execution Step</strong>
+                <div id="viz-content" style="margin-top:8px; color:var(--text-muted);">
+                    Run code to see execution
+                </div>
+                <div style="margin-top:10px; display:flex; gap:8px;">
+                    <button onclick="prevStep()">⏮ Prev</button>
+                    <button onclick="nextStep()">⏭ Next</button>
+                </div>
             </div>
+        </div>
 
-            <hr style="margin:12px 0; opacity:0.3">
+        <!-- AST TAB -->
+        <div id="rtab-ast" class="right-tab-content">
+            <strong>AST</strong>
+            <div id="ast-tree" style="height:calc(100vh - 220px); min-height:300px; margin-top:8px; font-size:13px; color:var(--text-muted); line-height:1.5;">
+                Run code to see AST
+            </div>
+        </div>
 
-            <!-- VARIABLE GRAPH -->
-            <!-- VARIABLE GRAPH -->
-            <div id="var-graph-wrap">
+        <!-- GRAPH TAB -->
+        <div id="rtab-graph" class="right-tab-content">
+            <div id="var-graph-wrap" style="margin-top:0;">
                 <strong>📈 Variable Graph</strong>
-                <div id="var-graph-hint">Shows how numeric variables change at each execution step. Click a variable chip to toggle it on/off.</div>
+                <div id="var-graph-hint">Shows how numeric variables change at each execution step. Click a chip to toggle.</div>
                 <div id="var-graph-controls" style="color:var(--text-muted); font-size:12px; margin-top:8px;">
                     Run code to see variable graph
                 </div>
@@ -979,18 +1131,41 @@
                 <div id="var-graph-legend"></div>
                 <div id="var-graph-step-info" style="font-size:11px; color:var(--accent-green); margin-top:4px; min-height:16px;"></div>
             </div>
+        </div>
 
-            <hr style="margin:12px 0; opacity:0.3">
-
-            <!-- CALL STACK -->
-            <div id="callstack-wrap">
+        <!-- CALL STACK TAB -->
+        <div id="rtab-stack" class="right-tab-content">
+            <div id="callstack-wrap" style="margin-top:0;">
                 <strong>📚 Call Stack</strong>
                 <div id="callstack-content" style="margin-top:6px; color:var(--text-muted);">
                     Run code to see call stack
                 </div>
             </div>
         </div>
+
     </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<div id="mobile-nav">
+    <button class="mob-tab active" onclick="switchMobileTab('editor')">
+        <span class="mob-icon">✏️</span>Editor
+    </button>
+    <button class="mob-tab" onclick="switchMobileTab('output')">
+        <span class="mob-icon">📤</span>Output
+    </button>
+    <button class="mob-tab" onclick="switchMobileTab('trace')">
+        <span class="mob-icon">👣</span>Trace
+    </button>
+    <button class="mob-tab" onclick="switchMobileTab('ast')">
+        <span class="mob-icon">🌳</span>AST
+    </button>
+    <button class="mob-tab" onclick="switchMobileTab('graph')">
+        <span class="mob-icon">📈</span>Graph
+    </button>
+    <button class="mob-tab" onclick="switchMobileTab('stack')">
+        <span class="mob-icon">📚</span>Stack
+    </button>
 </div>
 
 <!-- SHARE MODAL -->
@@ -1394,6 +1569,56 @@ serveChai(fruits)`
         if (!newName.endsWith(".chai")) newName += ".chai";
         tab.name = newName;
         renderTabs();
+    }
+
+
+    // ── RIGHT PANEL TABS ──
+    function switchRightTab(name) {
+        document.querySelectorAll(".right-tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".right-tab-content").forEach(t => t.classList.remove("active"));
+        document.querySelector(`.right-tab[onclick*="'${name}'"]`).classList.add("active");
+        document.getElementById(`rtab-${name}`).classList.add("active");
+
+        // re-render AST now that tab is visible and has real width
+        if (name === "ast" && astTree) renderAST(astTree);
+
+        // re-draw graph now that SVG has real width
+        if (name === "graph" && allVarNames.length > 0) drawVarGraph();
+    }
+
+    // ── MOBILE TAB SWITCHING ──
+    const MOB_PANEL_MAP = {
+        editor: 0,   // first .panel
+        output: 1,   // second .panel — rtab-output
+        trace:  1,
+        ast:    1,
+        graph:  1,
+        stack:  1
+    };
+
+    function switchMobileTab(name) {
+        const panels = document.querySelectorAll("#app .panel");
+        const tabs   = document.querySelectorAll(".mob-tab");
+
+        // update bottom nav highlight
+        tabs.forEach((t, i) => {
+            const tabName = ["editor","output","trace","ast","graph","stack"][i];
+            t.classList.toggle("active", tabName === name);
+        });
+
+        if (name === "editor") {
+            panels[0].classList.add("mob-active");
+            panels[1].classList.remove("mob-active");
+        } else {
+            panels[0].classList.remove("mob-active");
+            panels[1].classList.add("mob-active");
+            switchRightTab(name);
+        }
+    }
+
+    // init mobile — show editor panel by default
+    if (window.innerWidth <= 768) {
+        document.querySelectorAll("#app .panel")[0].classList.add("mob-active");
     }
 
     let errorDecoration = [];
