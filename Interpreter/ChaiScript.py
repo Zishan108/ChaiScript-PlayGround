@@ -2245,7 +2245,7 @@ class BuiltInFunction(BaseFunction):
         elements = value.elements
 
         # Sort the elements (assuming they are all comparable)
-        sorted_elements = sorted(elements, key=lambda x: x.value if isinstance(x, Number) else x)
+        sorted_elements = sorted(elements, key=lambda x: x.value if hasattr(x, 'value') else str(x))
 
         # Return a new List instance with sorted elements
         return RTResult().success(List(sorted_elements))
