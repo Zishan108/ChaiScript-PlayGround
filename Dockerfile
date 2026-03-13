@@ -11,4 +11,4 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD gunicorn ChaiScript.wsgi --bind 0.0.0.0:$PORT
+CMD python manage.py migrate --noinput && gunicorn ChaiScript.wsgi --bind 0.0.0.0:$PORT
