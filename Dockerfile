@@ -11,4 +11,4 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD python manage.py migrate --noinput && gunicorn ChaiScript.wsgi --bind 0.0.0.0:$PORT
+CMD sh -c "until python manage.py migrate --noinput; do echo 'DB not ready, retrying in 5s...'; sleep 5; done && gunicorn ChaiScript.wsgi --bind 0.0.0.0:$PORT"
