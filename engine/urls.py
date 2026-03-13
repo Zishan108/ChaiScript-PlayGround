@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import run_chai, share_code, load_shared
+from .views import run_chai, share_code, load_shared, docs
 from django.shortcuts import render
 
 def index(request):

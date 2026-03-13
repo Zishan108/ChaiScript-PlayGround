@@ -16,10 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+
+def docs(request):
+    return render(request, "engine/docs.html")
 
 urlpatterns = [
     path("", lambda request: redirect("engine/")),
     path("admin/", admin.site.urls),
     path("engine/", include("engine.urls")),
+    path("docs/", docs, name="docs"),
 ]

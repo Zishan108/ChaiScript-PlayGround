@@ -48,3 +48,6 @@ def load_shared(request, share_id):
         return render(request, "engine/index.html")
     except SharedCode.DoesNotExist:
         return JsonResponse({"error": "Not found"}, status=404)
+
+def docs(request):
+    return render(request, "engine/docs.html")
