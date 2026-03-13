@@ -51,3 +51,6 @@ def load_shared(request, share_id):
 
 def docs(request):
     return render(request, "engine/docs.html")
+
+def custom_404(request, exception):
+    return render(request, "engine/404.html", status=404)

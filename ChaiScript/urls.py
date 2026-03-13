@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect, render
 
+handler404 = 'engine.views.custom_404'
+
 def docs(request):
     return render(request, "engine/docs.html")
 

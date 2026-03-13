@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — ChaiScript</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
+    <style>
+        :root {
+            --bg-page: #f6fff5; --bg-navbar: #ffffff;
+            --border-strong: #b7d7b0; --text-main: #1f2933;
+            --text-muted: #5f6f5f; --accent-green: #2f855a;
+            --button-bg: #2f855a; --button-hover: #276749;
+        }
+        body.dark {
+            --bg-page: #0f1412; --bg-navbar: #141a17;
+            --border-strong: #4fd1a5; --text-main: #e6f4ea;
+            --text-muted: #9bbfb0; --accent-green: #4fd1a5;
+            --button-bg: #2f855a; --button-hover: #38a169;
+        }
+        * { box-sizing: border-box; font-family: "JetBrains Mono", monospace; margin: 0; padding: 0; }
+        body {
+            background: var(--bg-page); color: var(--text-main);
+            min-height: 100vh; display: flex; flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        nav {
+            height: 60px; background: var(--bg-navbar);
+            border-bottom: 2px solid var(--border-strong);
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; position: fixed; top: 0; width: 100%; z-index: 10;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        nav img { height: 32px; }
+        nav span { font-size: 1.3rem; letter-spacing: 1.5px; color: var(--accent-green); }
+
+        .page {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 40px 20px; margin-top: 60px; text-align: center;
+            gap: 8px;
+        }
+
+        .msg  { font-size: 1.35rem; color: var(--text-muted); margin-top: 6px; }
+        .sub  { font-size: 1rem;    color: var(--text-muted); opacity: 0.65; margin-bottom: 28px; }
+
+        .btn {
+            background: var(--button-bg); color: #fff; border: none;
+            padding: 12px 30px; border-radius: 8px; font-size: 1rem;
+            cursor: pointer; text-decoration: none;
+            font-family: "JetBrains Mono", monospace;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: var(--button-hover); }
+
+        @keyframes steam1 {
+            0%   { transform: translateY(0)      scaleX(1);   opacity: 0; }
+            15%  { opacity: 0.75; }
+            80%  { transform: translateY(-90px)  scaleX(1.5); opacity: 0.3; }
+            100% { transform: translateY(-120px) scaleX(1.7); opacity: 0; }
+        }
+        @keyframes steam2 {
+            0%   { transform: translateY(0)      scaleX(1);   opacity: 0; }
+            15%  { opacity: 0.65; }
+            80%  { transform: translateY(-100px) scaleX(1.4); opacity: 0.25; }
+            100% { transform: translateY(-130px) scaleX(1.6); opacity: 0; }
+        }
+        @keyframes steam3 {
+            0%   { transform: translateY(0)      scaleX(1);   opacity: 0; }
+            20%  { opacity: 0.7; }
+            80%  { transform: translateY(-80px)  scaleX(1.6); opacity: 0.2; }
+            100% { transform: translateY(-110px) scaleX(1.8); opacity: 0; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-8px); }
+        }
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.18; }
+            50%       { opacity: 0.38; }
+        }
+        @keyframes fadein {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .cup-group   { animation: float 3.2s ease-in-out infinite; transform-origin: 340px 380px; }
+        .s1          { animation: steam1 2.4s ease-out infinite;      transform-origin: 50% 100%; }
+        .s2          { animation: steam2 2.4s ease-out infinite 0.8s; transform-origin: 50% 100%; }
+        .s3          { animation: steam3 2.4s ease-out infinite 1.6s; transform-origin: 50% 100%; }
+        .liq-shimmer { animation: shimmer 2s ease-in-out infinite; }
+        .fadein      { animation: fadein 0.9s ease both; }
+        .fadein-d    { animation: fadein 0.9s ease both 0.25s; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <img src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
+    <span>ChaiScript</span>
+</nav>
+
+<div class="page">
+
+    <svg width="420" height="340" viewBox="0 0 680 520" xmlns="http://www.w3.org/2000/svg">
+
+        <ellipse cx="340" cy="422" rx="170" ry="18" fill="#2f855a" opacity="0.07"/>
+
+        <g class="cup-group">
+
+            <!-- saucer -->
+            <ellipse cx="340" cy="418" rx="105" ry="13" fill="#c6a96b"/>
+            <ellipse cx="340" cy="414" rx="105" ry="13" fill="#e8c87a"/>
+            <ellipse cx="340" cy="412" rx="100" ry="10" fill="#f5d98b"/>
+
+            <!-- cup body -->
+            <path d="M258 320 Q255 415 280 415 L400 415 Q425 415 422 320 Z" fill="#e8c87a"/>
+            <path d="M258 320 Q255 415 280 415 L295 415 Q272 415 274 320 Z" fill="#c6a96b" opacity="0.45"/>
+            <path d="M400 415 Q425 415 422 320 L408 320 Q410 415 387 415 Z" fill="#c6a96b" opacity="0.35"/>
+
+            <!-- cup rim -->
+            <ellipse cx="340" cy="320" rx="82" ry="11" fill="#f5d98b"/>
+            <ellipse cx="340" cy="318" rx="82" ry="11" fill="#fdefc3"/>
+
+            <!-- chai liquid -->
+            <ellipse cx="340" cy="320" rx="76" ry="9" fill="#a0522d"/>
+            <ellipse cx="340" cy="320" rx="76" ry="9" fill="#8B4513" opacity="0.5"/>
+            <ellipse class="liq-shimmer" cx="322" cy="319" rx="28" ry="4" fill="#d2691e" opacity="0.25"/>
+
+            <!-- handle -->
+            <path d="M420 345 Q462 345 462 375 Q462 407 420 402" fill="none" stroke="#e8c87a" stroke-width="14" stroke-linecap="round"/>
+            <path d="M420 345 Q456 345 456 375 Q456 402 420 402" fill="none" stroke="#f5d98b" stroke-width="7"  stroke-linecap="round"/>
+
+            <!-- stripes -->
+            <path d="M264 358 Q340 362 416 358" fill="none" stroke="#c6a96b" stroke-width="2.5" opacity="0.45"/>
+            <path d="M261 376 Q340 381 419 376" fill="none" stroke="#c6a96b" stroke-width="2"   opacity="0.3"/>
+
+            <!-- steam 1 left -->
+            <g class="s1" style="transform-origin:305px 317px">
+                <path d="M305 317 Q294 290 306 267 Q318 244 305 222" fill="none" stroke="#9bbfb0" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+            </g>
+
+            <!-- steam 2 center -->
+            <g class="s2" style="transform-origin:340px 315px">
+                <path d="M340 315 Q327 284 340 258 Q353 232 340 208" fill="none" stroke="#9bbfb0" stroke-width="7" stroke-linecap="round" opacity="0.7"/>
+            </g>
+
+            <!-- steam 3 right -->
+            <g class="s3" style="transform-origin:376px 317px">
+                <path d="M376 317 Q387 290 375 267 Q363 244 376 222" fill="none" stroke="#9bbfb0" stroke-width="5" stroke-linecap="round" opacity="0.75"/>
+            </g>
+
+        </g>
+
+        <text x="340" y="486" text-anchor="middle"
+              font-family="JetBrains Mono, monospace"
+              font-size="64" font-weight="700"
+              fill="#2f855a" letter-spacing="10">404</text>
+
+    </svg>
+
+    <p class="msg fadein">☕ Looks like this cup is empty.</p>
+    <p class="sub fadein-d">The page you're looking for doesn't exist.</p>
+    <a href="/engine/" class="btn">▶ Back to Playground</a>
+
+</div>
+
+<script>
+    if (localStorage.getItem('chai_theme') === 'dark') document.body.classList.add('dark');
+</script>
+</body>
+</html>
