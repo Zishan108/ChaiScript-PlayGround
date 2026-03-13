@@ -28,9 +28,14 @@ def run_chai(request):
 @csrf_exempt
 def share_code(request):
     if request.method == "POST":
-        code = request.POST.get("code", "")
-        obj = SharedCode.objects.create(code=code)
-        return JsonResponse({"share_id": obj.share_id})
+        try:
+            code = request.POST.get("code", "")
+            obj = SharedCode.objects.create(code=code)
+            return JsonResponse({"share_id": obj.share_id})
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return JsonResponse({"error": str(e)}, status=500)
     return JsonResponse({"error": "POST required"}, status=400)
 
 def load_shared(request, share_id):
