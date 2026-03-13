@@ -1,1 +1,1 @@
-web: gunicorn ChaiScript.wsgi
+web: gunicorn ChaiScript.wsgi --bind 0.0.0.0:$PORT
