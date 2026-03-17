@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     SharedCode, UserProfile, Project,
-    VersionSnapshot, Challenge, ChallengeSubmission
+    VersionSnapshot, Challenge, ChallengeSubmission, HomeComment
 )
 
 
@@ -61,3 +61,9 @@ class ChallengeSubmissionAdmin(admin.ModelAdmin):
     list_filter   = ('passed', 'challenge')
     search_fields = ('user__username', 'challenge__title')
     readonly_fields = ('submitted_at',)
+
+@admin.register(HomeComment)
+class HomeCommentAdmin(admin.ModelAdmin):
+    list_display  = ('user', 'body', 'created_at')
+    search_fields = ('user__username', 'body')
+    readonly_fields = ('created_at',)
