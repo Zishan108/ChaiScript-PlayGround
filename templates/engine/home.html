@@ -1016,6 +1016,148 @@
         }
 
         /* ===============================
+           COMMENTS SECTION
+           =============================== */
+        #comments-section {
+            padding: 96px 24px;
+            background: var(--bg-page);
+            position: relative;
+            overflow: hidden;
+        }
+        #comments-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+            width: 1px; height: 60px;
+            background: linear-gradient(to bottom, transparent, var(--border-strong));
+        }
+        .comments-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+        .comments-header .section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase;
+            color: var(--accent-green);
+            background: var(--bg-editor);
+            border: 1px solid var(--border-strong);
+            border-radius: 999px;
+            padding: 5px 16px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .comments-header h2 {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+        .comments-header p { color: var(--text-muted); font-size: 1rem; }
+        .comments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto 56px;
+        }
+        .comment-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 16px;
+            padding: 28px;
+            position: relative;
+            transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .comment-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 32px rgba(47,133,90,0.1);
+        }
+        .comment-quote {
+            font-size: 5rem; line-height: 0.8;
+            color: var(--accent-green); opacity: 0.15;
+            font-family: Georgia, serif; font-weight: 900;
+            pointer-events: none; user-select: none;
+        }
+        .comment-body {
+            font-size: 0.97rem; line-height: 1.75;
+            color: var(--text-main); flex: 1;
+        }
+        .comment-author {
+            display: flex; align-items: center; gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-soft);
+        }
+        .comment-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--bg-editor);
+            border: 2px solid var(--border-strong);
+            overflow: hidden; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; font-weight: 700;
+            color: var(--accent-green);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .comment-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .comment-username {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem; font-weight: 700; color: var(--text-main);
+        }
+        .comment-date { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .comment-form-wrap {
+            max-width: 600px; margin: 0 auto;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 16px; padding: 32px;
+        }
+        .comment-form-wrap h3 {
+            font-size: 1.1rem; font-weight: 800; margin-bottom: 16px;
+            font-family: 'JetBrains Mono', monospace; color: var(--accent-green);
+        }
+        .comment-textarea {
+            width: 100%; background: var(--bg-editor);
+            border: 1.5px solid var(--border-soft);
+            border-radius: 10px; padding: 14px 16px;
+            font-family: 'Inter', sans-serif; font-size: 0.95rem;
+            color: var(--text-main); resize: none; height: 100px;
+            outline: none; transition: border-color 0.2s;
+        }
+        .comment-textarea:focus { border-color: var(--accent-green); }
+        .comment-textarea::placeholder { color: var(--text-muted); }
+        .comment-form-footer {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-top: 12px;
+        }
+        .comment-char-count {
+            font-size: 0.78rem; color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .comment-submit-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem; font-weight: 700;
+            color: #fff; background: var(--button-bg);
+            border: none; padding: 10px 24px; border-radius: 8px;
+            cursor: pointer; transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 0 14px var(--glow);
+        }
+        .comment-submit-btn:hover {
+            background: var(--button-hover);
+            transform: translateY(-1px); box-shadow: 0 0 24px var(--glow);
+        }
+        .comment-login-prompt {
+            text-align: center; color: var(--text-muted);
+            font-size: 0.95rem; padding: 20px;
+        }
+        .comment-login-prompt a { color: var(--accent-green); text-decoration: none; font-weight: 600; }
+        .comment-login-prompt a:hover { text-decoration: underline; }
+        .no-comments {
+            text-align: center; color: var(--text-muted);
+            font-size: 0.95rem; padding: 32px; grid-column: 1/-1;
+        }
+
+        /* ===============================
            FOOTER
            =============================== */
         footer {
@@ -1340,6 +1482,66 @@
         </div>
     </section>
 
+    <!-- ==================== COMMENTS ==================== -->
+    <section id="comments-section">
+        <div class="comments-header">
+            <span class="section-tag">☕ Community</span>
+            <h2>What Brewers Are Saying</h2>
+            <p>Real thoughts from real ChaiScript users.</p>
+        </div>
+
+        <div class="comments-grid">
+            {% for item in comment_data %}
+            <div class="comment-card">
+                <div class="comment-quote">&ldquo;</div>
+                <p class="comment-body">{{ item.comment.body }}</p>
+                <div class="comment-author">
+                    <!-- AFTER -->
+            <div class="comment-avatar">
+                {% if item.avatar %}
+                <img src="{{ item.avatar }}" alt="{{ item.comment.user.username }}" onerror="this.style.display='none'">
+                {% elif item.comment.user %}
+                {{ item.comment.user.username|first|upper }}
+                {% else %}
+                <img src="https://api.dicebear.com/9.x/thumbs/svg?seed={{ item.comment.id }}" alt="Anonymous" style="width:100%;height:100%;border-radius:50%;">
+                {% endif %}
+            </div>
+            <div>
+                <div class="comment-username">{{ item.comment.user.username|default:"Anonymous" }}</div>
+                <div class="comment-date">{{ item.comment.created_at|date:"M d, Y" }}</div>
+            </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-comments">No comments yet. Be the first to brew a thought! ☕</div>
+            {% endfor %}
+        </div>
+
+        <div class="comment-form-wrap">
+            <!-- AFTER -->
+<h3>✍️ Leave a Comment</h3>
+{% if not request.user.is_authenticated %}
+<p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:12px;">
+    Posting as <strong>Anonymous</strong> — <a href="/accounts/login/">log in</a> to use your name.
+</p>
+{% endif %}
+<form method="POST" action="/">
+    {% csrf_token %}
+    <textarea
+        class="comment-textarea"
+        name="body"
+        placeholder="Share your thoughts about ChaiScript…"
+        maxlength="280"
+        id="comment-input"
+        required></textarea>
+    <div class="comment-form-footer">
+        <span class="comment-char-count"><span id="char-count">0</span> / 280</span>
+        <button type="submit" class="comment-submit-btn">☕ Post Comment</button>
+    </div>
+</form>
+        </div>
+    </section>
+
     <!-- ==================== FOOTER ==================== -->
     <footer>
         <div class="footer-brand">
@@ -1571,6 +1773,17 @@
             });
         }, { threshold: 0.5 });
         document.querySelectorAll('.stat-item').forEach(el => statIo.observe(el));
+
+        /* ==================== COMMENT CHAR COUNTER ==================== */
+        const commentInput = document.getElementById('comment-input');
+        const charCount = document.getElementById('char-count');
+        if (commentInput && charCount) {
+            commentInput.addEventListener('input', function() {
+                const len = this.value.length;
+                charCount.textContent = len;
+                charCount.style.color = len > 250 ? '#c53030' : '';
+            });
+        }
 
         /* ==================== NAVBAR SCROLL SHADOW ==================== */
         window.addEventListener('scroll', () => {

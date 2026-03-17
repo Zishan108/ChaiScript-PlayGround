@@ -8,7 +8,7 @@ import time, json
 
 from Interpreter.ChaiScript import run_web
 from Interpreter.ast_serializer import ast_to_json
-from .models import SharedCode, Project, VersionSnapshot, Challenge, ChallengeSubmission, UserProfile
+from .models import SharedCode, Project, VersionSnapshot, Challenge, ChallengeSubmission, UserProfile, HomeComment
 
 
 # ── helpers ────────────────────────────────────────────────
@@ -66,6 +66,37 @@ def load_shared(request, share_id):
 
 def docs(request):
     return render(request, "engine/docs.html")
+
+
+# After
+def home(request):
+    if request.method == "POST":
+        body = request.POST.get("body", "").strip()
+        if body:
+            HomeComment.objects.create(
+                user=request.user if request.user.is_authenticated else None,
+                body=body
+            )
+        return redirect('home')
+
+    comments = HomeComment.objects.select_related('user').order_by('-created_at')[:5]
+
+    # attach avatar to each comment
+    comment_data = []
+    for c in comments:
+        avatar = ''
+        if c.user:
+            try:
+                sa = c.user.socialaccount_set.filter(provider='google').first()
+                if sa:
+                    avatar = sa.extra_data.get('picture', '')
+            except Exception:
+                pass
+        comment_data.append({'comment': c, 'avatar': avatar})
+
+    return render(request, "engine/home.html", {
+        "comment_data": comment_data,
+    })
 
 
 def custom_404(request, exception):

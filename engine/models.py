@@ -92,3 +92,17 @@ class ChallengeSubmission(models.Model):
     def __str__(self):
         status = '✓' if self.passed else '✗'
         return f'{status} {self.user.username} — {self.challenge.title}'
+
+
+# ── Home Comments ──────────────────────────────────────────
+class HomeComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='home_comments')
+    body       = models.TextField(max_length=280)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        name = self.user.username if self.user else 'Anonymous'
+        return f'{name}: {self.body[:40]}'

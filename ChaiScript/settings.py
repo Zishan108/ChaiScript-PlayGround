@@ -133,7 +133,6 @@ import os
 import dj_database_url
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your-fallback-key')
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = ['chaiscript-playground.onrender.com', 'localhost', '127.0.0.1']
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
