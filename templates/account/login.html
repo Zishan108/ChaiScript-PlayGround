@@ -1,0 +1,528 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in — ChaiScript</title>
+    <meta name="description" content="Log in to your ChaiScript account and start brewing code.">
+
+    <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
+    <link rel="icon" type="image/png"    href="{% static 'engine/img/ChaiScript.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ─── THEME VARIABLES ─────────────────────── */
+        :root {
+            --bg-page: #f6fff5;
+            --bg-panel: #ffffff;
+            --bg-editor: #f0fff4;
+            --border-soft: #d9e7d8;
+            --border-strong: #b7d7b0;
+            --text-main: #1f2933;
+            --text-muted: #5f6f5f;
+            --accent-green: #2f855a;
+            --accent-green-light: #38a169;
+            --accent-yellow: #f6c453;
+            --button-bg: #2f855a;
+            --button-hover: #276749;
+            --glow: rgba(47,133,90,0.35);
+            --input-bg: #f0fff4;
+        }
+        body.dark {
+            --bg-page: #0f1412;
+            --bg-panel: #141a17;
+            --bg-editor: #101614;
+            --border-soft: #2f855a44;
+            --border-strong: #4fd1a555;
+            --text-main: #e6f4ea;
+            --text-muted: #9bbfb0;
+            --accent-green: #4fd1a5;
+            --accent-green-light: #68d9b3;
+            --button-bg: #2f855a;
+            --button-hover: #38a169;
+            --glow: rgba(79,209,165,0.4);
+            --input-bg: #0c110f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            transition: background 0.3s, color 0.3s;
+            overflow: hidden;
+        }
+
+        /* ─── CANVAS BG ──────────────────────────── */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            background: var(--bg-page);
+            opacity: 0.88;
+        }
+
+        /* ─── LAYOUT ─────────────────────────────── */
+        .auth-wrap {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        /* ─── CARD ───────────────────────────────── */
+        .auth-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 20px;
+            padding: 48px 44px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.12), 0 0 0 1px var(--border-soft);
+            animation: cardIn 0.5s cubic-bezier(0.34,1.4,0.64,1) both;
+            position: relative;
+            overflow: hidden;
+        }
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: -60px; left: -60px;
+            width: 220px; height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(28px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ─── BRAND ──────────────────────────────── */
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+        }
+        .brand-logo { height: 28px; }
+        .brand-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            letter-spacing: 1.5px;
+        }
+
+        .auth-heading {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+        .auth-sub {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        .auth-sub a {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .auth-sub a:hover { text-decoration: underline; }
+
+        /* ─── GOOGLE BTN ─────────────────────────── */
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 13px 20px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border-strong);
+            background: var(--bg-panel);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.22s;
+            position: relative;
+            overflow: hidden;
+        }
+        .google-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            background: var(--glow);
+            opacity: 0;
+            transition: opacity 0.22s;
+        }
+        .google-btn:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px var(--glow);
+        }
+        .google-btn:hover::after { opacity: 0.15; }
+
+        .google-icon {
+            width: 22px; height: 22px;
+            flex-shrink: 0;
+        }
+
+        /* ─── DIVIDER ────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-soft);
+        }
+
+        /* ─── FORM ───────────────────────────────── */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 7px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.3px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border-soft);
+            background: var(--input-bg);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px var(--glow);
+        }
+        input::placeholder { color: var(--text-muted); opacity: 0.6; }
+
+        /* ─── FORGOT PASSWORD ──────────────────── */
+        .forgot-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        .forgot-link {
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .forgot-link:hover { text-decoration: underline; }
+
+        /* ─── SUBMIT BTN ─────────────────────────── */
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: none;
+            background: var(--button-bg);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.22s;
+            box-shadow: 0 0 20px var(--glow);
+            letter-spacing: 0.2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .submit-btn:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 0 32px var(--glow), 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .submit-btn:active { transform: translateY(0); }
+
+        /* ─── ERRORS ─────────────────────────────── */
+        .errorlist {
+            list-style: none;
+            background: rgba(255,80,80,0.1);
+            border: 1px solid rgba(255,80,80,0.4);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 0.82rem;
+            color: #e53e3e;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        body.dark .errorlist { color: #fc8181; }
+
+        /* ─── BOTTOM LINK ────────────────────────── */
+        .bottom-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .bottom-link a {
+            color: var(--accent-green);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .bottom-link a:hover { text-decoration: underline; }
+
+        /* ─── HOME LINK ──────────────────────────── */
+        .home-link {
+            position: fixed;
+            top: 24px; left: 28px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            animation: cardIn 0.4s ease both;
+        }
+        .home-link:hover { color: var(--accent-green); }
+        .home-link svg { width: 16px; height: 16px; }
+
+        /* ─── THEME TOGGLE ───────────────────────── */
+        .theme-toggle {
+            position: fixed;
+            top: 24px; right: 28px;
+            z-index: 50;
+            width: 52px; height: 26px;
+            background: var(--border-soft);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .theme-toggle::after {
+            content: "☀️";
+            position: absolute; top: 2px; left: 2px;
+            width: 22px; height: 22px;
+            background: var(--bg-panel);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        body.dark .theme-toggle { background: var(--accent-green); }
+        body.dark .theme-toggle::after { content: "🌙"; left: 28px; background: #0f1412; }
+
+        /* ─── FLOATING CHAI ──────────────────────── */
+        .float-chai {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.12;
+            pointer-events: none;
+            animation: floatChai 7s ease-in-out infinite;
+            z-index: 2;
+        }
+        .float-chai:nth-child(1) { top: 12%; left: 5%;  animation-delay: 0s;   font-size: 2.5rem; }
+        .float-chai:nth-child(2) { top: 70%; right: 5%; animation-delay: 2s;   font-size: 2rem; }
+        .float-chai:nth-child(3) { bottom: 12%; left: 8%; animation-delay: 4s; font-size: 3rem; }
+        @keyframes floatChai {
+            0%,100% { transform: translateY(0) rotate(-6deg); }
+            50% { transform: translateY(-18px) rotate(6deg); }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-page); }
+        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
+
+        @media (max-width: 500px) {
+            .auth-card { padding: 36px 24px; }
+            body { overflow: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="bg-overlay"></div>
+
+<span class="float-chai">☕</span>
+<span class="float-chai">☕</span>
+<span class="float-chai">☕</span>
+
+<a class="home-link" href="/">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+    Back to home
+</a>
+
+<div class="theme-toggle" onclick="toggleTheme()"></div>
+
+<div class="auth-wrap">
+    <div class="auth-card">
+
+        <div class="brand-row">
+            <img class="brand-logo" src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
+            <span class="brand-name">ChaiScript</span>
+        </div>
+
+        <h1 class="auth-heading">Welcome back ☕</h1>
+        <p class="auth-sub">
+            Don't have an account? <a href="/accounts/signup/">Sign up free</a>
+        </p>
+
+        <!-- GOOGLE LOGIN -->
+        {% get_providers as socialaccount_providers %}
+        {% if socialaccount_providers %}
+        <a class="google-btn" href="{% provider_login_url 'google' %}">
+            <svg class="google-icon" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg">
+                <path d="M533.5 278.4c0-18.5-1.5-37.1-4.7-55.3H272.1v104.8h147c-6.1 33.8-25.7 63.7-54.4 82.7v68h87.7c51.5-47.4 81.1-117.4 81.1-200.2z" fill="#4285f4"/>
+                <path d="M272.1 544.3c73.4 0 135.3-24.1 180.4-65.7l-87.7-68c-24.4 16.6-55.9 26-92.6 26-71 0-131.2-47.9-152.8-112.3H28.9v70.1c46.2 91.9 140.3 149.9 243.2 149.9z" fill="#34a853"/>
+                <path d="M119.3 324.3c-11.4-33.8-11.4-70.4 0-104.2V150H28.9c-38.6 76.9-38.6 167.5 0 244.4l90.4-70.1z" fill="#fbbc04"/>
+                <path d="M272.1 107.7c38.8-.6 76.3 14 104.4 40.8l77.7-77.7C405 24.6 339.7-.8 272.1 0 169.2 0 75.1 58 28.9 150l90.4 70.1c21.5-64.5 81.8-112.4 152.8-112.4z" fill="#ea4335"/>
+            </svg>
+            Continue with Google
+        </a>
+        {% endif %}
+
+        <div class="divider">or sign in with email</div>
+
+        <!-- ALLAUTH LOGIN FORM -->
+        <form method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for err in form.non_field_errors %}<li>{{ err }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="id_login">Email or Username</label>
+                <input type="text" id="id_login" name="login"
+                       placeholder="you@example.com"
+                       value="{{ form.login.value|default:'' }}" autocomplete="username">
+                {% if form.login.errors %}
+                    <ul class="errorlist">{% for e in form.login.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                <input type="password" id="id_password" name="password"
+                       placeholder="••••••••" autocomplete="current-password">
+                {% if form.password.errors %}
+                    <ul class="errorlist">{% for e in form.password.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+                {% endif %}
+            </div>
+
+            <div class="forgot-row">
+                <a class="forgot-link" href="{% url 'account_reset_password' %}">Forgot password?</a>
+            </div>
+
+            <button class="submit-btn" type="submit">Log in to ChaiScript</button>
+        </form>
+
+        <div class="bottom-link">
+            New here? <a href="/accounts/signup/">Create a free account →</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* theme */
+    const saved = localStorage.getItem('chaiTheme') || 'light';
+    if (saved === 'dark') document.body.classList.add('dark');
+    function toggleTheme() {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('chaiTheme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    /* particle canvas */
+    const canvas = document.getElementById('bg-canvas');
+    const ctx    = canvas.getContext('2d');
+    let pts      = [];
+    function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        pts = Array.from({length: 60}, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            r: Math.random() * 2.5 + 1,
+        }));
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const isDark = document.body.classList.contains('dark');
+        const col = isDark ? 'rgba(79,209,165,' : 'rgba(47,133,90,';
+        for (const p of pts) {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
+            if (p.y < 0 || p.y > canvas.height)  p.vy *= -1;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = col + '0.5)';
+            ctx.fill();
+        }
+        for (let i = 0; i < pts.length; i++) {
+            for (let j = i + 1; j < pts.length; j++) {
+                const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+                const d  = Math.sqrt(dx*dx + dy*dy);
+                if (d < 110) {
+                    ctx.beginPath();
+                    ctx.moveTo(pts[i].x, pts[i].y);
+                    ctx.lineTo(pts[j].x, pts[j].y);
+                    ctx.strokeStyle = col + (0.1 * (1 - d/110)) + ')';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(draw);
+    }
+    draw();
+</script>
+</body>
+</html>
