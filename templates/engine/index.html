@@ -1,6 +1,7 @@
 ~{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>ChaiScript Engine</title>
@@ -9,6 +10,11 @@
     <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
     <link rel="icon" type="image/png" href="{% static 'engine/img/ChaiScript.png' %}">
     <link rel="shortcut icon" href="{% static 'engine/img/ChaiScript.ico' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <style>
         /* ===============================
@@ -96,7 +102,7 @@
             top: 0;
             width: 100%;
             z-index: 20;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
         }
 
         .nav-left {
@@ -249,7 +255,8 @@
             justify-content: center;
             animation: fadeOut 2s ease forwards;
             animation-delay: 2s;
-            z-index: 999;   /* 👈 JUST THIS */
+            z-index: 999;
+            /* 👈 JUST THIS */
         }
 
         #intro h1 {
@@ -276,13 +283,14 @@
         #app {
             display: none;
             height: calc(100vh - 108px);
-            margin-top: 108px; /* navbar (60) + runbar (48) */
+            margin-top: 108px;
+            /* navbar (60) + runbar (48) */
             display: flex;
             background: var(--bg-page);
         }
 
         .panel {
-            flex: 1; 
+            flex: 1;
             width: 50%;
             padding: 20px;
             display: flex;
@@ -325,7 +333,7 @@
             background: var(--button-hover);
         }
 
-        pre{
+        pre {
             margin: 0;
             background: var(--bg-output);
             border: 1px solid var(--border-soft);
@@ -343,7 +351,108 @@
             min-height: 0;
         }
 
-                /* ===============================
+        #navbar {
+            height: 60px;
+            background: var(--bg-navbar);
+            border-bottom: 2px solid var(--border-strong);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 20;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        #nav-img {
+            height: 32px;
+            width: auto;
+            display: block;
+        }
+
+        .brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--accent-green);
+            line-height: 1;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-login {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--accent-green);
+            border: 1.5px solid var(--accent-green);
+            background: transparent;
+            padding: 6px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-login:hover {
+            background: var(--accent-green);
+            color: #fff;
+        }
+
+        .btn-signup {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--button-bg);
+            border: none;
+            padding: 7px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-signup:hover {
+            background: var(--button-hover);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 7px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-editor);
+            color: var(--accent-green);
+        }
+
+        /* ===============================
         FORCE MONACO TO MATCH OUTPUT
         =============================== */
 
@@ -366,8 +475,8 @@
 
 
         .execution-line {
-        background: rgba(246, 196, 83, 0.25);
-        border-left: 3px solid var(--accent-yellow);
+            background: rgba(246, 196, 83, 0.25);
+            border-left: 3px solid var(--accent-yellow);
         }
 
         .var-changed {
@@ -379,8 +488,13 @@
         }
 
         @keyframes pulseVar {
-            0% { background: rgba(79, 209, 165, 0.6); }
-            100% { background: rgba(79, 209, 165, 0.25); }
+            0% {
+                background: rgba(79, 209, 165, 0.6);
+            }
+
+            100% {
+                background: rgba(79, 209, 165, 0.25);
+            }
         }
 
         /* ===============================
@@ -398,7 +512,7 @@
             font-size: 12px;
             color: var(--text-muted);
             width: 180px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
         #perf-monitor .perf-title {
@@ -434,14 +548,20 @@
             transition: width 0.5s ease;
         }
 
-        #cpu-bar  { background: var(--accent-green); }
-        #ram-bar  { background: var(--accent-yellow); }
+        #cpu-bar {
+            background: var(--accent-green);
+        }
+
+        #ram-bar {
+            background: var(--accent-yellow);
+        }
 
         #exec-timer {
             font-size: 12px;
             color: var(--text-muted);
             align-self: center;
         }
+
         #exec-timer span {
             color: var(--accent-green);
             font-weight: 600;
@@ -454,10 +574,132 @@
             font-size: 12px;
             color: var(--text-muted);
         }
+
         #font-slider {
             accent-color: var(--accent-green);
             cursor: pointer;
             width: 80px;
+        }
+
+        /* ── PROJECT PANEL ── */
+        #project-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(0, 0, 0, 0.45);
+            align-items: center;
+            justify-content: center;
+        }
+
+        #project-overlay.open {
+            display: flex;
+        }
+
+        #project-box {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-strong);
+            border-radius: 14px;
+            padding: 28px;
+            width: 480px;
+            max-width: 95vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        #project-box h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .proj-input {
+            width: 100%;
+            background: var(--bg-editor);
+            border: 1px solid var(--border-strong);
+            border-radius: 8px;
+            padding: 9px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .proj-input:focus {
+            border-color: var(--accent-green);
+        }
+
+        .proj-save-btn {
+            background: var(--button-bg);
+            color: #fff;
+            border: none;
+            padding: 9px 22px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .proj-save-btn:hover {
+            background: var(--button-hover);
+        }
+
+        .proj-item {
+            background: var(--bg-editor);
+            border: 1px solid var(--border-soft);
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: border-color .2s;
+        }
+
+        .proj-item:hover {
+            border-color: var(--accent-green);
+        }
+
+        .proj-item-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .85rem;
+            font-weight: 600;
+        }
+
+        .proj-item-date {
+            font-size: .75rem;
+            color: var(--text-muted);
+        }
+
+        .proj-section-label {
+            font-size: .78rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .proj-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        #proj-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .82rem;
+            color: var(--accent-green);
+            min-height: 18px;
         }
 
         /* SHORTCUTS MODAL */
@@ -465,28 +707,32 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0, 0, 0, 0.45);
             z-index: 500;
             align-items: center;
             justify-content: center;
         }
+
         #shortcuts-overlay.open {
             display: flex;
         }
+
         #shortcuts-box {
             background: var(--bg-panel);
             border: 1px solid var(--border-strong);
             border-radius: 12px;
             padding: 24px 28px;
             min-width: 320px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
+
         #shortcuts-box h3 {
             margin: 0 0 16px;
             color: var(--accent-green);
             font-size: 1rem;
             letter-spacing: 1px;
         }
+
         .sc-row {
             display: flex;
             justify-content: space-between;
@@ -495,7 +741,11 @@
             font-size: 13px;
             color: var(--text-muted);
         }
-        .sc-row:last-child { border-bottom: none; }
+
+        .sc-row:last-child {
+            border-bottom: none;
+        }
+
         .sc-key {
             background: var(--bg-editor);
             border: 1px solid var(--border-soft);
@@ -505,6 +755,7 @@
             color: var(--accent-green);
             font-weight: 600;
         }
+
         #shortcuts-close {
             margin-top: 16px;
             width: 100%;
@@ -522,12 +773,16 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0, 0, 0, 0.45);
             z-index: 500;
             align-items: center;
             justify-content: center;
         }
-        #snippet-overlay.open { display: flex; }
+
+        #snippet-overlay.open {
+            display: flex;
+        }
+
         #snippet-box {
             background: var(--bg-panel);
             border: 1px solid var(--border-strong);
@@ -536,14 +791,16 @@
             width: 460px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
+
         #snippet-box h3 {
             margin: 0 0 16px;
             color: var(--accent-green);
             font-size: 1rem;
             letter-spacing: 1px;
         }
+
         .snippet-item {
             padding: 10px 12px;
             border: 1px solid var(--border-soft);
@@ -552,17 +809,23 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        .snippet-item:hover { background: var(--bg-editor); }
+
+        .snippet-item:hover {
+            background: var(--bg-editor);
+        }
+
         .snippet-item .sn-title {
             font-weight: 600;
             color: var(--accent-green);
             font-size: 13px;
         }
+
         .snippet-item .sn-desc {
             font-size: 11px;
             color: var(--text-muted);
             margin-top: 3px;
         }
+
         #snippet-close {
             margin-top: 14px;
             width: 100%;
@@ -583,15 +846,18 @@
             background: var(--bg-output);
             font-size: 14px;
         }
+
         #var-graph-wrap strong {
             font-size: 13px;
         }
+
         #var-graph-controls {
             margin-top: 8px;
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
         }
+
         .var-chip {
             padding: 3px 10px;
             border-radius: 999px;
@@ -602,11 +868,13 @@
             color: var(--text-muted);
             transition: all 0.2s;
         }
+
         .var-chip.active {
             background: var(--accent-green);
             color: #fff;
             border-color: var(--accent-green);
         }
+
         #var-graph-svg {
             margin-top: 10px;
             width: 100%;
@@ -619,6 +887,7 @@
             gap: 10px;
             margin-top: 8px;
         }
+
         .legend-item {
             display: flex;
             align-items: center;
@@ -626,18 +895,21 @@
             font-size: 11px;
             color: var(--text-muted);
         }
+
         .legend-dot {
             width: 10px;
             height: 10px;
             border-radius: 50%;
             flex-shrink: 0;
         }
+
         #var-graph-hint {
             font-size: 11px;
             color: var(--text-muted);
             margin-top: 6px;
             font-style: italic;
         }
+
         #var-graph-wrap strong {
             font-size: 13px;
         }
@@ -651,6 +923,7 @@
             background: var(--bg-output);
             font-size: 13px;
         }
+
         .stack-frame {
             padding: 5px 10px;
             margin-top: 5px;
@@ -661,13 +934,22 @@
             font-size: 12px;
             animation: slideIn 0.2s ease;
         }
+
         .stack-frame.top {
             border-left-color: var(--accent-yellow);
             font-weight: 600;
         }
+
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-6px); }
-            to   { opacity: 1; transform: translateX(0); }
+            from {
+                opacity: 0;
+                transform: translateX(-6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* CUSTOM SCROLLBAR */
@@ -675,13 +957,16 @@
             width: 6px;
             height: 6px;
         }
+
         ::-webkit-scrollbar-track {
             background: var(--bg-page);
         }
+
         ::-webkit-scrollbar-thumb {
             background: var(--border-strong);
             border-radius: 999px;
         }
+
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-green);
         }
@@ -691,6 +976,7 @@
             background: rgba(255, 80, 80, 0.18);
             border-left: 3px solid #fc5c5c;
         }
+
         .error-line-glyph::before {
             content: "●";
             color: #fc5c5c;
@@ -708,6 +994,7 @@
             flex-shrink: 0;
             overflow-x: auto;
         }
+
         .editor-tab {
             display: flex;
             align-items: center;
@@ -723,12 +1010,14 @@
             white-space: nowrap;
             transition: background 0.2s;
         }
+
         .editor-tab.active {
             background: var(--bg-panel);
             color: var(--accent-green);
             font-weight: 600;
             border-bottom: 2px solid var(--accent-green);
         }
+
         .editor-tab .tab-close {
             font-size: 14px;
             line-height: 1;
@@ -737,7 +1026,11 @@
             padding: 0 2px;
             border-radius: 3px;
         }
-        .editor-tab .tab-close:hover { color: #fc5c5c; }
+
+        .editor-tab .tab-close:hover {
+            color: #fc5c5c;
+        }
+
         #tab-add-btn {
             background: none;
             border: 1px dashed var(--border-soft);
@@ -748,6 +1041,7 @@
             cursor: pointer;
             line-height: 1;
         }
+
         #tab-add-btn:hover {
             color: var(--accent-green);
             border-color: var(--accent-green);
@@ -759,25 +1053,31 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0, 0, 0, 0.45);
             z-index: 600;
             align-items: center;
             justify-content: center;
         }
-        #share-modal-overlay.open { display: flex; }
+
+        #share-modal-overlay.open {
+            display: flex;
+        }
+
         #share-modal-box {
             background: var(--bg-panel);
             border: 1px solid var(--border-strong);
             border-radius: 12px;
             padding: 24px 28px;
             width: 420px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
+
         #share-modal-box h3 {
             margin: 0 0 12px;
             color: var(--accent-green);
             font-size: 1rem;
         }
+
         #share-link-input {
             width: 100%;
             padding: 10px 12px;
@@ -789,6 +1089,7 @@
             font-family: "JetBrains Mono", monospace;
             box-sizing: border-box;
         }
+
         #share-copy-btn {
             margin-top: 10px;
             width: 100%;
@@ -800,7 +1101,11 @@
             cursor: pointer;
             font-size: 0.9rem;
         }
-        #share-copy-btn:hover { background: var(--button-hover); }
+
+        #share-copy-btn:hover {
+            background: var(--button-hover);
+        }
+
         #share-copy-confirm {
             font-size: 12px;
             color: var(--accent-green);
@@ -808,6 +1113,7 @@
             min-height: 18px;
             text-align: center;
         }
+
         #share-modal-close {
             margin-top: 8px;
             width: 100%;
@@ -832,6 +1138,7 @@
             flex-shrink: 0;
             overflow-x: auto;
         }
+
         .right-tab {
             padding: 5px 14px;
             border-radius: 6px 6px 0 0;
@@ -844,12 +1151,14 @@
             white-space: nowrap;
             transition: background 0.2s;
         }
+
         .right-tab.active {
             background: var(--bg-panel);
             color: var(--accent-green);
             font-weight: 600;
             border-bottom: 2px solid var(--accent-green);
         }
+
         .right-tab-content {
             display: none;
             padding: 14px;
@@ -859,12 +1168,21 @@
             box-sizing: border-box;
             flex: 1;
         }
-        .right-tab-content.active { display: flex; flex-direction: column; }
+
+        .right-tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
 
         /* every direct child of a tab fills remaining space */
-        .right-tab-content.active > * { flex-shrink: 0; }
-        .right-tab-content.active > pre,
-        .right-tab-content.active > div { flex: 1; }
+        .right-tab-content.active>* {
+            flex-shrink: 0;
+        }
+
+        .right-tab-content.active>pre,
+        .right-tab-content.active>div {
+            flex: 1;
+        }
 
         /* output pre fills its tab fully */
         #rtab-output pre {
@@ -890,6 +1208,7 @@
             justify-content: space-around;
             align-items: center;
         }
+
         .mob-tab {
             flex: 1;
             display: flex;
@@ -904,9 +1223,19 @@
             border: none;
             background: none;
         }
-        .mob-tab .mob-icon { font-size: 18px; line-height: 1; }
-        .mob-tab.active { color: var(--accent-green); }
-        .mob-tab.active .mob-icon { transform: scale(1.15); }
+
+        .mob-tab .mob-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .mob-tab.active {
+            color: var(--accent-green);
+        }
+
+        .mob-tab.active .mob-icon {
+            transform: scale(1.15);
+        }
 
         /* ===============================
            RESPONSIVE
@@ -916,19 +1245,45 @@
             #navbar {
                 padding: 0 12px;
             }
-            .brand { font-size: 1rem; }
-            .nav-right .nav-btn:not(:last-child) { display: none; }
-            #nav-img { height: 24px; }
+
+            .brand {
+                font-size: 1rem;
+            }
+
+            .nav-right .nav-btn:not(.active) {
+                display: none;
+            }
+
+            .btn-login,
+            .btn-signup {
+                display: none;
+            }
+
+            #nav-img {
+                height: 24px;
+            }
 
             #runbar {
                 grid-template-columns: auto 1fr auto;
                 padding: 0 8px;
                 height: 44px;
             }
-            #font-slider-wrap { display: none; }
-            #exec-timer { display: none; }
-            #brew-counter { display: none; }
-            .shortcut { display: none; }
+
+            #font-slider-wrap {
+                display: none;
+            }
+
+            #exec-timer {
+                display: none;
+            }
+
+            #brew-counter {
+                display: none;
+            }
+
+            .shortcut {
+                display: none;
+            }
 
             #app {
                 margin-top: 104px;
@@ -943,384 +1298,480 @@
             }
 
             /* show only active mobile panel */
-            .panel { display: none; }
-            .panel.mob-active { display: flex; }
+            .panel {
+                display: none;
+            }
 
-            #right-tab-bar { display: none; }
+            .panel.mob-active {
+                display: flex;
+            }
 
-            #mobile-nav { display: flex; }
+            #right-tab-bar {
+                display: none;
+            }
 
-            #perf-monitor { bottom: 64px; }
+            #mobile-nav {
+                display: flex;
+            }
+
+            #perf-monitor {
+                bottom: 64px;
+            }
         }
 
         @media (min-width: 769px) {
-            #mobile-nav { display: none !important; }
-            .panel { display: flex !important; }
+            #mobile-nav {
+                display: none !important;
+            }
+
+            .panel {
+                display: flex !important;
+            }
         }
 
-        
+
 
         /* FORCE FULL HEIGHT ON ALL TAB CONTENTS */
-        #rtab-output { padding: 14px; }
-        #rtab-output pre { height: calc(100vh - 108px - 38px - 28px); max-height: unset; }
+        #rtab-output {
+            padding: 14px;
+        }
 
-        #rtab-ast { padding: 14px; }
-        #rtab-ast #ast-tree { height: calc(100vh - 108px - 38px - 60px) !important; }
+        #rtab-output pre {
+            height: calc(100vh - 108px - 38px - 28px);
+            max-height: unset;
+        }
 
-        #rtab-graph { padding: 14px; }
-        #rtab-graph #var-graph-svg { height: calc(100vh - 108px - 38px - 160px) !important; }
+        #rtab-ast {
+            padding: 14px;
+        }
 
-        #rtab-trace, #rtab-stack { padding: 14px; }
+        #rtab-ast #ast-tree {
+            height: calc(100vh - 108px - 38px - 60px) !important;
+        }
 
+        #rtab-graph {
+            padding: 14px;
+        }
+
+        #rtab-graph #var-graph-svg {
+            height: calc(100vh - 108px - 38px - 160px) !important;
+        }
+
+        #rtab-trace,
+        #rtab-stack {
+            padding: 14px;
+        }
     </style>
 </head>
 
 <script src="https://d3js.org/d3.v7.min.js"></script>
+
 <body>
 
-<!-- NAVBAR (UNCHANGED) -->
-<nav id="navbar">
-    <div class="nav-left">
-        <div class="theme-toggle" onclick="toggleTheme()"></div>
-    </div>
+    <!-- NAVBAR (UNCHANGED) -->
+    <nav id="navbar">
+        <a class="nav-brand" href="/">
+            <img id="nav-img" src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
+            <span class="brand">ChaiScript</span>
+        </a>
 
-    <div class="nav-center">
-        <img id="nav-img" src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
-        <span class="brand">ChaiScript</span>
-    </div>
-
-    <div class="nav-right">
-        <button class="nav-btn active">Editor</button>
-        <a class="nav-btn"
-           href="/docs"
-           target="_blank">Docs</a>
-        <button class="nav-btn" onclick="document.getElementById('snippet-overlay').classList.add('open')">☕ Examples</button>
-        <button class="nav-btn" onclick="document.getElementById('shortcuts-overlay').classList.add('open')">⌨ ?</button>
-    </div>
-</nav>
-
-<!-- RUN BAR (ADDED) -->
-<div id="runbar">
-    <div style="padding-left:20px;">
-        <div id="font-slider-wrap">
-            <span>A</span>
-            <input type="range" id="font-slider" min="12" max="24" value="16">
-            <span>A</span>
+        <div class="nav-right">
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/engine/">Playground</a>
+            <a class="nav-link" href="/docs/">Docs</a>
+            <a class="nav-link" href="/downloads/">Downloads</a>
+            <button class="nav-btn" onclick="document.getElementById('snippet-overlay').classList.add('open')">☕
+                Examples</button>
+            <button class="nav-btn" onclick="document.getElementById('shortcuts-overlay').classList.add('open')">⌨
+                ?</button>
+            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></div>
+            {% if request.user.is_authenticated %}
+            <a class="nav-link" href="/engine/profile/" style="display:flex;align-items:center;gap:6px;">
+                {% with request.user.socialaccount_set.all|first as sa %}
+                {% if sa %}
+                <img src="{{ sa.extra_data.picture }}"
+                    style="width:24px;height:24px;border-radius:50%;object-fit:cover;"
+                    onerror="this.style.display='none'">
+                {% endif %}
+                {% endwith %}
+                {{ request.user.username }}
+            </a>
+            {% else %}
+            <a class="btn-login" href="/accounts/login/">Log in</a>
+            <a class="btn-signup" href="/accounts/signup/">Sign up</a>
+            {% endif %}
         </div>
-    </div>
+    </nav>
 
-    <div class="run-center">
-        <button class="run-btn-top" onclick="runCode()">▶ Run</button>
-        <span class="shortcut">Ctrl + Enter</span>
-    </div>
-    
-    <div style="padding-right:20px; display:flex; justify-content:flex-end; align-items:center; gap:14px;">
-        <div id="exec-timer">Last run: <span id="timer-val">–</span></div>
-        <div id="brew-counter" style="font-size:12px; color:var(--text-muted);">☕ <span id="brew-count">0</span> brewed</div>
-
-        <button class="run-btn-top" onclick="exportChai()" style="padding:6px 12px; font-size:0.85rem;" title="Export as .chai">⬇ Download</button>
-        <button class="run-btn-top" onclick="shareCode()" style="padding:6px 12px; font-size:0.85rem;" title="Share code">🔗 Share</button>
-
-    </div>
-
-</div>
-
-
-<!-- SNIPPET LIBRARY -->
-<div id="snippet-overlay" onclick="if(event.target===this)this.classList.remove('open')">
-    <div id="snippet-box">
-        <h3>☕ Examples</h3>
-
-        <div class="snippet-item" onclick="loadSnippet('hello')">
-            <div class="sn-title">Hello World</div>
-            <div class="sn-desc">Basic print statement</div>
-        </div>
-        <div class="snippet-item" onclick="loadSnippet('forloop')">
-            <div class="sn-title">For Loop</div>
-            <div class="sn-desc">Loop from 1 to 10</div>
-        </div>
-        <div class="snippet-item" onclick="loadSnippet('while')">
-            <div class="sn-title">While Loop</div>
-            <div class="sn-desc">Count down with while</div>
-        </div>
-        <div class="snippet-item" onclick="loadSnippet('function')">
-            <div class="sn-title">Function</div>
-            <div class="sn-desc">Define and call a brew function</div>
-        </div>
-        <div class="snippet-item" onclick="loadSnippet('ifelse')">
-            <div class="sn-title">If / Else</div>
-            <div class="sn-desc">hot / mild / chilled condition</div>
-        </div>
-        <div class="snippet-item" onclick="loadSnippet('fibonacci')">
-            <div class="sn-title">Fibonacci</div>
-            <div class="sn-desc">Print fibonacci sequence</div>
-        </div>
-        <div class="snippet-item" onclick="loadSnippet('factorial')">
-            <div class="sn-title">Factorial</div>
-            <div class="sn-desc">Recursive factorial function</div>
-        </div>
-        <div class="snippet-item" onclick="loadSnippet('list')">
-            <div class="sn-title">List Operations</div>
-            <div class="sn-desc">append, pop, sort a list</div>
-        </div>
-
-        <button id="snippet-close" onclick="document.getElementById('snippet-overlay').classList.remove('open')">Close</button>
-    </div>
-</div>
-
-<!-- INTRO (UNCHANGED) -->
-<div id="intro">
-    <h1>ChaiScript</h1>
-    <p>Brew Up Your Code ☕</p>
-</div>
-
-<!-- APP (UNCHANGED CONTENT) -->
-<div id="app">
-    <div class="panel" style="padding:0; overflow:hidden;">
-        <div id="tab-bar">
-            <!-- tabs injected by JS -->
-        </div>
-        <div id="editor" style="flex:1; width:100%; min-height:0;"></div>
-    </div>
-
-    <div class="panel" style="padding:0; overflow:hidden;">
-
-        <!-- RIGHT PANEL TAB BAR -->
-        <div id="right-tab-bar">
-            <div class="right-tab active" onclick="switchRightTab('output')">📤 Output</div>
-            <div class="right-tab" onclick="switchRightTab('trace')">👣 Trace</div>
-            <div class="right-tab" onclick="switchRightTab('ast')">🌳 AST</div>
-            <div class="right-tab" onclick="switchRightTab('graph')">📈 Graph</div>
-            <div class="right-tab" onclick="switchRightTab('stack')">📚 Stack</div>
-        </div>
-
-        <!-- OUTPUT TAB -->
-        <div id="rtab-output" class="right-tab-content active">
-            <pre id="output" style="margin:0; height:calc(100vh - 220px); min-height:200px;">ChaiScript v-1.1.0</pre>
-        </div>
-
-        <!-- TRACE TAB -->
-        <div id="rtab-trace" class="right-tab-content">
-            <div style="font-size:14px;">
-                <strong>Execution Step</strong>
-                <div id="viz-content" style="margin-top:8px; color:var(--text-muted);">
-                    Run code to see execution
-                </div>
-                <div style="margin-top:10px; display:flex; gap:8px;">
-                    <button onclick="prevStep()">⏮ Prev</button>
-                    <button onclick="nextStep()">⏭ Next</button>
-                </div>
+    <!-- RUN BAR (ADDED) -->
+    <div id="runbar">
+        <div style="padding-left:20px;">
+            <div id="font-slider-wrap">
+                <span>A</span>
+                <input type="range" id="font-slider" min="12" max="24" value="16">
+                <span>A</span>
             </div>
         </div>
 
-        <!-- AST TAB -->
-        <div id="rtab-ast" class="right-tab-content">
-            <strong>AST</strong>
-            <div id="ast-tree" style="height:calc(100vh - 220px); min-height:300px; margin-top:8px; font-size:13px; color:var(--text-muted); line-height:1.5;">
-                Run code to see AST
-            </div>
+        <div class="run-center">
+            <button class="run-btn-top" onclick="runCode()">▶ Run</button>
+            <span class="shortcut">Ctrl + Enter</span>
         </div>
 
-        <!-- GRAPH TAB -->
-        <div id="rtab-graph" class="right-tab-content">
-            <div id="var-graph-wrap" style="margin-top:0;">
-                <strong>📈 Variable Graph</strong>
-                <div id="var-graph-hint">Shows how numeric variables change at each execution step. Click a chip to toggle.</div>
-                <div id="var-graph-controls" style="color:var(--text-muted); font-size:12px; margin-top:8px;">
-                    Run code to see variable graph
+        <div style="padding-right:20px; display:flex; justify-content:flex-end; align-items:center; gap:14px;">
+            <div id="exec-timer">Last run: <span id="timer-val">–</span></div>
+            <div id="brew-counter" style="font-size:12px; color:var(--text-muted);">☕ <span id="brew-count">0</span>
+                brewed</div>
+
+            <button class="run-btn-top" onclick="exportChai()" style="padding:6px 12px; font-size:0.85rem;"
+                title="Export as .chai">⬇ Download</button>
+            <button class="run-btn-top" onclick="shareCode()" style="padding:6px 12px; font-size:0.85rem;"
+                title="Share code">🔗 Share</button>
+            {% if request.user.is_authenticated %}
+            <button class="run-btn-top" onclick="openProjectPanel()" style="padding:6px 12px; font-size:0.85rem;"
+                title="Save / Load projects">📁 Projects</button>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- PROJECT PANEL -->
+    <div id="project-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+        <div id="project-box">
+            <button class="proj-close"
+                onclick="document.getElementById('project-overlay').classList.remove('open')">✕</button>
+            <h3>📁 My Projects</h3>
+
+            <div>
+                <div class="proj-section-label">Save current code as</div>
+                <input class="proj-input" id="proj-title-input" type="text" placeholder="Project name…"
+                    style="margin-top:6px;">
+            </div>
+            <div style="display:flex;gap:8px;">
+                <button class="proj-save-btn" onclick="saveProject()">💾 Save</button>
+                <button class="proj-save-btn" onclick="newProject()"
+                    style="background:transparent;color:var(--accent-green);border:1.5px solid var(--accent-green);">＋
+                    New</button>
+            </div>
+            <div id="proj-status"></div>
+
+            <div class="proj-section-label" style="margin-top:8px;">Load a project</div>
+            <div id="proj-list"><span style="color:var(--text-muted);font-size:.85rem;">Loading…</span></div>
+        </div>
+    </div>
+
+    <!-- SNIPPET LIBRARY -->
+    <div id="snippet-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+        <div id="snippet-box">
+            <h3>☕ Examples</h3>
+
+            <div class="snippet-item" onclick="loadSnippet('hello')">
+                <div class="sn-title">Hello World</div>
+                <div class="sn-desc">Basic print statement</div>
+            </div>
+            <div class="snippet-item" onclick="loadSnippet('forloop')">
+                <div class="sn-title">For Loop</div>
+                <div class="sn-desc">Loop from 1 to 10</div>
+            </div>
+            <div class="snippet-item" onclick="loadSnippet('while')">
+                <div class="sn-title">While Loop</div>
+                <div class="sn-desc">Count down with while</div>
+            </div>
+            <div class="snippet-item" onclick="loadSnippet('function')">
+                <div class="sn-title">Function</div>
+                <div class="sn-desc">Define and call a brew function</div>
+            </div>
+            <div class="snippet-item" onclick="loadSnippet('ifelse')">
+                <div class="sn-title">If / Else</div>
+                <div class="sn-desc">hot / mild / chilled condition</div>
+            </div>
+            <div class="snippet-item" onclick="loadSnippet('fibonacci')">
+                <div class="sn-title">Fibonacci</div>
+                <div class="sn-desc">Print fibonacci sequence</div>
+            </div>
+            <div class="snippet-item" onclick="loadSnippet('factorial')">
+                <div class="sn-title">Factorial</div>
+                <div class="sn-desc">Recursive factorial function</div>
+            </div>
+            <div class="snippet-item" onclick="loadSnippet('list')">
+                <div class="sn-title">List Operations</div>
+                <div class="sn-desc">append, pop, sort a list</div>
+            </div>
+
+            <button id="snippet-close"
+                onclick="document.getElementById('snippet-overlay').classList.remove('open')">Close</button>
+        </div>
+    </div>
+
+    <!-- INTRO (UNCHANGED) -->
+    <div id="intro">
+        <h1>ChaiScript</h1>
+        <p>Brew Up Your Code ☕</p>
+    </div>
+
+    <!-- APP (UNCHANGED CONTENT) -->
+    <div id="app">
+        <div class="panel" style="padding:0; overflow:hidden;">
+            <div id="tab-bar">
+                <!-- tabs injected by JS -->
+            </div>
+            <div id="editor" style="flex:1; width:100%; min-height:0;"></div>
+        </div>
+
+        <div class="panel" style="padding:0; overflow:hidden;">
+
+            <!-- RIGHT PANEL TAB BAR -->
+            <div id="right-tab-bar">
+                <div class="right-tab active" onclick="switchRightTab('output')">📤 Output</div>
+                <div class="right-tab" onclick="switchRightTab('trace')">👣 Trace</div>
+                <div class="right-tab" onclick="switchRightTab('ast')">🌳 AST</div>
+                <div class="right-tab" onclick="switchRightTab('graph')">📈 Graph</div>
+                <div class="right-tab" onclick="switchRightTab('stack')">📚 Stack</div>
+                {% if request.user.is_authenticated %}
+                <div class="right-tab" onclick="switchRightTab('history')">🕓 History</div>
+                {% endif %}
+            </div>
+
+            <!-- OUTPUT TAB -->
+            <div id="rtab-output" class="right-tab-content active">
+                <pre id="output"
+                    style="margin:0; height:calc(100vh - 220px); min-height:200px;">ChaiScript v-1.1.0</pre>
+            </div>
+
+            <!-- TRACE TAB -->
+            <div id="rtab-trace" class="right-tab-content">
+                <div style="font-size:14px;">
+                    <strong>Execution Step</strong>
+                    <div id="viz-content" style="margin-top:8px; color:var(--text-muted);">
+                        Run code to see execution
+                    </div>
+                    <div style="margin-top:10px; display:flex; gap:8px;">
+                        <button onclick="prevStep()">⏮ Prev</button>
+                        <button onclick="nextStep()">⏭ Next</button>
+                    </div>
                 </div>
-                <svg id="var-graph-svg"></svg>
-                <div id="var-graph-legend"></div>
-                <div id="var-graph-step-info" style="font-size:11px; color:var(--accent-green); margin-top:4px; min-height:16px;"></div>
             </div>
-        </div>
 
-        <!-- CALL STACK TAB -->
-        <div id="rtab-stack" class="right-tab-content">
-            <div id="callstack-wrap" style="margin-top:0;">
-                <strong>📚 Call Stack</strong>
-                <div id="callstack-content" style="margin-top:6px; color:var(--text-muted);">
-                    Run code to see call stack
+            <!-- AST TAB -->
+            <div id="rtab-ast" class="right-tab-content">
+                <strong>AST</strong>
+                <div id="ast-tree"
+                    style="height:calc(100vh - 220px); min-height:300px; margin-top:8px; font-size:13px; color:var(--text-muted); line-height:1.5;">
+                    Run code to see AST
                 </div>
             </div>
-        </div>
 
-    </div>
-</div>
+            <!-- GRAPH TAB -->
+            <div id="rtab-graph" class="right-tab-content">
+                <div id="var-graph-wrap" style="margin-top:0;">
+                    <strong>📈 Variable Graph</strong>
+                    <div id="var-graph-hint">Shows how numeric variables change at each execution step. Click a chip to
+                        toggle.</div>
+                    <div id="var-graph-controls" style="color:var(--text-muted); font-size:12px; margin-top:8px;">
+                        Run code to see variable graph
+                    </div>
+                    <svg id="var-graph-svg"></svg>
+                    <div id="var-graph-legend"></div>
+                    <div id="var-graph-step-info"
+                        style="font-size:11px; color:var(--accent-green); margin-top:4px; min-height:16px;"></div>
+                </div>
+            </div>
 
-<!-- MOBILE BOTTOM NAV -->
-<div id="mobile-nav">
-    <button class="mob-tab active" onclick="switchMobileTab('editor')">
-        <span class="mob-icon">✏️</span>Editor
-    </button>
-    <button class="mob-tab" onclick="switchMobileTab('output')">
-        <span class="mob-icon">📤</span>Output
-    </button>
-    <button class="mob-tab" onclick="switchMobileTab('trace')">
-        <span class="mob-icon">👣</span>Trace
-    </button>
-    <button class="mob-tab" onclick="switchMobileTab('ast')">
-        <span class="mob-icon">🌳</span>AST
-    </button>
-    <button class="mob-tab" onclick="switchMobileTab('graph')">
-        <span class="mob-icon">📈</span>Graph
-    </button>
-    <button class="mob-tab" onclick="switchMobileTab('stack')">
-        <span class="mob-icon">📚</span>Stack
-    </button>
-</div>
+            <!-- CALL STACK TAB -->
+            <div id="rtab-stack" class="right-tab-content">
+                <div id="callstack-wrap" style="margin-top:0;">
+                    <strong>📚 Call Stack</strong>
+                    <div id="callstack-content" style="margin-top:6px; color:var(--text-muted);">
+                        Run code to see call stack
+                    </div>
+                </div>
+            </div>
+            <!-- HISTORY TAB -->
+            <div id="rtab-history" class="right-tab-content">
+                <div style="padding:14px; display:flex; flex-direction:column; gap:8px;" id="history-list">
+                    <span style="color:var(--text-muted); font-size:13px;">Save a project to see version history.</span>
+                </div>
+            </div>
 
-<!-- SHARE MODAL -->
-<div id="share-modal-overlay" onclick="if(event.target===this)this.classList.remove('open')">
-    <div id="share-modal-box">
-        <h3>🔗 Share Code</h3>
-        <input id="share-link-input" type="text" readonly value="" onclick="this.select()">
-        <button id="share-copy-btn" onclick="copyShareLink()">📋 Copy Link</button>
-        <div id="share-copy-confirm"></div>
-        <button id="share-modal-close" onclick="document.getElementById('share-modal-overlay').classList.remove('open')">Close</button>
-    </div>
-</div>
-
-<!-- SHORTCUTS MODAL -->
-<div id="shortcuts-overlay" onclick="if(event.target===this)this.classList.remove('open')">
-    <div id="shortcuts-box">
-        <h3>⌨ Keyboard Shortcuts</h3>
-        <div class="sc-row"><span>Run code</span><span class="sc-key">Ctrl + Enter</span></div>
-        <div class="sc-row"><span>Toggle Theme</span><span class="sc-key">Ctrl + Shift</span></div>
-        <div class="sc-row"><span>Previous step</span><span class="sc-key">Ctrl + ← Arrow</span></div>
-        <div class="sc-row"><span>Next step</span><span class="sc-key">Ctrl + → Arrow</span></div>
-        <div class="sc-row"><span>Find in editor</span><span class="sc-key">Ctrl + F</span></div>
-        <div class="sc-row"><span>Find & Replace</span><span class="sc-key">Ctrl + H</span></div>
-        <div class="sc-row"><span>Export code</span><span class="sc-key">⬇ button</span></div>
-        <div class="sc-row"><span>Close modal</span><span class="sc-key">Esc</span></div>
-        <button id="shortcuts-close" onclick="document.getElementById('shortcuts-overlay').classList.remove('open')">Close</button>
-    </div>
-</div>
-
-<!-- CPU / RAM MONITOR -->
-<div id="perf-monitor">
-    <div class="perf-title">⚙ My Session</div>
-
-    <div class="perf-row">
-        <div class="perf-label">
-            <span>CPU</span>
-            <span id="cpu-val">–</span>
-        </div>
-        <div class="perf-bar-bg">
-            <div class="perf-bar-fill" id="cpu-bar" style="width:0%"></div>
         </div>
     </div>
 
-    <div class="perf-row">
-        <div class="perf-label">
-            <span>RAM</span>
-            <span id="ram-val">–</span>
-        </div>
-        <div class="perf-bar-bg">
-            <div class="perf-bar-fill" id="ram-bar" style="width:0%"></div>
+    <!-- MOBILE BOTTOM NAV -->
+    <div id="mobile-nav">
+        <button class="mob-tab active" onclick="switchMobileTab('editor')">
+            <span class="mob-icon">✏️</span>Editor
+        </button>
+        <button class="mob-tab" onclick="switchMobileTab('output')">
+            <span class="mob-icon">📤</span>Output
+        </button>
+        <button class="mob-tab" onclick="switchMobileTab('trace')">
+            <span class="mob-icon">👣</span>Trace
+        </button>
+        <button class="mob-tab" onclick="switchMobileTab('ast')">
+            <span class="mob-icon">🌳</span>AST
+        </button>
+        <button class="mob-tab" onclick="switchMobileTab('graph')">
+            <span class="mob-icon">📈</span>Graph
+        </button>
+        <button class="mob-tab" onclick="switchMobileTab('stack')">
+            <span class="mob-icon">📚</span>Stack
+        </button>
+    </div>
+
+    <!-- SHARE MODAL -->
+    <div id="share-modal-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+        <div id="share-modal-box">
+            <h3>🔗 Share Code</h3>
+            <input id="share-link-input" type="text" readonly value="" onclick="this.select()">
+            <button id="share-copy-btn" onclick="copyShareLink()">📋 Copy Link</button>
+            <div id="share-copy-confirm"></div>
+            <button id="share-modal-close"
+                onclick="document.getElementById('share-modal-overlay').classList.remove('open')">Close</button>
         </div>
     </div>
-</div>
 
-<script>
-(function () {
-    // ── Estimate this TAB's CPU using requestAnimationFrame timing ──
-    let lastTime = performance.now();
-    let cpuLoad = 0;
+    <!-- SHORTCUTS MODAL -->
+    <div id="shortcuts-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+        <div id="shortcuts-box">
+            <h3>⌨ Keyboard Shortcuts</h3>
+            <div class="sc-row"><span>Run code</span><span class="sc-key">Ctrl + Enter</span></div>
+            <div class="sc-row"><span>Toggle Theme</span><span class="sc-key">Ctrl + Shift</span></div>
+            <div class="sc-row"><span>Previous step</span><span class="sc-key">Ctrl + ← Arrow</span></div>
+            <div class="sc-row"><span>Next step</span><span class="sc-key">Ctrl + → Arrow</span></div>
+            <div class="sc-row"><span>Find in editor</span><span class="sc-key">Ctrl + F</span></div>
+            <div class="sc-row"><span>Find & Replace</span><span class="sc-key">Ctrl + H</span></div>
+            <div class="sc-row"><span>Export code</span><span class="sc-key">⬇ button</span></div>
+            <div class="sc-row"><span>Close modal</span><span class="sc-key">Esc</span></div>
+            <button id="shortcuts-close"
+                onclick="document.getElementById('shortcuts-overlay').classList.remove('open')">Close</button>
+        </div>
+    </div>
 
-    function estimateCPU() {
-        const now = performance.now();
-        const delta = now - lastTime;
-        lastTime = now;
-        // If frame took longer than 16ms (60fps ideal), we're under load
-        const load = Math.min(100, Math.max(0, ((delta - 16) / 84) * 100));
-        cpuLoad = cpuLoad * 0.85 + load * 0.15; // smooth
-        requestAnimationFrame(estimateCPU);
-    }
-    requestAnimationFrame(estimateCPU);
+    <!-- CPU / RAM MONITOR -->
+    <div id="perf-monitor">
+        <div class="perf-title">⚙ My Session</div>
 
-    // ── Estimate this TAB's RAM using performance.memory ──
-    function getRAM() {
-        if (performance.memory) {
-            const used = performance.memory.usedJSHeapSize;
-            const total = performance.memory.jsHeapSizeLimit;
-            const pct = Math.min(100, (used / total) * 100);
-            const mb = (used / 1024 / 1024).toFixed(1);
-            return { pct, label: mb + " MB" };
-        }
-        return null;
-    }
+        <div class="perf-row">
+            <div class="perf-label">
+                <span>CPU</span>
+                <span id="cpu-val">–</span>
+            </div>
+            <div class="perf-bar-bg">
+                <div class="perf-bar-fill" id="cpu-bar" style="width:0%"></div>
+            </div>
+        </div>
 
-    // ── Update UI every second ──
-    setInterval(() => {
-        // CPU
-        const cpuPct = Math.round(cpuLoad);
-        document.getElementById("cpu-val").textContent = cpuPct + "%";
-        document.getElementById("cpu-bar").style.width = cpuPct + "%";
+        <div class="perf-row">
+            <div class="perf-label">
+                <span>RAM</span>
+                <span id="ram-val">–</span>
+            </div>
+            <div class="perf-bar-bg">
+                <div class="perf-bar-fill" id="ram-bar" style="width:0%"></div>
+            </div>
+        </div>
+    </div>
 
-        // RAM
-        const ram = getRAM();
-        if (ram) {
-            document.getElementById("ram-val").textContent = ram.label;
-            document.getElementById("ram-bar").style.width = ram.pct.toFixed(1) + "%";
-        } else {
-            document.getElementById("ram-val").textContent = "N/A";
-        }
-    }, 1000);
-})();
+    <script>
+        (function () {
+            // ── Estimate this TAB's CPU using requestAnimationFrame timing ──
+            let lastTime = performance.now();
+            let cpuLoad = 0;
 
-document.getElementById("font-slider").addEventListener("input", function () {
-        if (window.editor) {
-            window.editor.updateOptions({ fontSize: parseInt(this.value) });
-        }
-    });
-</script>
+            function estimateCPU() {
+                const now = performance.now();
+                const delta = now - lastTime;
+                lastTime = now;
+                // If frame took longer than 16ms (60fps ideal), we're under load
+                const load = Math.min(100, Math.max(0, ((delta - 16) / 84) * 100));
+                cpuLoad = cpuLoad * 0.85 + load * 0.15; // smooth
+                requestAnimationFrame(estimateCPU);
+            }
+            requestAnimationFrame(estimateCPU);
 
-<script>
+            // ── Estimate this TAB's RAM using performance.memory ──
+            function getRAM() {
+                if (performance.memory) {
+                    const used = performance.memory.usedJSHeapSize;
+                    const total = performance.memory.jsHeapSizeLimit;
+                    const pct = Math.min(100, (used / total) * 100);
+                    const mb = (used / 1024 / 1024).toFixed(1);
+                    return { pct, label: mb + " MB" };
+                }
+                return null;
+            }
 
-    let executionTrace = [];
-    let currentStep = 0;
-    let highlightDecoration = [];
-    let astTree = null;
+            // ── Update UI every second ──
+            setInterval(() => {
+                // CPU
+                const cpuPct = Math.round(cpuLoad);
+                document.getElementById("cpu-val").textContent = cpuPct + "%";
+                document.getElementById("cpu-bar").style.width = cpuPct + "%";
+
+                // RAM
+                const ram = getRAM();
+                if (ram) {
+                    document.getElementById("ram-val").textContent = ram.label;
+                    document.getElementById("ram-bar").style.width = ram.pct.toFixed(1) + "%";
+                } else {
+                    document.getElementById("ram-val").textContent = "N/A";
+                }
+            }, 1000);
+        })();
+
+        document.getElementById("font-slider").addEventListener("input", function () {
+            if (window.editor) {
+                window.editor.updateOptions({ fontSize: parseInt(this.value) });
+            }
+        });
+    </script>
+
+    <script>
+
+        let executionTrace = [];
+        let currentStep = 0;
+        let highlightDecoration = [];
+        let astTree = null;
 
 
-    let brewCount = parseInt(localStorage.getItem("chai_brew_count") || "0");
-    document.getElementById("brew-count").textContent = brewCount;
+        let brewCount = parseInt(localStorage.getItem("chai_brew_count") || "0");
+        document.getElementById("brew-count").textContent = brewCount;
 
 
-    // AUTO-SAVE: restore last code on load
-    window.addEventListener("load", () => {
-        const saved = localStorage.getItem("chai_autosave");
-        if (saved && window.editor) {
-            window.editor.setValue(saved);
-        }
-    });
+        // AUTO-SAVE: restore last code on load
+        window.addEventListener("load", () => {
+            const saved = localStorage.getItem("chai_autosave");
+            if (saved && window.editor) {
+                window.editor.setValue(saved);
+            }
+        });
 
 
-    const SNIPPETS = {
-        hello: `serveChai("Hello, World!")`,
+        const SNIPPETS = {
+            hello: `serveChai("Hello, World!")`,
 
-        forloop:
-`for_chai i = 1 to_chai 10 then_chai
+            forloop:
+                `for_chai i = 1 to_chai 10 then_chai
     serveChai(i)
 sip`,
 
-        while:
-`cup i = 10
+            while:
+                `cup i = 10
 while_chai i > 0 then_chai
     serveChai(i)
     cup i = i - 1
 sip`,
 
-        function:
-`brew greet(name)
+            function:
+                `brew greet(name)
     serveChai("Hello, " + name)
 sip
 
 greet("ChaiScript")`,
 
-        ifelse:
-`cup score = 75
+            ifelse:
+                `cup score = 75
 
 hot score >= 90 then_chai
     serveChai("Excellent!")
@@ -1330,8 +1781,8 @@ chilled
     serveChai("Failed!")
 sip`,
 
-        fibonacci:
-`cup a = 0
+            fibonacci:
+                `cup a = 0
 cup b = 1
 cup i = 0
 while_chai i < 10 then_chai
@@ -1342,8 +1793,8 @@ while_chai i < 10 then_chai
     cup i = i + 1
 sip`,
 
-        factorial:
-`brew factorial(n)
+            factorial:
+                `brew factorial(n)
     hot n <= 1 then_chai
         return_chai 1
     sip
@@ -1352,940 +1803,1056 @@ sip
 
 serveChai(factorial(6))`,
 
-        list:
-`cup fruits = []
+            list:
+                `cup fruits = []
 append(fruits, "mango")
 append(fruits, "chai")
 append(fruits, "lemon")
 sort_list(fruits)
 serveChai(fruits)`
-    };
+        };
 
-    function loadSnippet(key) {
-        if (window.editor && SNIPPETS[key]) {
-            window.editor.setValue(SNIPPETS[key]);
-            window.editor.focus();
-        }
-        document.getElementById("snippet-overlay").classList.remove("open");
-    }
-
-    function getCookie(name) {
-        const val = document.cookie.split(";").map(c => c.trim());
-        for (const c of val) {
-            if (c.startsWith(name + "=")) return decodeURIComponent(c.slice(name.length + 1));
-        }
-        return null;
-    }
-
-    function shareCode() {
-        const code = window.editor.getValue();
-        fetch("/engine/share/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-                "X-CSRFToken": getCookie("csrftoken") || ""
-            },
-            body: "code=" + encodeURIComponent(code)
-        })
-        .then(r => {
-            if (!r.ok) throw new Error("Server error: " + r.status);
-            return r.json();
-        })
-        .then(data => {
-            if (data.share_id) {
-                const url = `${location.origin}/engine/share/${data.share_id}/`;
-                document.getElementById("share-link-input").value = url;
-                document.getElementById("share-copy-confirm").textContent = "";
-                document.getElementById("share-modal-overlay").classList.add("open");
-            } else {
-                alert("Error: " + (data.error || "Unknown error"));
+        function loadSnippet(key) {
+            if (window.editor && SNIPPETS[key]) {
+                window.editor.setValue(SNIPPETS[key]);
+                window.editor.focus();
             }
-        })
-        .catch(err => alert("Failed: " + err.message));
-    }
+            document.getElementById("snippet-overlay").classList.remove("open");
+        }
 
-    function copyShareLink() {
-        const input = document.getElementById("share-link-input");
-        input.select();
-        input.setSelectionRange(0, 9999);
-        document.execCommand("copy");
-        document.getElementById("share-copy-confirm").textContent = "✅ Copied!";
-    }
-    // on load — check if opened via share link
-    // on load — check if opened via share link
-    (function checkSharedLink() {
-        const path = location.pathname;
-        const match = path.match(/\/engine\/share\/([a-zA-Z0-9]+)\/?$/);
-        if (!match) return;
+        // ── PROJECT SAVE / LOAD ──────────────────────────────
+        let currentProjectId = null;
+        let currentProjectTitle = 'Untitled';
 
-        fetch(`/engine/share/${match[1]}/?json=1`)
-            .then(r => r.json())
-            .then(data => {
-                if (!data.code) return;
+        async function loadHistory() {
+            const listEl = document.getElementById('history-list');
+            if (!currentProjectId) {
+                listEl.innerHTML = '<span style="color:var(--text-muted);font-size:13px;">Load a project first, then save it multiple times to build history here.</span>';
+                return;
+            }
+            listEl.innerHTML = '<span style="color:var(--text-muted);font-size:13px;">Loading…</span>';
+            try {
+                const res = await fetch(`/engine/projects/${currentProjectId}/`);
+                const data = await res.json();
+                if (!data.snapshots.length) {
+                    listEl.innerHTML = '<span style="color:var(--text-muted);font-size:13px;">No snapshots yet. Save a few times to build history.</span>';
+                    return;
+                }
+                listEl.innerHTML = '';
+                data.snapshots.forEach(s => {
+                    const d = document.createElement('div');
+                    d.className = 'proj-item';
+                    d.style.cursor = 'pointer';
+                    const dt = new Date(s.created_at).toLocaleString();
+                    d.innerHTML = `<span class="proj-item-title">${s.label || 'auto'}</span><span class="proj-item-date">${dt}</span>`;
+                    d.onclick = async () => {
+                        const r = await fetch(`/engine/snapshots/${s.id}/`);
+                        const snap = await r.json();
+                        if (window.editor) window.editor.setValue(snap.code);
+                    };
+                    listEl.appendChild(d);
+                });
+            } catch (e) {
+                listEl.innerHTML = '<span style="color:#c53030;font-size:13px;">Failed to load history.</span>';
+            }
+        }
 
-                // keep retrying until editor is ready AND tabs are initialized
-                const interval = setInterval(() => {
-                    if (window.editor && typeof renderTabs === "function") {
-                        // load into first tab
-                        tabs[0].content = data.code;
-                        tabs[0].name = "shared.chai";
-                        activeTabId = 1;
-                        window.editor.setValue(data.code);
-                        renderTabs();
-                        clearInterval(interval);
-                    }
-                }, 150);
+        function newProject() {
+            currentProjectId = null;
+            currentProjectTitle = 'Untitled';
+            document.getElementById('proj-title-input').value = '';
+            document.getElementById('proj-status').textContent = '✓ New project ready — type a name and save.';
+            setTimeout(() => document.getElementById('proj-status').textContent = '', 3000);
+        }
+
+        async function openProjectPanel() {
+            document.getElementById('project-overlay').classList.add('open');
+            document.getElementById('proj-title-input').value = currentProjectTitle;
+            await refreshProjectList();
+        }
+
+        async function refreshProjectList() {
+            const listEl = document.getElementById('proj-list');
+            listEl.innerHTML = '<span style="color:var(--text-muted);font-size:.85rem;">Loading…</span>';
+            try {
+                const res = await fetch('/engine/projects/list/');
+                const data = await res.json();
+                if (!data.projects.length) {
+                    listEl.innerHTML = '<span style="color:var(--text-muted);font-size:.85rem;">No saved projects yet.</span>';
+                    return;
+                }
+                listEl.innerHTML = '';
+                data.projects.forEach(p => {
+                    const d = document.createElement('div');
+                    d.className = 'proj-item';
+                    d.innerHTML = `<span class="proj-item-title">${p.title}</span><span class="proj-item-date">${new Date(p.updated_at).toLocaleDateString()}</span>`;
+                    d.onclick = () => loadProject(p.id, p.title);
+                    listEl.appendChild(d);
+                });
+            } catch (e) {
+                listEl.innerHTML = '<span style="color:#c53030;font-size:.85rem;">Failed to load projects.</span>';
+            }
+        }
+
+        async function saveProject() {
+            const title = document.getElementById('proj-title-input').value.trim() || 'Untitled';
+            const code = window.editor ? window.editor.getValue() : '';
+            const status = document.getElementById('proj-status');
+            status.textContent = 'Saving…';
+            try {
+                const res = await fetch('/engine/projects/save/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+                    body: JSON.stringify({ code, title, project_id: currentProjectId })
+                });
+                const data = await res.json();
+                currentProjectId = data.project_id;
+                currentProjectTitle = data.title;
+                status.textContent = '✓ Saved!';
+                await refreshProjectList();
+                await loadHistory();
+                setTimeout(() => status.textContent = '', 2500);
+            } catch (e) {
+                status.textContent = '✗ Save failed.';
+            }
+        }
+
+        async function loadProject(id, title) {
+            try {
+                const res = await fetch(`/engine/projects/${id}/`);
+                const data = await res.json();
+                if (window.editor) window.editor.setValue(data.code);
+                currentProjectId = data.project_id;
+                currentProjectTitle = data.title;
+                document.getElementById('proj-title-input').value = data.title;
+                document.getElementById('project-overlay').classList.remove('open');
+                document.getElementById('proj-status').textContent = '';
+                await loadHistory();
+            } catch (e) {
+                alert('Failed to load project.');
+            }
+        }
+
+        function getCookie(name) {
+            const val = document.cookie.split(";").map(c => c.trim());
+            for (const c of val) {
+                if (c.startsWith(name + "=")) return decodeURIComponent(c.slice(name.length + 1));
+            }
+            return null;
+        }
+
+        function shareCode() {
+            const code = window.editor.getValue();
+            fetch("/engine/share/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": getCookie("csrftoken") || ""
+                },
+                body: "code=" + encodeURIComponent(code)
             })
-            .catch(err => console.error("Share load error:", err));
-    })();
+                .then(r => {
+                    if (!r.ok) throw new Error("Server error: " + r.status);
+                    return r.json();
+                })
+                .then(data => {
+                    if (data.share_id) {
+                        const url = `${location.origin}/engine/share/${data.share_id}/`;
+                        document.getElementById("share-link-input").value = url;
+                        document.getElementById("share-copy-confirm").textContent = "";
+                        document.getElementById("share-modal-overlay").classList.add("open");
+                    } else {
+                        alert("Error: " + (data.error || "Unknown error"));
+                    }
+                })
+                .catch(err => alert("Failed: " + err.message));
+        }
+
+        function copyShareLink() {
+            const input = document.getElementById("share-link-input");
+            input.select();
+            input.setSelectionRange(0, 9999);
+            document.execCommand("copy");
+            document.getElementById("share-copy-confirm").textContent = "✅ Copied!";
+        }
+        // on load — check if opened via share link
+        // on load — check if opened via share link
+        (function checkSharedLink() {
+            const path = location.pathname;
+            const match = path.match(/\/engine\/share\/([a-zA-Z0-9]+)\/?$/);
+            if (!match) return;
+
+            fetch(`/engine/share/${match[1]}/?json=1`)
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.code) return;
+
+                    // keep retrying until editor is ready AND tabs are initialized
+                    const interval = setInterval(() => {
+                        if (window.editor && typeof renderTabs === "function") {
+                            // load into first tab
+                            tabs[0].content = data.code;
+                            tabs[0].name = "shared.chai";
+                            activeTabId = 1;
+                            window.editor.setValue(data.code);
+                            renderTabs();
+                            clearInterval(interval);
+                        }
+                    }, 150);
+                })
+                .catch(err => console.error("Share load error:", err));
+        })();
 
 
-    function exportChai() {
-        let name = prompt("Enter file name:", "my_script");
-        if (name === null) return; // user cancelled
-        name = name.trim() || "my_script";
-        if (name.endsWith(".chai")) name = name.slice(0, -5); // avoid double extension
-        const code = window.editor.getValue();
-        const blob = new Blob([code], { type: "text/plain" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = name + ".chai";
-        a.click();
-        URL.revokeObjectURL(a.href);
-    }
+        function exportChai() {
+            let name = prompt("Enter file name:", "my_script");
+            if (name === null) return; // user cancelled
+            name = name.trim() || "my_script";
+            if (name.endsWith(".chai")) name = name.slice(0, -5); // avoid double extension
+            const code = window.editor.getValue();
+            const blob = new Blob([code], { type: "text/plain" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = name + ".chai";
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
 
-    function playBrewSound() {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBrewSound() {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Bubble 1
-        const o1 = ctx.createOscillator();
-        const g1 = ctx.createGain();
-        o1.connect(g1); g1.connect(ctx.destination);
-        o1.type = "sine";
-        o1.frequency.setValueAtTime(520, ctx.currentTime);
-        o1.frequency.exponentialRampToValueAtTime(280, ctx.currentTime + 0.15);
-        g1.gain.setValueAtTime(0.3, ctx.currentTime);
-        g1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-        o1.start(); o1.stop(ctx.currentTime + 0.15);
+            // Bubble 1
+            const o1 = ctx.createOscillator();
+            const g1 = ctx.createGain();
+            o1.connect(g1); g1.connect(ctx.destination);
+            o1.type = "sine";
+            o1.frequency.setValueAtTime(520, ctx.currentTime);
+            o1.frequency.exponentialRampToValueAtTime(280, ctx.currentTime + 0.15);
+            g1.gain.setValueAtTime(0.3, ctx.currentTime);
+            g1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+            o1.start(); o1.stop(ctx.currentTime + 0.15);
 
-        // Bubble 2
-        const o2 = ctx.createOscillator();
-        const g2 = ctx.createGain();
-        o2.connect(g2); g2.connect(ctx.destination);
-        o2.type = "sine";
-        o2.frequency.setValueAtTime(700, ctx.currentTime + 0.1);
-        o2.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.25);
-        g2.gain.setValueAtTime(0.2, ctx.currentTime + 0.1);
-        g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
-        o2.start(ctx.currentTime + 0.1); o2.stop(ctx.currentTime + 0.25);
-    }
+            // Bubble 2
+            const o2 = ctx.createOscillator();
+            const g2 = ctx.createGain();
+            o2.connect(g2); g2.connect(ctx.destination);
+            o2.type = "sine";
+            o2.frequency.setValueAtTime(700, ctx.currentTime + 0.1);
+            o2.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.25);
+            g2.gain.setValueAtTime(0.2, ctx.currentTime + 0.1);
+            g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+            o2.start(ctx.currentTime + 0.1); o2.stop(ctx.currentTime + 0.25);
+        }
 
-    // INTRO (UNCHANGED)
-    setTimeout(() => {
-        document.getElementById("intro").style.display = "none";
-        document.getElementById("app").style.display = "flex";
-    }, 5000);
+        // INTRO (UNCHANGED)
+        setTimeout(() => {
+            document.getElementById("intro").style.display = "none";
+            document.getElementById("app").style.display = "flex";
+        }, 5000);
 
-    // THEME TOGGLE (UNCHANGED)
-    function toggleTheme() {
-        document.body.classList.toggle("dark");
-        localStorage.setItem(
-            "theme",
-            document.body.classList.contains("dark") ? "dark" : "light"
-        );
-        monaco.editor.setTheme(
-        document.body.classList.contains("dark") ? "vs-dark" : "vs"
-);
-    }
+        // THEME TOGGLE (UNCHANGED)
+        function toggleTheme() {
+            document.body.classList.toggle("dark");
+            localStorage.setItem(
+                "chai_theme",
+                document.body.classList.contains("dark") ? "dark" : "light"
+            );
+            monaco.editor.setTheme(
+                document.body.classList.contains("dark") ? "vs-dark" : "vs"
+            );
+        }
 
-    if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark");
-    }
+        if (localStorage.getItem("chai_theme") === "dark") {
+            document.body.classList.add("dark");
+        }
 
-    // ── EDITOR TABS ──
-    let tabs = [{ id: 1, name: "script_1.chai", content: "" }];
-    let activeTabId = 1;
-    let tabCounter = 1;
+        // ── EDITOR TABS ──
+        let tabs = [{ id: 1, name: "script_1.chai", content: "" }];
+        let activeTabId = 1;
+        let tabCounter = 1;
 
-    function renderTabs() {
-        const bar = document.getElementById("tab-bar");
-        bar.innerHTML = "";
-        tabs.forEach(tab => {
-            const el = document.createElement("div");
-            el.className = "editor-tab" + (tab.id === activeTabId ? " active" : "");
-            el.innerHTML = `
+        function renderTabs() {
+            const bar = document.getElementById("tab-bar");
+            bar.innerHTML = "";
+            tabs.forEach(tab => {
+                const el = document.createElement("div");
+                el.className = "editor-tab" + (tab.id === activeTabId ? " active" : "");
+                el.innerHTML = `
                 <span ondblclick="renameTab(${tab.id})">${tab.name}</span>
                 ${tabs.length > 1 ? `<span class="tab-close" onclick="closeTab(event,${tab.id})">×</span>` : ""}
             `;
-            el.onclick = (e) => { if (!e.target.classList.contains("tab-close")) switchTab(tab.id); };
-            bar.appendChild(el);
-        });
-        const addBtn = document.createElement("button");
-        addBtn.id = "tab-add-btn";
-        addBtn.textContent = "+";
-        addBtn.onclick = addTab;
-        bar.appendChild(addBtn);
-    }
-
-    function switchTab(id) {
-        // save current content
-        const current = tabs.find(t => t.id === activeTabId);
-        if (current && window.editor) current.content = window.editor.getValue();
-        // switch
-        activeTabId = id;
-        const next = tabs.find(t => t.id === id);
-        if (next && window.editor) window.editor.setValue(next.content);
-        renderTabs();
-    }
-
-    function addTab() {
-        // save current
-        const current = tabs.find(t => t.id === activeTabId);
-        if (current && window.editor) current.content = window.editor.getValue();
-        tabCounter++;
-        const newTab = { id: tabCounter, name: `script_${tabCounter}.chai`, content: "" };
-        tabs.push(newTab);
-        activeTabId = newTab.id;
-        if (window.editor) window.editor.setValue("");
-        renderTabs();
-    }
-
-    function closeTab(e, id) {
-        e.stopPropagation();
-        if (tabs.length === 1) return;
-        const idx = tabs.findIndex(t => t.id === id);
-        tabs.splice(idx, 1);
-        if (activeTabId === id) {
-            activeTabId = tabs[Math.max(0, idx - 1)].id;
-            if (window.editor) window.editor.setValue(tabs.find(t => t.id === activeTabId).content);
+                el.onclick = (e) => { if (!e.target.classList.contains("tab-close")) switchTab(tab.id); };
+                bar.appendChild(el);
+            });
+            const addBtn = document.createElement("button");
+            addBtn.id = "tab-add-btn";
+            addBtn.textContent = "+";
+            addBtn.onclick = addTab;
+            bar.appendChild(addBtn);
         }
-        renderTabs();
-    }
 
-    function renameTab(id) {
-        const tab = tabs.find(t => t.id === id);
-        if (!tab) return;
-        let newName = prompt("Rename tab:", tab.name.replace(".chai",""));
-        if (!newName) return;
-        newName = newName.trim();
-        if (!newName.endsWith(".chai")) newName += ".chai";
-        tab.name = newName;
-        renderTabs();
-    }
-
-
-    // ── RIGHT PANEL TABS ──
-    function switchRightTab(name) {
-        document.querySelectorAll(".right-tab").forEach(t => t.classList.remove("active"));
-        document.querySelectorAll(".right-tab-content").forEach(t => t.classList.remove("active"));
-        document.querySelector(`.right-tab[onclick*="'${name}'"]`).classList.add("active");
-        document.getElementById(`rtab-${name}`).classList.add("active");
-
-        // re-render AST now that tab is visible and has real width
-        if (name === "ast" && astTree) renderAST(astTree);
-
-        // re-draw graph now that SVG has real width
-        if (name === "graph" && allVarNames.length > 0) drawVarGraph();
-    }
-
-    // ── MOBILE TAB SWITCHING ──
-    const MOB_PANEL_MAP = {
-        editor: 0,   // first .panel
-        output: 1,   // second .panel — rtab-output
-        trace:  1,
-        ast:    1,
-        graph:  1,
-        stack:  1
-    };
-
-    function switchMobileTab(name) {
-        const panels = document.querySelectorAll("#app .panel");
-        const tabs   = document.querySelectorAll(".mob-tab");
-
-        // update bottom nav highlight
-        tabs.forEach((t, i) => {
-            const tabName = ["editor","output","trace","ast","graph","stack"][i];
-            t.classList.toggle("active", tabName === name);
-        });
-
-        if (name === "editor") {
-            panels[0].classList.add("mob-active");
-            panels[1].classList.remove("mob-active");
-        } else {
-            panels[0].classList.remove("mob-active");
-            panels[1].classList.add("mob-active");
-            switchRightTab(name);
+        function switchTab(id) {
+            // save current content
+            const current = tabs.find(t => t.id === activeTabId);
+            if (current && window.editor) current.content = window.editor.getValue();
+            // switch
+            activeTabId = id;
+            const next = tabs.find(t => t.id === id);
+            if (next && window.editor) window.editor.setValue(next.content);
+            renderTabs();
         }
-    }
 
-    // init mobile — show editor panel by default
-    if (window.innerWidth <= 768) {
-        document.querySelectorAll("#app .panel")[0].classList.add("mob-active");
-    }
+        function addTab() {
+            // save current
+            const current = tabs.find(t => t.id === activeTabId);
+            if (current && window.editor) current.content = window.editor.getValue();
+            tabCounter++;
+            const newTab = { id: tabCounter, name: `script_${tabCounter}.chai`, content: "" };
+            tabs.push(newTab);
+            activeTabId = newTab.id;
+            if (window.editor) window.editor.setValue("");
+            renderTabs();
+        }
 
-    let errorDecoration = [];
+        function closeTab(e, id) {
+            e.stopPropagation();
+            if (tabs.length === 1) return;
+            const idx = tabs.findIndex(t => t.id === id);
+            tabs.splice(idx, 1);
+            if (activeTabId === id) {
+                activeTabId = tabs[Math.max(0, idx - 1)].id;
+                if (window.editor) window.editor.setValue(tabs.find(t => t.id === activeTabId).content);
+            }
+            renderTabs();
+        }
 
-    function highlightErrorLine(lineNumber) {
-        if (!window.editor || !lineNumber) return;
-        errorDecoration = window.editor.deltaDecorations(errorDecoration, [
-            {
-                range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-                options: {
-                    isWholeLine: true,
-                    className: "error-line",
-                    glyphMarginClassName: "error-line-glyph"
+        function renameTab(id) {
+            const tab = tabs.find(t => t.id === id);
+            if (!tab) return;
+            let newName = prompt("Rename tab:", tab.name.replace(".chai", ""));
+            if (!newName) return;
+            newName = newName.trim();
+            if (!newName.endsWith(".chai")) newName += ".chai";
+            tab.name = newName;
+            renderTabs();
+        }
+
+
+        // ── RIGHT PANEL TABS ──
+        function switchRightTab(name) {
+            document.querySelectorAll(".right-tab").forEach(t => t.classList.remove("active"));
+            document.querySelectorAll(".right-tab-content").forEach(t => t.classList.remove("active"));
+            document.querySelector(`.right-tab[onclick*="'${name}'"]`).classList.add("active");
+            document.getElementById(`rtab-${name}`).classList.add("active");
+
+            // re-render AST now that tab is visible and has real width
+            if (name === "ast" && astTree) renderAST(astTree);
+
+            // re-draw graph now that SVG has real width
+            if (name === "graph" && allVarNames.length > 0) drawVarGraph();
+
+            // load version history
+            if (name === "history") loadHistory();
+        }
+
+        // ── MOBILE TAB SWITCHING ──
+        const MOB_PANEL_MAP = {
+            editor: 0,   // first .panel
+            output: 1,   // second .panel — rtab-output
+            trace: 1,
+            ast: 1,
+            graph: 1,
+            stack: 1
+        };
+
+        function switchMobileTab(name) {
+            const panels = document.querySelectorAll("#app .panel");
+            const tabs = document.querySelectorAll(".mob-tab");
+
+            // update bottom nav highlight
+            tabs.forEach((t, i) => {
+                const tabName = ["editor", "output", "trace", "ast", "graph", "stack"][i];
+                t.classList.toggle("active", tabName === name);
+            });
+
+            if (name === "editor") {
+                panels[0].classList.add("mob-active");
+                panels[1].classList.remove("mob-active");
+            } else {
+                panels[0].classList.remove("mob-active");
+                panels[1].classList.add("mob-active");
+                switchRightTab(name);
+            }
+        }
+
+        // init mobile — show editor panel by default
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll("#app .panel")[0].classList.add("mob-active");
+        }
+
+        let errorDecoration = [];
+
+        function highlightErrorLine(lineNumber) {
+            if (!window.editor || !lineNumber) return;
+            errorDecoration = window.editor.deltaDecorations(errorDecoration, [
+                {
+                    range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+                    options: {
+                        isWholeLine: true,
+                        className: "error-line",
+                        glyphMarginClassName: "error-line-glyph"
+                    }
                 }
+            ]);
+            window.editor.revealLineInCenter(lineNumber);
+        }
+
+        function clearErrorLine() {
+            if (!window.editor) return;
+            errorDecoration = window.editor.deltaDecorations(errorDecoration, []);
+        }
+
+        // RUN CODE (UNCHANGED)
+        function runCode() {
+
+            playBrewSound();
+            const code = window.editor.getValue();
+
+            localStorage.setItem("chai_autosave", code);
+
+            const runStart = performance.now();
+
+            fetch("/engine/run/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: "code=" + encodeURIComponent(code)
+            })
+                .then(res => res.json())
+                .then(data => {
+
+                    // =========================
+                    // OUTPUT
+                    // =========================
+                    clearErrorLine();
+                    const output = data.output || "";
+                    document.getElementById("output").textContent = output;
+
+                    // check if output is an error and extract line number
+                    const lineMatch = output.match(/line (\d+)/i);
+                    if (lineMatch && (output.includes("Error") || output.includes("error"))) {
+                        highlightErrorLine(parseInt(lineMatch[1]));
+                    }
+
+                    brewCount++;
+                    localStorage.setItem("chai_brew_count", brewCount);
+                    document.getElementById("brew-count").textContent = brewCount;
+
+                    const elapsed = (performance.now() - runStart).toFixed(0);
+                    document.getElementById("timer-val").textContent = elapsed + " ms";
+
+                    // =========================
+                    // EXECUTION TRACE
+                    // =========================
+                    executionTrace = data.trace || [];
+                    currentStep = 0;
+
+                    console.log("Execution Trace:", executionTrace);
+
+                    // =========================
+                    // AST
+                    // =========================
+                    astTree = data.ast || null;
+
+                    console.log("AST:", astTree);
+
+                    renderAST(astTree);
+
+                    // =========================
+                    // RENDER
+                    // =========================
+                    buildVarGraph();
+                    renderStep();
+
+                })
+                .catch(err => {
+                    console.error("Run error:", err);
+                    document.getElementById("output").textContent = "Error running code";
+                });
+        }
+
+        // CTRL + ENTER (ADDED)
+        document.addEventListener("keydown", function (e) {
+            if (e.ctrlKey && e.key === "Enter") {
+                e.preventDefault();
+                runCode();
             }
-        ]);
-        window.editor.revealLineInCenter(lineNumber);
-    }
-
-    function clearErrorLine() {
-        if (!window.editor) return;
-        errorDecoration = window.editor.deltaDecorations(errorDecoration, []);
-    }
-
-    // RUN CODE (UNCHANGED)
-    function runCode() {
-
-        playBrewSound();
-        const code = window.editor.getValue();
-
-        localStorage.setItem("chai_autosave", code);
-
-        const runStart = performance.now();
-
-        fetch("/engine/run/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: "code=" + encodeURIComponent(code)
-        })
-        .then(res => res.json())
-        .then(data => {
-
-            // =========================
-            // OUTPUT
-            // =========================
-            clearErrorLine();
-            const output = data.output || "";
-            document.getElementById("output").textContent = output;
-
-            // check if output is an error and extract line number
-            const lineMatch = output.match(/line (\d+)/i);
-            if (lineMatch && (output.includes("Error") || output.includes("error"))) {
-                highlightErrorLine(parseInt(lineMatch[1]));
+            if (e.key === "Escape") {
+                document.getElementById("shortcuts-overlay").classList.remove("open");
             }
 
-            brewCount++;
-            localStorage.setItem("chai_brew_count", brewCount);
-            document.getElementById("brew-count").textContent = brewCount;
+            if (e.ctrlKey && e.key === "ArrowRight") {
+                e.preventDefault();
+                nextStep();
+            }
+            if (e.ctrlKey && e.key === "ArrowLeft") {
+                e.preventDefault();
+                prevStep();
+            }
 
-            const elapsed = (performance.now() - runStart).toFixed(0);
-            document.getElementById("timer-val").textContent = elapsed + " ms";
+            if (e.ctrlKey && e.shiftKey) {
+                e.preventDefault();
+                toggleTheme();
+            }
 
-            // =========================
-            // EXECUTION TRACE
-            // =========================
-            executionTrace = data.trace || [];
-            currentStep = 0;
-
-            console.log("Execution Trace:", executionTrace);
-
-            // =========================
-            // AST
-            // =========================
-            astTree = data.ast || null;
-
-            console.log("AST:", astTree);
-
-            renderAST(astTree);
-
-            // =========================
-            // RENDER
-            // =========================
-            buildVarGraph();
-            renderStep();
-
-        })
-        .catch(err => {
-            console.error("Run error:", err);
-            document.getElementById("output").textContent = "Error running code";
         });
-    }
 
-    // CTRL + ENTER (ADDED)
-    document.addEventListener("keydown", function (e) {
-        if (e.ctrlKey && e.key === "Enter") {
-            e.preventDefault();
-            runCode();
-        }
-        if (e.key === "Escape") {
-            document.getElementById("shortcuts-overlay").classList.remove("open");
-        }
+        function renderAST(astData) {
 
-        if (e.ctrlKey && e.key === "ArrowRight"){
-            e.preventDefault();
-            nextStep();
-        }
-        if (e.ctrlKey && e.key === "ArrowLeft"){
-            e.preventDefault();
-            prevStep();
-        }
+            d3.select("#ast-tree").selectAll("*").remove();
 
-        if (e.ctrlKey && e.shiftKey){
-            e.preventDefault();
-            toggleTheme();
-        }
+            if (!astData) return;
 
-    });
+            const container = document.getElementById("ast-tree");
+            container.innerHTML = "";
 
-    function renderAST(astData) {
+            const width = container.clientWidth;
+            const height = 400;
 
-    d3.select("#ast-tree").selectAll("*").remove();
+            const svg = d3.select("#ast-tree")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
 
-    if (!astData) return;
+            const g = svg.append("g");
 
-    const container = document.getElementById("ast-tree");
-    container.innerHTML = "";
-
-    const width = container.clientWidth;
-    const height = 400;
-
-    const svg = d3.select("#ast-tree")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
-    const g = svg.append("g");
-
-    const zoom = d3.zoom().on("zoom", (event) => {
-        g.attr("transform", event.transform);
-    });
-
-    svg.call(zoom);
-
-    const root = d3.hierarchy(astData);
-
-    const treeLayout = d3.tree().size([width - 100, height - 100]);
-
-    treeLayout(root);
-
-    // links
-    g.selectAll("line")
-        .data(root.links())
-        .enter()
-        .append("line")
-        .attr("x1", d => d.source.x + 50)
-        .attr("y1", d => d.source.y + 50)
-        .attr("x2", d => d.target.x + 50)
-        .attr("y2", d => d.target.y + 50)
-        .attr("stroke", "#888");
-
-    // nodes
-    const node = g.selectAll("g")
-        .data(root.descendants())
-        .enter()
-        .append("g")
-        .attr("transform", d => `translate(${d.x + 50},${d.y + 50})`);
-
-    node.append("circle")
-        .attr("r", 8)
-        .attr("fill", "#2f855a");
-
-    node.append("text")
-    .each(function(d) {
-
-        const text = d3.select(this);
-
-        let type = d.data.type;
-        let value = d.data.value;
-
-        // Friendly names
-        if (type === "ListNode") type = "Program";
-        if (type === "VarAssignNode") type = "Assign";
-        if (type === "VarAccessNode") type = "Variable";
-        if (type === "NumberNode") type = "Number";
-        if (type === "StringNode") type = "String";
-        if (type === "BinOpNode") type = "BinaryOp";
-        if (type === "CallNode") type = "Function Call";
-        if (type === "IfNode") type = "If Condition";
-        if (type === "ForNode") type = "For Loop";
-        if (type === "WhileNode") type = "While Loop";
-        if (type === "FuncDefNode") type = "Function";
-
-        // FIRST LINE → NODE TYPE
-        text.append("tspan")
-            .text(type)
-            .attr("x", 12)
-            .attr("dy", "0em");
-
-        // SECOND LINE → VALUE (if exists)
-        if (value) {
-            text.append("tspan")
-                .text(value)
-                .attr("x", 12)
-                .attr("dy", "1.2em")
-                .style("fill", "var(--accent-yellow)");
-        }
-
-    })
-    .attr("dx", 12)
-    .attr("dy", 4)
-    .style("font-size", "12px")
-    .style("fill", "var(--text-main)");
-}
-
-function highlightASTNode(lineNumber) {
-
-    const nodes = document.querySelectorAll("#ast-tree div");
-
-    nodes.forEach(n => {
-        n.style.background = "";
-    });
-
-    nodes.forEach(n => {
-
-        if (parseInt(n.dataset.line) === lineNumber) {
-
-            n.style.background = "rgba(246,196,83,0.35)";
-            n.style.borderLeft = "3px solid #f6c453";
-            n.style.paddingLeft = "6px";
-        }
-
-    });
-
-}
-
-
-// ── VARIABLE GRAPH ──
-    const VAR_COLORS = ["#2f855a","#f6c453","#63b3ed","#fc8181","#b794f4","#68d391"];
-    let activeVars = new Set();
-    let allVarNames = [];
-
-    function buildVarGraph() {
-        // collect all variable names across all steps
-        const nameSet = new Set();
-        executionTrace.forEach(s => { if(s.symbols) Object.keys(s.symbols).forEach(k => nameSet.add(k)); });
-        allVarNames = [...nameSet];
-        activeVars = new Set(allVarNames.slice(0, 2)); // default: first 2 vars active
-
-        const ctrl = document.getElementById("var-graph-controls");
-        if (allVarNames.length === 0) {
-            ctrl.textContent = "No variables to graph.";
-            return;
-        }
-        ctrl.innerHTML = "";
-        allVarNames.forEach((name, i) => {
-            const chip = document.createElement("span");
-            chip.className = "var-chip" + (activeVars.has(name) ? " active" : "");
-            chip.textContent = name;
-            chip.style.borderColor = VAR_COLORS[i % VAR_COLORS.length];
-            chip.onclick = () => {
-                if (activeVars.has(name)) activeVars.delete(name);
-                else activeVars.add(name);
-                chip.classList.toggle("active");
-                drawVarGraph();
-            };
-            ctrl.appendChild(chip);
-        });
-        drawVarGraph();
-    }
-
-    function drawVarGraph() {
-        const svg = document.getElementById("var-graph-svg");
-        svg.innerHTML = "";
-
-        const W = svg.clientWidth || 400;
-        const H = 300;
-        const PAD = { top: 20, right: 80, bottom: 36, left: 42 };
-        const innerW = W - PAD.left - PAD.right;
-        const innerH = H - PAD.top - PAD.bottom;
-
-        const steps = executionTrace.length;
-        if (steps < 2) return;
-
-        // for each active var, build numeric series
-        const series = [];
-        activeVars.forEach((name, _) => {
-            const vals = executionTrace.map(s => {
-                const v = s.symbols && s.symbols[name];
-                return v !== undefined ? parseFloat(v) : NaN;
+            const zoom = d3.zoom().on("zoom", (event) => {
+                g.attr("transform", event.transform);
             });
-            if (vals.some(v => !isNaN(v))) series.push({ name, vals });
-        });
 
-        if (series.length === 0) return;
+            svg.call(zoom);
 
-        // global min/max
-        let minV = Infinity, maxV = -Infinity;
-        series.forEach(s => s.vals.forEach(v => { if(!isNaN(v)){ minV=Math.min(minV,v); maxV=Math.max(maxV,v); }}));
-        if (minV === maxV) { minV -= 1; maxV += 1; }
+            const root = d3.hierarchy(astData);
 
-        const xScale = i => PAD.left + (i / (steps - 1)) * innerW;
-        const yScale = v => PAD.top + innerH - ((v - minV) / (maxV - minV)) * innerH;
+            const treeLayout = d3.tree().size([width - 100, height - 100]);
 
-        const ns = "http://www.w3.org/2000/svg";
+            treeLayout(root);
 
-        // y-axis labels
-        [minV, maxV].forEach(v => {
-            const t = document.createElementNS(ns, "text");
-            t.setAttribute("x", PAD.left - 4);
-            t.setAttribute("y", yScale(v) + 4);
-            t.setAttribute("text-anchor", "end");
-            t.setAttribute("font-size", "10");
-            t.setAttribute("fill", "var(--text-muted)");
-            t.textContent = Number.isInteger(v) ? v : v.toFixed(1);
-            svg.appendChild(t);
-        });
+            // links
+            g.selectAll("line")
+                .data(root.links())
+                .enter()
+                .append("line")
+                .attr("x1", d => d.source.x + 50)
+                .attr("y1", d => d.source.y + 50)
+                .attr("x2", d => d.target.x + 50)
+                .attr("y2", d => d.target.y + 50)
+                .attr("stroke", "#888");
 
-       // x-axis label
-        const xLabel = document.createElementNS(ns, "text");
-        xLabel.setAttribute("x", W / 2);
-        xLabel.setAttribute("y", H);
-        xLabel.setAttribute("text-anchor", "middle");
-        xLabel.setAttribute("font-size", "10");
-        xLabel.setAttribute("fill", "var(--text-muted)");
-        xLabel.textContent = "← execution steps →";
-        svg.appendChild(xLabel);
+            // nodes
+            const node = g.selectAll("g")
+                .data(root.descendants())
+                .enter()
+                .append("g")
+                .attr("transform", d => `translate(${d.x + 50},${d.y + 50})`);
 
-        // x-axis step numbers
-        [0, Math.floor(steps/2), steps-1].forEach(i => {
-            const t = document.createElementNS(ns, "text");
-            t.setAttribute("x", xScale(i));
-            t.setAttribute("y", H - 12);
-            t.setAttribute("text-anchor", "middle");
-            t.setAttribute("font-size", "10");
-            t.setAttribute("fill", "var(--text-muted)");
-            t.textContent = `step ${i + 1}`;
-            svg.appendChild(t);
-        });
-        // draw lines per variable
-        series.forEach(({ name, vals }, si) => {
-            const color = VAR_COLORS[allVarNames.indexOf(name) % VAR_COLORS.length];
-            let d = "";
-            let lastX, lastY;
-            vals.forEach((v, i) => {
-                if (isNaN(v)) return;
-                const x = xScale(i), y = yScale(v);
-                d += d === "" ? `M${x},${y}` : `L${x},${y}`;
-                lastX = x; lastY = y;
-            });
-            if (d) {
-                const path = document.createElementNS(ns, "path");
-                path.setAttribute("d", d);
-                path.setAttribute("fill", "none");
-                path.setAttribute("stroke", color);
-                path.setAttribute("stroke-width", "2");
-                path.setAttribute("stroke-linejoin", "round");
-                svg.appendChild(path);
-            }
+            node.append("circle")
+                .attr("r", 8)
+                .attr("fill", "#2f855a");
 
-            // current step dot + tooltip label
-            const cv = vals[currentStep];
-            if (!isNaN(cv)) {
-                const circle = document.createElementNS(ns, "circle");
-                circle.setAttribute("cx", xScale(currentStep));
-                circle.setAttribute("cy", yScale(cv));
-                circle.setAttribute("r", "5");
-                circle.setAttribute("fill", color);
-                circle.setAttribute("stroke", "var(--bg-panel)");
-                circle.setAttribute("stroke-width", "2");
-                svg.appendChild(circle);
+            node.append("text")
+                .each(function (d) {
 
-                // value label next to dot — flip left if near right edge
-                const lbl = document.createElementNS(ns, "text");
-                const nearRight = xScale(currentStep) > W - 80;
-                lbl.setAttribute("x", nearRight ? xScale(currentStep) - 8 : xScale(currentStep) + 8);
-                lbl.setAttribute("text-anchor", nearRight ? "end" : "start");
-                lbl.setAttribute("y", yScale(cv) - 6);
-                lbl.setAttribute("font-size", "11");
-                lbl.setAttribute("fill", color);
-                lbl.setAttribute("font-weight", "bold");
-                lbl.textContent = `${name}=${Number.isInteger(cv) ? cv : cv.toFixed(2)}`;
-                svg.appendChild(lbl);
-            }
-        });
+                    const text = d3.select(this);
 
-         // legend
-        updateLegend(series);
+                    let type = d.data.type;
+                    let value = d.data.value;
 
-        // step info bar
-        const stepInfo = document.getElementById("var-graph-step-info");
-        if (stepInfo) {
-            const activeVals = series.map(({ name, vals }) => {
-                const v = vals[currentStep];
-                return isNaN(v) ? null : `${name} = ${Number.isInteger(v) ? v : v.toFixed(2)}`;
-            }).filter(Boolean);
-            stepInfo.textContent = activeVals.length
-                ? `▶ Step ${currentStep + 1}:  ${activeVals.join("   |   ")}`
-                : "";
+                    // Friendly names
+                    if (type === "ListNode") type = "Program";
+                    if (type === "VarAssignNode") type = "Assign";
+                    if (type === "VarAccessNode") type = "Variable";
+                    if (type === "NumberNode") type = "Number";
+                    if (type === "StringNode") type = "String";
+                    if (type === "BinOpNode") type = "BinaryOp";
+                    if (type === "CallNode") type = "Function Call";
+                    if (type === "IfNode") type = "If Condition";
+                    if (type === "ForNode") type = "For Loop";
+                    if (type === "WhileNode") type = "While Loop";
+                    if (type === "FuncDefNode") type = "Function";
+
+                    // FIRST LINE → NODE TYPE
+                    text.append("tspan")
+                        .text(type)
+                        .attr("x", 12)
+                        .attr("dy", "0em");
+
+                    // SECOND LINE → VALUE (if exists)
+                    if (value) {
+                        text.append("tspan")
+                            .text(value)
+                            .attr("x", 12)
+                            .attr("dy", "1.2em")
+                            .style("fill", "var(--accent-yellow)");
+                    }
+
+                })
+                .attr("dx", 12)
+                .attr("dy", 4)
+                .style("font-size", "12px")
+                .style("fill", "var(--text-main)");
         }
-    }
 
-function renderStep() {
+        function highlightASTNode(lineNumber) {
 
-    const container = document.getElementById("viz-content");
+            const nodes = document.querySelectorAll("#ast-tree div");
 
-    if (executionTrace.length === 0) {
-        container.textContent = "No execution trace.";
-        return;
-    }
+            nodes.forEach(n => {
+                n.style.background = "";
+            });
 
-    const step = executionTrace[currentStep];
-    const prevStep = executionTrace[currentStep - 1];
+            nodes.forEach(n => {
 
-    let html = `
+                if (parseInt(n.dataset.line) === lineNumber) {
+
+                    n.style.background = "rgba(246,196,83,0.35)";
+                    n.style.borderLeft = "3px solid #f6c453";
+                    n.style.paddingLeft = "6px";
+                }
+
+            });
+
+        }
+
+
+        // ── VARIABLE GRAPH ──
+        const VAR_COLORS = ["#2f855a", "#f6c453", "#63b3ed", "#fc8181", "#b794f4", "#68d391"];
+        let activeVars = new Set();
+        let allVarNames = [];
+
+        function buildVarGraph() {
+            // collect all variable names across all steps
+            const nameSet = new Set();
+            executionTrace.forEach(s => { if (s.symbols) Object.keys(s.symbols).forEach(k => nameSet.add(k)); });
+            allVarNames = [...nameSet];
+            activeVars = new Set(allVarNames.slice(0, 2)); // default: first 2 vars active
+
+            const ctrl = document.getElementById("var-graph-controls");
+            if (allVarNames.length === 0) {
+                ctrl.textContent = "No variables to graph.";
+                return;
+            }
+            ctrl.innerHTML = "";
+            allVarNames.forEach((name, i) => {
+                const chip = document.createElement("span");
+                chip.className = "var-chip" + (activeVars.has(name) ? " active" : "");
+                chip.textContent = name;
+                chip.style.borderColor = VAR_COLORS[i % VAR_COLORS.length];
+                chip.onclick = () => {
+                    if (activeVars.has(name)) activeVars.delete(name);
+                    else activeVars.add(name);
+                    chip.classList.toggle("active");
+                    drawVarGraph();
+                };
+                ctrl.appendChild(chip);
+            });
+            drawVarGraph();
+        }
+
+        function drawVarGraph() {
+            const svg = document.getElementById("var-graph-svg");
+            svg.innerHTML = "";
+
+            const W = svg.clientWidth || 400;
+            const H = 300;
+            const PAD = { top: 20, right: 80, bottom: 36, left: 42 };
+            const innerW = W - PAD.left - PAD.right;
+            const innerH = H - PAD.top - PAD.bottom;
+
+            const steps = executionTrace.length;
+            if (steps < 2) return;
+
+            // for each active var, build numeric series
+            const series = [];
+            activeVars.forEach((name, _) => {
+                const vals = executionTrace.map(s => {
+                    const v = s.symbols && s.symbols[name];
+                    return v !== undefined ? parseFloat(v) : NaN;
+                });
+                if (vals.some(v => !isNaN(v))) series.push({ name, vals });
+            });
+
+            if (series.length === 0) return;
+
+            // global min/max
+            let minV = Infinity, maxV = -Infinity;
+            series.forEach(s => s.vals.forEach(v => { if (!isNaN(v)) { minV = Math.min(minV, v); maxV = Math.max(maxV, v); } }));
+            if (minV === maxV) { minV -= 1; maxV += 1; }
+
+            const xScale = i => PAD.left + (i / (steps - 1)) * innerW;
+            const yScale = v => PAD.top + innerH - ((v - minV) / (maxV - minV)) * innerH;
+
+            const ns = "http://www.w3.org/2000/svg";
+
+            // y-axis labels
+            [minV, maxV].forEach(v => {
+                const t = document.createElementNS(ns, "text");
+                t.setAttribute("x", PAD.left - 4);
+                t.setAttribute("y", yScale(v) + 4);
+                t.setAttribute("text-anchor", "end");
+                t.setAttribute("font-size", "10");
+                t.setAttribute("fill", "var(--text-muted)");
+                t.textContent = Number.isInteger(v) ? v : v.toFixed(1);
+                svg.appendChild(t);
+            });
+
+            // x-axis label
+            const xLabel = document.createElementNS(ns, "text");
+            xLabel.setAttribute("x", W / 2);
+            xLabel.setAttribute("y", H);
+            xLabel.setAttribute("text-anchor", "middle");
+            xLabel.setAttribute("font-size", "10");
+            xLabel.setAttribute("fill", "var(--text-muted)");
+            xLabel.textContent = "← execution steps →";
+            svg.appendChild(xLabel);
+
+            // x-axis step numbers
+            [0, Math.floor(steps / 2), steps - 1].forEach(i => {
+                const t = document.createElementNS(ns, "text");
+                t.setAttribute("x", xScale(i));
+                t.setAttribute("y", H - 12);
+                t.setAttribute("text-anchor", "middle");
+                t.setAttribute("font-size", "10");
+                t.setAttribute("fill", "var(--text-muted)");
+                t.textContent = `step ${i + 1}`;
+                svg.appendChild(t);
+            });
+            // draw lines per variable
+            series.forEach(({ name, vals }, si) => {
+                const color = VAR_COLORS[allVarNames.indexOf(name) % VAR_COLORS.length];
+                let d = "";
+                let lastX, lastY;
+                vals.forEach((v, i) => {
+                    if (isNaN(v)) return;
+                    const x = xScale(i), y = yScale(v);
+                    d += d === "" ? `M${x},${y}` : `L${x},${y}`;
+                    lastX = x; lastY = y;
+                });
+                if (d) {
+                    const path = document.createElementNS(ns, "path");
+                    path.setAttribute("d", d);
+                    path.setAttribute("fill", "none");
+                    path.setAttribute("stroke", color);
+                    path.setAttribute("stroke-width", "2");
+                    path.setAttribute("stroke-linejoin", "round");
+                    svg.appendChild(path);
+                }
+
+                // current step dot + tooltip label
+                const cv = vals[currentStep];
+                if (!isNaN(cv)) {
+                    const circle = document.createElementNS(ns, "circle");
+                    circle.setAttribute("cx", xScale(currentStep));
+                    circle.setAttribute("cy", yScale(cv));
+                    circle.setAttribute("r", "5");
+                    circle.setAttribute("fill", color);
+                    circle.setAttribute("stroke", "var(--bg-panel)");
+                    circle.setAttribute("stroke-width", "2");
+                    svg.appendChild(circle);
+
+                    // value label next to dot — flip left if near right edge
+                    const lbl = document.createElementNS(ns, "text");
+                    const nearRight = xScale(currentStep) > W - 80;
+                    lbl.setAttribute("x", nearRight ? xScale(currentStep) - 8 : xScale(currentStep) + 8);
+                    lbl.setAttribute("text-anchor", nearRight ? "end" : "start");
+                    lbl.setAttribute("y", yScale(cv) - 6);
+                    lbl.setAttribute("font-size", "11");
+                    lbl.setAttribute("fill", color);
+                    lbl.setAttribute("font-weight", "bold");
+                    lbl.textContent = `${name}=${Number.isInteger(cv) ? cv : cv.toFixed(2)}`;
+                    svg.appendChild(lbl);
+                }
+            });
+
+            // legend
+            updateLegend(series);
+
+            // step info bar
+            const stepInfo = document.getElementById("var-graph-step-info");
+            if (stepInfo) {
+                const activeVals = series.map(({ name, vals }) => {
+                    const v = vals[currentStep];
+                    return isNaN(v) ? null : `${name} = ${Number.isInteger(v) ? v : v.toFixed(2)}`;
+                }).filter(Boolean);
+                stepInfo.textContent = activeVals.length
+                    ? `▶ Step ${currentStep + 1}:  ${activeVals.join("   |   ")}`
+                    : "";
+            }
+        }
+
+        function renderStep() {
+
+            const container = document.getElementById("viz-content");
+
+            if (executionTrace.length === 0) {
+                container.textContent = "No execution trace.";
+                return;
+            }
+
+            const step = executionTrace[currentStep];
+            const prevStep = executionTrace[currentStep - 1];
+
+            let html = `
         <div><strong>Step:</strong> ${currentStep + 1} / ${executionTrace.length}</div>
         <div><strong>Node:</strong> ${step.node}</div>
         <div><strong>Line:</strong> ${step.line}</div>
         <div style="margin-top:6px;"><strong>Variables:</strong></div>
     `;
 
-    const vars = step.symbols || {};
+            const vars = step.symbols || {};
 
-    for (const k in vars) {
+            for (const k in vars) {
 
-        let changed = false;
+                let changed = false;
 
-        if (prevStep && prevStep.symbols) {
-            if (prevStep.symbols[k] !== vars[k]) {
-                changed = true;
-            }
-        } else {
-            // first appearance of variable
-            changed = true;
-        }
+                if (prevStep && prevStep.symbols) {
+                    if (prevStep.symbols[k] !== vars[k]) {
+                        changed = true;
+                    }
+                } else {
+                    // first appearance of variable
+                    changed = true;
+                }
 
-        if (changed) {
-            html += `<div class="var-changed">${k} = ${vars[k]}</div>`;
-        } else {
-            html += `<div>${k} = ${vars[k]}</div>`;
-        }
-    }
-
-    container.innerHTML = html;
-
-    // highlight editor line
-    highlightLine(step.line);
-
-    // highlight AST node
-    highlightASTNode(step.line);
-
-    if (allVarNames.length > 0) drawVarGraph();
-
-    // update call stack
-    renderCallStack(step);
-}
-
-function updateLegend(series) {
-        const legend = document.getElementById("var-graph-legend");
-        if (!legend) return;
-        legend.innerHTML = "";
-        series.forEach(({ name }, si) => {
-            const color = VAR_COLORS[allVarNames.indexOf(name) % VAR_COLORS.length];
-            const item = document.createElement("div");
-            item.className = "legend-item";
-            item.innerHTML = `<div class="legend-dot" style="background:${color}"></div><span>${name}</span>`;
-            legend.appendChild(item);
-        });
-    }
-
-function renderCallStack(step) {
-        const el = document.getElementById("callstack-content");
-        if (!step) { el.textContent = "—"; return; }
-
-        // build stack from current step scope
-        const scopes = step.scope ? step.scope.split(" > ") : ["<program>"];
-        el.innerHTML = "";
-
-        // render bottom to top
-        [...scopes].reverse().forEach((scope, i) => {
-            const frame = document.createElement("div");
-            frame.className = "stack-frame" + (i === 0 ? " top" : "");
-            frame.textContent = (i === 0 ? "▶ " : "   ") + scope;
-            el.appendChild(frame);
-        });
-    }
-
-function nextStep() {
-    if (currentStep < executionTrace.length - 1) {
-        currentStep++;
-        renderStep();
-    }
-}
-
-function prevStep() {
-    if (currentStep > 0) {
-        currentStep--;
-        renderStep();
-    }
-}
-
-function highlightLine(lineNumber) {
-    if (!window.editor) return;
-
-    highlightDecoration = window.editor.deltaDecorations(
-        highlightDecoration,
-        [
-            {
-                range: new monaco.Range(lineNumber, 1, lineNumber, 1),
-                options: {
-                    isWholeLine: true,
-                    className: "execution-line"
+                if (changed) {
+                    html += `<div class="var-changed">${k} = ${vars[k]}</div>`;
+                } else {
+                    html += `<div>${k} = ${vars[k]}</div>`;
                 }
             }
-        ]
-    );
 
-    window.editor.revealLineInCenter(lineNumber);
-}
+            container.innerHTML = html;
 
-</script>
+            // highlight editor line
+            highlightLine(step.line);
 
-<script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
+            // highlight AST node
+            highlightASTNode(step.line);
 
-<script>
-require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.45.0/min/vs' } });
+            if (allVarNames.length > 0) drawVarGraph();
 
-require(['vs/editor/editor.main'], function () {
-
-    /* ===============================
-       1️⃣ LANGUAGE REGISTRATION
-       =============================== */
-    monaco.languages.register({ id: 'chaiscript' });
-
-    /* ===============================
-       2️⃣ KEYWORDS & BUILT-INS
-       =============================== */
-
-    const CHAI_KEYWORDS = [
-        'cup','and','or','not',
-        'hot','mild','chilled',
-        'for_chai','to_chai','STEP',
-        'while_chai',
-        'brew','then_chai','sip',
-        'return_chai','continue_chai','break_chai', 'try_chai', 'catch_chai', 'true', 'false'
-    ];
-
-    const CHAI_FUNCTIONS = [
-        // Utility
-        'serveChai','serve_ret','orderChai','orderChai_int',
-        'clean','cls','type_chai','current_date_time',
-        'list_len','str_len','len','int','str','float','time_freeze',
-
-        // Boolean
-        'is_chai_num','is_chai_str','is_chai_list',
-        'is_brew','is_empty',
-
-        // String
-        'to_lower','to_upper','char_at','index_of','slice',
-        'starts_with','ends_with','trim','replace',
-        'split_to_list','capitalize','title','is_equals',
-
-        // List
-        'append','pop','extend','sort_list','reverse_list',
-        'range','element_at','join_to_str',
-
-        // Math constants
-        'Math_PI','Math_E',
-
-        // Math core
-        'Math_mod_div','Math_factorial','Math_sqrt',
-        'Math_floor','Math_ceil','Math_round','Math_absoluteval',
-        'Math_random_chai',
-
-        // Trigonometry
-        'Math_sin','Math_cos','Math_tan','Math_sec','Math_cosec','Math_cot',
-        'Math_arcsin','Math_arccos','Math_arctan',
-        'Math_arcsec','Math_arccosec','Math_arccot',
-
-        // Hyperbolic
-        'Math_sinh','Math_cosh','Math_tanh','Math_sech','Math_cosech','Math_coth',
-        'Math_arcsinh','Math_arccosh','Math_arctanh',
-        'Math_arcsech','Math_arccosech','Math_arccoth'
-    ];
-
-    /* ===============================
-       3️⃣ SYNTAX HIGHLIGHTING
-       =============================== */
-    monaco.languages.setMonarchTokensProvider('chaiscript', {
-        keywords: CHAI_KEYWORDS,
-        functions: CHAI_FUNCTIONS,
-
-        tokenizer: {
-            root: [
-                [/[a-zA-Z_][\w_]*/, {
-                    cases: {
-                        '@keywords': 'keyword',
-                        '@functions': 'type.identifier',
-                        '@default': 'identifier'
-                    }
-                }],
-                [/\d+(\.\d+)?/, 'number'],
-                [/".*?"/, 'string'],
-                [/[{}()\[\]]/, '@brackets'],
-                [/[+\-*\/^=<>!]+/, 'operator'],
-                [/#.*$/, 'comment']
-            ]
+            // update call stack
+            renderCallStack(step);
         }
-    });
 
-    /* ===============================
-       4️⃣ AUTOCOMPLETE
-       =============================== */
-    monaco.languages.registerCompletionItemProvider('chaiscript', {
-    triggerCharacters: ['f', 'w', 'b', 'h', 'c', 'm'],
-    provideCompletionItems: () => ({
-        suggestions: [
+        function updateLegend(series) {
+            const legend = document.getElementById("var-graph-legend");
+            if (!legend) return;
+            legend.innerHTML = "";
+            series.forEach(({ name }, si) => {
+                const color = VAR_COLORS[allVarNames.indexOf(name) % VAR_COLORS.length];
+                const item = document.createElement("div");
+                item.className = "legend-item";
+                item.innerHTML = `<div class="legend-dot" style="background:${color}"></div><span>${name}</span>`;
+                legend.appendChild(item);
+            });
+        }
 
-            // 🔁 FOR LOOP
-            {
-                label: 'for',
-                kind: monaco.languages.CompletionItemKind.Snippet,
-                insertTextRules:
-                    monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                insertText:
-`for_chai \${1:i} = \${2:start} to_chai \${3:end} then_chai
+        function renderCallStack(step) {
+            const el = document.getElementById("callstack-content");
+            if (!step) { el.textContent = "—"; return; }
+
+            // build stack from current step scope
+            const scopes = step.scope ? step.scope.split(" > ") : ["<program>"];
+            el.innerHTML = "";
+
+            // render bottom to top
+            [...scopes].reverse().forEach((scope, i) => {
+                const frame = document.createElement("div");
+                frame.className = "stack-frame" + (i === 0 ? " top" : "");
+                frame.textContent = (i === 0 ? "▶ " : "   ") + scope;
+                el.appendChild(frame);
+            });
+        }
+
+        function nextStep() {
+            if (currentStep < executionTrace.length - 1) {
+                currentStep++;
+                renderStep();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                renderStep();
+            }
+        }
+
+        function highlightLine(lineNumber) {
+            if (!window.editor) return;
+
+            highlightDecoration = window.editor.deltaDecorations(
+                highlightDecoration,
+                [
+                    {
+                        range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+                        options: {
+                            isWholeLine: true,
+                            className: "execution-line"
+                        }
+                    }
+                ]
+            );
+
+            window.editor.revealLineInCenter(lineNumber);
+        }
+
+    </script>
+
+    <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
+
+    <script>
+        require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.45.0/min/vs' } });
+
+        require(['vs/editor/editor.main'], function () {
+
+            /* ===============================
+               1️⃣ LANGUAGE REGISTRATION
+               =============================== */
+            monaco.languages.register({ id: 'chaiscript' });
+
+            /* ===============================
+               2️⃣ KEYWORDS & BUILT-INS
+               =============================== */
+
+            const CHAI_KEYWORDS = [
+                'cup', 'and', 'or', 'not',
+                'hot', 'mild', 'chilled',
+                'for_chai', 'to_chai', 'STEP',
+                'while_chai',
+                'brew', 'then_chai', 'sip',
+                'return_chai', 'continue_chai', 'break_chai', 'try_chai', 'catch_chai', 'true', 'false'
+            ];
+
+            const CHAI_FUNCTIONS = [
+                // Utility
+                'serveChai', 'serve_ret', 'orderChai', 'orderChai_int',
+                'clean', 'cls', 'type_chai', 'current_date_time',
+                'list_len', 'str_len', 'len', 'int', 'str', 'float', 'time_freeze',
+
+                // Boolean
+                'is_chai_num', 'is_chai_str', 'is_chai_list',
+                'is_brew', 'is_empty',
+
+                // String
+                'to_lower', 'to_upper', 'char_at', 'index_of', 'slice',
+                'starts_with', 'ends_with', 'trim', 'replace',
+                'split_to_list', 'capitalize', 'title', 'is_equals',
+
+                // List
+                'append', 'pop', 'extend', 'sort_list', 'reverse_list',
+                'range', 'element_at', 'join_to_str',
+
+                // Math constants
+                'Math_PI', 'Math_E',
+
+                // Math core
+                'Math_mod_div', 'Math_factorial', 'Math_sqrt',
+                'Math_floor', 'Math_ceil', 'Math_round', 'Math_absoluteval',
+                'Math_random_chai',
+
+                // Trigonometry
+                'Math_sin', 'Math_cos', 'Math_tan', 'Math_sec', 'Math_cosec', 'Math_cot',
+                'Math_arcsin', 'Math_arccos', 'Math_arctan',
+                'Math_arcsec', 'Math_arccosec', 'Math_arccot',
+
+                // Hyperbolic
+                'Math_sinh', 'Math_cosh', 'Math_tanh', 'Math_sech', 'Math_cosech', 'Math_coth',
+                'Math_arcsinh', 'Math_arccosh', 'Math_arctanh',
+                'Math_arcsech', 'Math_arccosech', 'Math_arccoth'
+            ];
+
+            /* ===============================
+               3️⃣ SYNTAX HIGHLIGHTING
+               =============================== */
+            monaco.languages.setMonarchTokensProvider('chaiscript', {
+                keywords: CHAI_KEYWORDS,
+                functions: CHAI_FUNCTIONS,
+
+                tokenizer: {
+                    root: [
+                        [/[a-zA-Z_][\w_]*/, {
+                            cases: {
+                                '@keywords': 'keyword',
+                                '@functions': 'type.identifier',
+                                '@default': 'identifier'
+                            }
+                        }],
+                        [/\d+(\.\d+)?/, 'number'],
+                        [/".*?"/, 'string'],
+                        [/[{}()\[\]]/, '@brackets'],
+                        [/[+\-*\/^=<>!]+/, 'operator'],
+                        [/#.*$/, 'comment']
+                    ]
+                }
+            });
+
+            /* ===============================
+               4️⃣ AUTOCOMPLETE
+               =============================== */
+            monaco.languages.registerCompletionItemProvider('chaiscript', {
+                triggerCharacters: ['f', 'w', 'b', 'h', 'c', 'm'],
+                provideCompletionItems: () => ({
+                    suggestions: [
+
+                        // 🔁 FOR LOOP
+                        {
+                            label: 'for',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules:
+                                monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `for_chai \${1:i} = \${2:start} to_chai \${3:end} then_chai
     \${4:# code block}
 sip`,
-                documentation: 'ChaiScript for loop'
-            },
+                            documentation: 'ChaiScript for loop'
+                        },
 
-            // 🔄 WHILE LOOP
-            {
-                label: 'while',
-                kind: monaco.languages.CompletionItemKind.Snippet,
-                insertTextRules:
-                    monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                insertText:
-`while_chai \${1:condition} then_chai
+                        // 🔄 WHILE LOOP
+                        {
+                            label: 'while',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules:
+                                monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `while_chai \${1:condition} then_chai
     \${2:# code block}
 sip`,
-                documentation: 'ChaiScript while loop'
-            },
+                            documentation: 'ChaiScript while loop'
+                        },
 
-            // 🍵 FUNCTION
-            {
-                label: 'brew',
-                kind: monaco.languages.CompletionItemKind.Snippet,
-                insertTextRules:
-                    monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-                insertText:
-`brew \${1:functionName}(\${2:params})
+                        // 🍵 FUNCTION
+                        {
+                            label: 'brew',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules:
+                                monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `brew \${1:functionName}(\${2:params})
     \${3: #code block}
 sip`,
-                documentation: 'ChaiScript function'
-            },
+                            documentation: 'ChaiScript function'
+                        },
 
-            {
-    label: 'hot-mild-chilled',
-    kind: monaco.languages.CompletionItemKind.Snippet,
-    insertTextRules:
-        monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-    insertText:
-`hot \${1: statement 1} > \${2: statement 2} then_chai
+                        {
+                            label: 'hot-mild-chilled',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules:
+                                monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `hot \${1: statement 1} > \${2: statement 2} then_chai
     #code block ;
 
 mild \${3: statement 1} < \${4: statement 2} then_chai
@@ -2294,80 +2861,81 @@ mild \${3: statement 1} < \${4: statement 2} then_chai
 chilled
     #code block ;
 sip;`,
-    documentation: 'ChaiScript hot–mild–chilled conditional'
-},
+                            documentation: 'ChaiScript hot–mild–chilled conditional'
+                        },
 
-    {
-    label: 'hot-chilled',
-    kind: monaco.languages.CompletionItemKind.Snippet,
-    insertTextRules:
-        monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-    insertText:
-`hot \${1: statement 1} > \${2:statement 2} then_chai
+                        {
+                            label: 'hot-chilled',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules:
+                                monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `hot \${1: statement 1} > \${2:statement 2} then_chai
     #code block ;
 
 chilled
     #code block ;
 sip;`,
-    documentation: 'ChaiScript hot–chilled conditional'
-},
+                            documentation: 'ChaiScript hot–chilled conditional'
+                        },
 
-            // ✨ keep normal keywords
-            ...CHAI_KEYWORDS.map(k => ({
-                label: k,
-                kind: monaco.languages.CompletionItemKind.Keyword,
-                insertText: k
-            })),
+                        // ✨ keep normal keywords
+                        ...CHAI_KEYWORDS.map(k => ({
+                            label: k,
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: k
+                        })),
 
-            // 🧠 functions
-            ...CHAI_FUNCTIONS.map(fn => ({
-                label: fn,
-                kind: monaco.languages.CompletionItemKind.Function,
-                insertText: fn + '('
-            }))
-        ]
-    })
-});
-    /* ===============================
-       5️⃣ EDITOR CREATION (LAST)
-       =============================== */
-    window.editor = monaco.editor.create(
-        document.getElementById('editor'),
-        {
-            value: tabs.find(t => t.id === activeTabId)?.content || '',
-            language: 'chaiscript',
-            theme: document.body.classList.contains('dark') ? 'vs-dark' : 'vs',
-            fontSize: 16,
-            automaticLayout: true,
-            minimap: { enabled: false }
-        }
-    );
+                        // 🧠 functions
+                        ...CHAI_FUNCTIONS.map(fn => ({
+                            label: fn,
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: fn + '('
+                        }))
+                    ]
+                })
+            });
+            /* ===============================
+               5️⃣ EDITOR CREATION (LAST)
+               =============================== */
+            window.editor = monaco.editor.create(
+                document.getElementById('editor'),
+                {
+                    value: tabs.find(t => t.id === activeTabId)?.content || '',
+                    language: 'chaiscript',
+                    theme: document.body.classList.contains('dark') ? 'vs-dark' : 'vs',
+                    fontSize: 16,
+                    automaticLayout: true,
+                    minimap: { enabled: false }
+                }
+            );
 
-    // Ctrl + Enter inside editor
-    window.editor.addCommand(
-        monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
-        function () {
-            runCode();
-        }
-    );
+            // Ctrl + Enter inside editor
+            window.editor.addCommand(
+                monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
+                function () {
+                    runCode();
+                }
+            );
 
-     // Arrow keys for step navigation (override Monaco's default inside editor)
-    window.editor.addCommand(
-        monaco.KeyCode.RightArrow,
-        function () { nextStep(); },
-        "editorTextFocus"
-    );
+            // Arrow keys for step navigation (override Monaco's default inside editor)
+            window.editor.addCommand(
+                monaco.KeyCode.RightArrow,
+                function () { nextStep(); },
+                "editorTextFocus"
+            );
 
-    window.editor.addCommand(
-        monaco.KeyCode.LeftArrow,
-        function () { prevStep(); },
-        "editorTextFocus"
-    );
+            window.editor.addCommand(
+                monaco.KeyCode.LeftArrow,
+                function () { prevStep(); },
+                "editorTextFocus"
+            );
 
-    renderTabs();
+            renderTabs();
 
-});
-</script>
+        });
+    </script>
 
 </body>
+
 </html>

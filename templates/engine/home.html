@@ -1,17 +1,21 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChaiScript — A Chai-Flavored Programming Language</title>
-    <meta name="description" content="ChaiScript is a fun, interpreted programming language with chai-flavored keywords. Write code in your browser, no installation needed.">
+    <meta name="description"
+        content="ChaiScript is a fun, interpreted programming language with chai-flavored keywords. Write code in your browser, no installation needed.">
 
     <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
     <link rel="icon" type="image/png" href="{% static 'engine/img/ChaiScript.png' %}">
     <link rel="shortcut icon" href="{% static 'engine/img/ChaiScript.ico' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <style>
         /* ===============================
@@ -57,9 +61,15 @@
             --hero-overlay: rgba(15, 20, 18, 0.88);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -72,10 +82,22 @@
         /* ===============================
            CUSTOM SCROLLBAR
            =============================== */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-page); }
-        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-page);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-strong);
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-green);
+        }
 
         /* ===============================
            NAVBAR
@@ -94,7 +116,7 @@
             top: 0;
             width: 100%;
             z-index: 100;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
             transition: background 0.3s, border-color 0.3s;
         }
 
@@ -105,7 +127,10 @@
             text-decoration: none;
         }
 
-        #nav-img { height: 30px; width: auto; }
+        #nav-img {
+            height: 30px;
+            width: auto;
+        }
 
         .brand-text {
             font-family: 'JetBrains Mono', monospace;
@@ -130,6 +155,7 @@
             border-radius: 7px;
             transition: background 0.2s, color 0.2s;
         }
+
         .nav-link:hover {
             background: var(--bg-editor);
             color: var(--accent-green);
@@ -147,6 +173,7 @@
             text-decoration: none;
             transition: all 0.2s;
         }
+
         .btn-login:hover {
             background: var(--accent-green);
             color: #fff;
@@ -165,6 +192,7 @@
             transition: all 0.2s;
             box-shadow: 0 0 14px var(--glow);
         }
+
         .btn-signup:hover {
             background: var(--button-hover);
             box-shadow: 0 0 24px var(--glow);
@@ -173,7 +201,8 @@
 
         /* theme toggle */
         .theme-toggle {
-            width: 52px; height: 26px;
+            width: 52px;
+            height: 26px;
             background: var(--border-soft);
             border-radius: 999px;
             position: relative;
@@ -181,18 +210,32 @@
             transition: background 0.3s;
             flex-shrink: 0;
         }
+
         .theme-toggle::after {
             content: "☀️";
-            position: absolute; top: 2px; left: 2px;
-            width: 22px; height: 22px;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
             background: var(--bg-panel);
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 13px;
             transition: all 0.3s;
         }
-        body.dark .theme-toggle { background: var(--accent-green); }
-        body.dark .theme-toggle::after { content: "🌙"; left: 28px; background: #0f1412; }
+
+        body.dark .theme-toggle {
+            background: var(--accent-green);
+        }
+
+        body.dark .theme-toggle::after {
+            content: "🌙";
+            left: 28px;
+            background: #0f1412;
+        }
 
         /* ===============================
            HERO SECTION
@@ -242,23 +285,39 @@
             font-size: 0.78rem;
             color: var(--accent-green);
             margin-bottom: 32px;
-            animation: badgePop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+            animation: badgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
         }
+
         .hero-badge .badge-dot {
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: var(--accent-green);
             animation: pulse 2s infinite;
         }
 
         @keyframes badgePop {
-            from { opacity: 0; transform: scale(0.8) translateY(-10px); }
-            to   { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         @keyframes pulse {
-            0%,100% { box-shadow: 0 0 0 0 var(--glow); }
-            50% { box-shadow: 0 0 0 6px transparent; }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 var(--glow);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px transparent;
+            }
         }
 
         .hero-title {
@@ -282,12 +341,21 @@
         }
 
         @keyframes shimmer {
-            to { background-position: 200% center; }
+            to {
+                background-position: 200% center;
+            }
         }
 
         @keyframes heroFadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero-subtitle {
@@ -311,8 +379,15 @@
         }
 
         @keyframes blink {
-            0%,100% { opacity: 1; }
-            50% { opacity: 0; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
         }
 
         .hero-actions {
@@ -335,24 +410,29 @@
             text-decoration: none;
             cursor: pointer;
             transition: all 0.25s;
-            box-shadow: 0 0 20px var(--glow), 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 0 20px var(--glow), 0 4px 15px rgba(0, 0, 0, 0.15);
             position: relative;
             overflow: hidden;
         }
+
         .cta-primary::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.3s;
         }
+
         .cta-primary:hover {
             background: var(--button-hover);
-            box-shadow: 0 0 36px var(--glow), 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 0 36px var(--glow), 0 8px 25px rgba(0, 0, 0, 0.2);
             transform: translateY(-3px);
         }
-        .cta-primary:hover::after { opacity: 1; }
+
+        .cta-primary:hover::after {
+            opacity: 1;
+        }
 
         .cta-secondary {
             font-family: 'JetBrains Mono', monospace;
@@ -367,6 +447,7 @@
             cursor: pointer;
             transition: all 0.25s;
         }
+
         .cta-secondary:hover {
             background: var(--accent-green);
             color: #fff;
@@ -384,14 +465,45 @@
             pointer-events: none;
             user-select: none;
         }
-        .float-chai:nth-child(1) { top: 20%; left: 8%; animation-delay: 0s; font-size: 3rem; }
-        .float-chai:nth-child(2) { top: 30%; right: 6%; animation-delay: 1.5s; font-size: 2.5rem; }
-        .float-chai:nth-child(3) { bottom: 20%; left: 12%; animation-delay: 3s; font-size: 2rem; }
-        .float-chai:nth-child(4) { bottom: 25%; right: 10%; animation-delay: 0.8s; font-size: 3.5rem; }
+
+        .float-chai:nth-child(1) {
+            top: 20%;
+            left: 8%;
+            animation-delay: 0s;
+            font-size: 3rem;
+        }
+
+        .float-chai:nth-child(2) {
+            top: 30%;
+            right: 6%;
+            animation-delay: 1.5s;
+            font-size: 2.5rem;
+        }
+
+        .float-chai:nth-child(3) {
+            bottom: 20%;
+            left: 12%;
+            animation-delay: 3s;
+            font-size: 2rem;
+        }
+
+        .float-chai:nth-child(4) {
+            bottom: 25%;
+            right: 10%;
+            animation-delay: 0.8s;
+            font-size: 3.5rem;
+        }
 
         @keyframes floatChai {
-            0%,100% { transform: translateY(0) rotate(-5deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-5deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
         }
 
         /* Scroll indicator */
@@ -410,20 +522,36 @@
             font-family: 'JetBrains Mono', monospace;
             animation: fadeInDelay 1s 1.5s ease both;
         }
+
         .scroll-arrow {
-            width: 18px; height: 18px;
+            width: 18px;
+            height: 18px;
             border-right: 2px solid var(--accent-green);
             border-bottom: 2px solid var(--accent-green);
             transform: rotate(45deg);
             animation: bounce 1.5s infinite;
         }
+
         @keyframes bounce {
-            0%,100% { transform: rotate(45deg) translateY(0); }
-            50% { transform: rotate(45deg) translateY(4px); }
+
+            0%,
+            100% {
+                transform: rotate(45deg) translateY(0);
+            }
+
+            50% {
+                transform: rotate(45deg) translateY(4px);
+            }
         }
+
         @keyframes fadeInDelay {
-            from { opacity: 0; }
-            to   { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         /* ===============================
@@ -437,6 +565,7 @@
             border-top: 1px solid var(--border-soft);
             border-bottom: 1px solid var(--border-soft);
         }
+
         .stat-item {
             flex: 1;
             max-width: 220px;
@@ -447,14 +576,23 @@
             transform: translateY(20px);
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
-        .stat-item:last-child { border-right: none; }
-        .stat-item.visible { opacity: 1; transform: translateY(0); }
+
+        .stat-item:last-child {
+            border-right: none;
+        }
+
+        .stat-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .stat-num {
             font-family: 'JetBrains Mono', monospace;
             font-size: 2.2rem;
             font-weight: 700;
             color: var(--accent-green);
         }
+
         .stat-label {
             font-size: 0.8rem;
             color: var(--text-muted);
@@ -481,17 +619,20 @@
             margin-bottom: 16px;
             letter-spacing: -0.5px;
         }
+
         .code-info p {
             font-size: 1rem;
             color: var(--text-muted);
             line-height: 1.8;
             margin-bottom: 28px;
         }
+
         .keyword-pills {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
+
         .kpill {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
@@ -502,6 +643,7 @@
             color: var(--accent-green);
             transition: all 0.2s;
         }
+
         .kpill:hover {
             background: var(--accent-green);
             color: #fff;
@@ -514,12 +656,16 @@
             border: 1px solid var(--border-soft);
             border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.12), 0 0 0 1px var(--border-soft);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--border-soft);
             opacity: 0;
             transform: translateX(30px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        .code-window.visible { opacity: 1; transform: translateX(0); }
+
+        .code-window.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
 
         .window-titlebar {
             display: flex;
@@ -529,10 +675,25 @@
             background: var(--bg-editor);
             border-bottom: 1px solid var(--border-soft);
         }
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-        .dot.red { background: #ff5f57; }
-        .dot.yellow { background: #febc2e; }
-        .dot.green { background: #28c840; }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot.red {
+            background: #ff5f57;
+        }
+
+        .dot.yellow {
+            background: #febc2e;
+        }
+
+        .dot.green {
+            background: #28c840;
+        }
+
         .window-filename {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
@@ -553,14 +714,44 @@
         }
 
         /* Syntax highlighting colors */
-        .kw { color: #d97706; }          /* keywords: cup, brew, hot */
-        .fn { color: var(--accent-green); font-weight: 600; }   /* serveChai etc */
-        .str { color: #0369a1; }         /* strings */
-        .num { color: #7c3aed; }         /* numbers */
-        .cmt { color: var(--text-muted); font-style: italic; }  /* comments */
-        body.dark .kw { color: #fbbf24; }
-        body.dark .str { color: #60a5fa; }
-        body.dark .num { color: #c084fc; }
+        .kw {
+            color: #d97706;
+        }
+
+        /* keywords: cup, brew, hot */
+        .fn {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* serveChai etc */
+        .str {
+            color: #0369a1;
+        }
+
+        /* strings */
+        .num {
+            color: #7c3aed;
+        }
+
+        /* numbers */
+        .cmt {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* comments */
+        body.dark .kw {
+            color: #fbbf24;
+        }
+
+        body.dark .str {
+            color: #60a5fa;
+        }
+
+        body.dark .num {
+            color: #c084fc;
+        }
 
         /* ===============================
            FEATURES GRID
@@ -576,6 +767,7 @@
             text-align: center;
             margin-bottom: 64px;
         }
+
         .section-tag {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
@@ -585,12 +777,14 @@
             font-weight: 600;
             margin-bottom: 12px;
         }
+
         .section-title {
             font-size: 2.4rem;
             font-weight: 800;
             letter-spacing: -0.5px;
             line-height: 1.2;
         }
+
         .section-sub {
             font-size: 1rem;
             color: var(--text-muted);
@@ -610,12 +804,13 @@
             border: 1px solid var(--border-soft);
             border-radius: 14px;
             padding: 32px 28px;
-            transition: all 0.3s cubic-bezier(0.34,1.3,0.64,1);
+            transition: all 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
             opacity: 0;
             transform: translateY(24px);
             position: relative;
             overflow: hidden;
         }
+
         .feature-card::before {
             content: '';
             position: absolute;
@@ -625,24 +820,35 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-        .feature-card:hover::before { opacity: 1; }
-        .feature-card.visible { opacity: 1; transform: translateY(0); }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .feature-card:hover {
             transform: translateY(-6px);
             border-color: var(--accent-green);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.1), 0 0 0 1px var(--accent-green), 0 0 30px var(--glow);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--accent-green), 0 0 30px var(--glow);
         }
+
         .feature-icon {
             font-size: 2.2rem;
             margin-bottom: 16px;
             display: block;
         }
+
         .feature-title {
             font-size: 1.05rem;
             font-weight: 700;
             margin-bottom: 10px;
             color: var(--text-main);
         }
+
         .feature-desc {
             font-size: 0.88rem;
             color: var(--text-muted);
@@ -690,15 +896,31 @@
             transform: translateX(-20px);
             transition: opacity 0.4s ease, transform 0.4s ease;
         }
+
         .compare-col:last-child .compare-row {
             transform: translateX(20px);
             border-color: var(--accent-green);
             background: rgba(47, 133, 90, 0.06);
         }
-        .compare-row.visible { opacity: 1; transform: translateX(0); }
-        .compare-row .arrow { color: var(--accent-yellow); font-size: 1rem; }
-        .ck { color: var(--accent-green); font-weight: 600; }
-        .pk { color: var(--text-muted); }
+
+        .compare-row.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .compare-row .arrow {
+            color: var(--accent-yellow);
+            font-size: 1rem;
+        }
+
+        .ck {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .pk {
+            color: var(--text-muted);
+        }
 
         /* ===============================
            CTA BANNER
@@ -711,6 +933,7 @@
             position: relative;
             overflow: hidden;
         }
+
         #cta-section::before {
             content: '';
             position: absolute;
@@ -723,6 +946,7 @@
             background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
             pointer-events: none;
         }
+
         .cta-title {
             font-size: 2.8rem;
             font-weight: 900;
@@ -730,12 +954,14 @@
             margin-bottom: 16px;
             position: relative;
         }
+
         .cta-sub {
             font-size: 1rem;
             color: var(--text-muted);
             margin-bottom: 40px;
             position: relative;
         }
+
         .cta-buttons {
             display: flex;
             gap: 16px;
@@ -743,6 +969,7 @@
             flex-wrap: wrap;
             position: relative;
         }
+
         .cta-big {
             font-family: 'JetBrains Mono', monospace;
             font-size: 1.05rem;
@@ -755,9 +982,10 @@
             text-decoration: none;
             cursor: pointer;
             transition: all 0.25s;
-            box-shadow: 0 0 30px var(--glow), 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 0 30px var(--glow), 0 4px 20px rgba(0, 0, 0, 0.15);
             position: relative;
         }
+
         .cta-big::before {
             content: '';
             position: absolute;
@@ -771,13 +999,20 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-        .cta-big:hover::before { opacity: 1; }
+
+        .cta-big:hover::before {
+            opacity: 1;
+        }
+
         .cta-big:hover {
             transform: translateY(-3px);
-            box-shadow: 0 0 50px var(--glow), 0 8px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 0 50px var(--glow), 0 8px 30px rgba(0, 0, 0, 0.2);
         }
+
         @keyframes borderRotate {
-            to { background-position: 200% center; }
+            to {
+                background-position: 200% center;
+            }
         }
 
         /* ===============================
@@ -789,6 +1024,7 @@
             padding: 40px 24px;
             text-align: center;
         }
+
         .footer-brand {
             display: flex;
             align-items: center;
@@ -796,13 +1032,18 @@
             justify-content: center;
             margin-bottom: 16px;
         }
-        .footer-logo { height: 24px; }
+
+        .footer-logo {
+            height: 24px;
+        }
+
         .footer-brand-text {
             font-family: 'JetBrains Mono', monospace;
             font-size: 1rem;
             font-weight: 700;
             color: var(--accent-green);
         }
+
         .footer-links {
             display: flex;
             gap: 24px;
@@ -810,6 +1051,7 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
+
         .footer-links a {
             font-size: 0.85rem;
             color: var(--text-muted);
@@ -817,460 +1059,529 @@
             font-family: 'JetBrains Mono', monospace;
             transition: color 0.2s;
         }
-        .footer-links a:hover { color: var(--accent-green); }
+
+        .footer-links a:hover {
+            color: var(--accent-green);
+        }
+
         .footer-copy {
             font-size: 0.8rem;
             color: var(--text-muted);
         }
-        .footer-copy span { color: var(--accent-green); }
+
+        .footer-copy span {
+            color: var(--accent-green);
+        }
 
         /* ===============================
            RESPONSIVE
            =============================== */
         @media (max-width: 900px) {
-            #code-section { grid-template-columns: 1fr; gap: 40px; }
-            .features-grid { grid-template-columns: repeat(2, 1fr); }
-            .compare-grid { grid-template-columns: 1fr; }
-            .stats-row { flex-wrap: wrap; }
-            .stat-item { flex: 1 1 140px; border-right: none; border-bottom: 1px solid var(--border-soft); }
+            #code-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-row {
+                flex-wrap: wrap;
+            }
+
+            .stat-item {
+                flex: 1 1 140px;
+                border-right: none;
+                border-bottom: 1px solid var(--border-soft);
+            }
         }
+
         @media (max-width: 620px) {
-            .features-grid { grid-template-columns: 1fr; }
-            #navbar { padding: 0 16px; }
-            .nav-link { display: none; }
-            .hero-title { font-size: 2.4rem; }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #navbar {
+                padding: 0 16px;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2.4rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<!-- ==================== NAVBAR ==================== -->
-<nav id="navbar">
-    <a class="nav-brand" href="/">
-        <img id="nav-img" src="{% static 'engine/img/ChaiScript.png' %}" alt="ChaiScript Logo">
-        <span class="brand-text">ChaiScript</span>
-    </a>
+    <!-- ==================== NAVBAR ==================== -->
+    <nav id="navbar">
+        <a class="nav-brand" href="/">
+            <img id="nav-img" src="{% static 'engine/img/ChaiScript.png' %}" alt="ChaiScript Logo">
+            <span class="brand-text">ChaiScript</span>
+        </a>
 
-    <div class="nav-links">
-        <a class="nav-link" href="/engine/">Playground</a>
-        <a class="nav-link" href="/docs/">Docs</a>
-        <a class="btn-login" href="/accounts/login/" id="login-btn">Log in</a>
-        <a class="btn-signup" href="/accounts/signup/" id="signup-btn">Sign up</a>
-        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></div>
-    </div>
-</nav>
+        <div class="nav-links">
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/engine/">Playground</a>
+            <a class="nav-link" href="/docs/">Docs</a>
+            <a class="nav-link" href="/downloads/">Downloads</a>
+            {% if request.user.is_authenticated %}
+            <a class="nav-link" href="/engine/profile/" style="display:flex;align-items:center;gap:6px;">
+                {% with request.user.socialaccount_set.all|first as sa %}{% if sa %}<img
+                    src="{{ sa.extra_data.picture }}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"
+                    onerror="this.style.display='none'">{% endif %}{% endwith %}
+                {{ request.user.username }}
+            </a>
+            {% else %}
+            <a class="btn-login" href="/accounts/login/" id="login-btn">Log in</a>
+            <a class="btn-signup" href="/accounts/signup/" id="signup-btn">Sign up</a>
+            {% endif %}
+            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></div>
+        </div>
+    </nav>
 
-<!-- ==================== HERO ==================== -->
-<section id="hero">
-    <canvas id="particle-canvas"></canvas>
-    <div class="hero-overlay"></div>
+    <!-- ==================== HERO ==================== -->
+    <section id="hero">
+        <canvas id="particle-canvas"></canvas>
+        <div class="hero-overlay"></div>
 
-    <!-- floating chai cups -->
-    <span class="float-chai">☕</span>
-    <span class="float-chai">☕</span>
-    <span class="float-chai">☕</span>
-    <span class="float-chai">☕</span>
+        <!-- floating chai cups -->
+        <span class="float-chai">☕</span>
+        <span class="float-chai">☕</span>
+        <span class="float-chai">☕</span>
+        <span class="float-chai">☕</span>
 
-    <div class="hero-content">
-        <div class="hero-badge">
-            <span class="badge-dot"></span>
-            v1.2.0 — File Handling is here!
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                v1.2.0 — File Handling is here!
+            </div>
+
+            <h1 class="hero-title">
+                Code like you<br>
+                <span class="highlight">brew chai.</span>
+            </h1>
+
+            <p class="hero-subtitle" id="typewriter-sub">
+                <span id="typed-text"></span><span class="cursor"></span>
+            </p>
+
+            <div class="hero-actions">
+                <a class="cta-primary" href="/engine/">▶ &nbsp;Try Playground</a>
+                <a class="cta-secondary" href="/accounts/signup/">✨ &nbsp;Get Started Free</a>
+            </div>
         </div>
 
-        <h1 class="hero-title">
-            Code like you<br>
-            <span class="highlight">brew chai.</span>
-        </h1>
-
-        <p class="hero-subtitle" id="typewriter-sub">
-            <span id="typed-text"></span><span class="cursor"></span>
-        </p>
-
-        <div class="hero-actions">
-            <a class="cta-primary" href="/engine/">▶ &nbsp;Try Playground</a>
-            <a class="cta-secondary" href="/accounts/signup/">✨ &nbsp;Get Started Free</a>
+        <div class="scroll-hint">
+            <span>scroll</span>
+            <div class="scroll-arrow"></div>
         </div>
-    </div>
+    </section>
 
-    <div class="scroll-hint">
-        <span>scroll</span>
-        <div class="scroll-arrow"></div>
-    </div>
-</section>
-
-<!-- ==================== STATS ==================== -->
-<div class="stats-row" id="stats-row">
-    <div class="stat-item">
-        <div class="stat-num" data-target="12">0</div>
-        <div class="stat-label">Built-in Keywords</div>
-    </div>
-    <div class="stat-item">
-        <div class="stat-num" data-target="40">0</div>
-        <div class="stat-label">Built-in Functions</div>
-    </div>
-    <div class="stat-item">
-        <div class="stat-num" data-target="100">0</div>
-        <div class="stat-label">% Browser-Based</div>
-    </div>
-    <div class="stat-item">
-        <div class="stat-num" data-target="0">∞</div>
-        <div class="stat-label">Installation Required</div>
-    </div>
-</div>
-
-<!-- ==================== CODE SHOWCASE ==================== -->
-<section id="code-section">
-    <div class="code-info" data-fade="left">
-        <h2>Write code that <span style="color:var(--accent-green)">feels like chai.</span></h2>
-        <p>ChaiScript brings a fresh twist to familiar programming concepts. If you know Python or JavaScript, you'll feel right at home — with a cup in hand.</p>
-        <div class="keyword-pills">
-            <span class="kpill">cup</span>
-            <span class="kpill">brew</span>
-            <span class="kpill">hot / mild / chilled</span>
-            <span class="kpill">then_chai</span>
-            <span class="kpill">sip</span>
-            <span class="kpill">for_chai</span>
-            <span class="kpill">while_chai</span>
-            <span class="kpill">serveChai()</span>
-            <span class="kpill">return_chai</span>
-            <span class="kpill">try_chai</span>
+    <!-- ==================== STATS ==================== -->
+    <div class="stats-row" id="stats-row">
+        <div class="stat-item">
+            <div class="stat-num" data-target="12">0</div>
+            <div class="stat-label">Built-in Keywords</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" data-target="80">0</div>
+            <div class="stat-label">Built-in Functions</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" data-target="100">0</div>
+            <div class="stat-label">% Browser-Based</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num" data-target="0">∞</div>
+            <div class="stat-label">Installation Required</div>
         </div>
     </div>
 
-    <div class="code-window" id="code-window">
-        <div class="window-titlebar">
-            <div class="dot red"></div>
-            <div class="dot yellow"></div>
-            <div class="dot green"></div>
-            <span class="window-filename">hello.chai</span>
+    <!-- ==================== CODE SHOWCASE ==================== -->
+    <section id="code-section">
+        <div class="code-info" data-fade="left">
+            <h2>Write code that <span style="color:var(--accent-green)">feels like chai.</span></h2>
+            <p>ChaiScript brings a fresh twist to familiar programming concepts. If you know Python or JavaScript,
+                you'll feel right at home — with a cup in hand.</p>
+            <div class="keyword-pills">
+                <span class="kpill">cup</span>
+                <span class="kpill">brew</span>
+                <span class="kpill">hot / mild / chilled</span>
+                <span class="kpill">then_chai</span>
+                <span class="kpill">sip</span>
+                <span class="kpill">for_chai</span>
+                <span class="kpill">while_chai</span>
+                <span class="kpill">serveChai()</span>
+                <span class="kpill">return_chai</span>
+                <span class="kpill">try_chai</span>
+            </div>
         </div>
-        <div class="code-body" id="code-body"></div>
-    </div>
-</section>
 
-<!-- ==================== FEATURES ==================== -->
-<section id="features">
-    <div class="section-header">
-        <div class="section-tag">Why ChaiScript?</div>
-        <h2 class="section-title">Everything you need to <span style="color:var(--accent-green)">brew</span> great code</h2>
-        <p class="section-sub">A full language, a full playground, all in your browser.</p>
-    </div>
-
-    <div class="features-grid">
-        <div class="feature-card">
-            <span class="feature-icon">☕</span>
-            <div class="feature-title">Chai-Flavored Syntax</div>
-            <div class="feature-desc">Unique keywords like <code style="font-family:monospace;font-size:0.8em;background:var(--bg-editor);padding:1px 5px;border-radius:4px;color:var(--accent-green)">cup</code>, <code style="font-family:monospace;font-size:0.8em;background:var(--bg-editor);padding:1px 5px;border-radius:4px;color:var(--accent-green)">brew</code>, <code style="font-family:monospace;font-size:0.8em;background:var(--bg-editor);padding:1px 5px;border-radius:4px;color:var(--accent-green)">sip</code> make coding feel warm, approachable and fun.</div>
+        <div class="code-window" id="code-window">
+            <div class="window-titlebar">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+                <span class="window-filename">hello.chai</span>
+            </div>
+            <div class="code-body" id="code-body"></div>
         </div>
-        <div class="feature-card">
-            <span class="feature-icon">🌐</span>
-            <div class="feature-title">Browser-Based IDE</div>
-            <div class="feature-desc">A full-featured Monaco Editor experience in your browser. Syntax highlighting, multi-tab editing, and live output — no install needed.</div>
+    </section>
+
+    <!-- ==================== FEATURES ==================== -->
+    <section id="features">
+        <div class="section-header">
+            <div class="section-tag">Why ChaiScript?</div>
+            <h2 class="section-title">Everything you need to <span style="color:var(--accent-green)">brew</span> great
+                code</h2>
+            <p class="section-sub">A full language, a full playground, all in your browser.</p>
         </div>
-        <div class="feature-card">
-            <span class="feature-icon">🔐</span>
-            <div class="feature-title">Google Sign-In</div>
-            <div class="feature-desc">Sign up and log in instantly with your Google account. One click and you're brewing your first script.</div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">☕</span>
+                <div class="feature-title">Chai-Flavored Syntax</div>
+                <div class="feature-desc">Unique keywords like <code
+                        style="font-family:monospace;font-size:0.8em;background:var(--bg-editor);padding:1px 5px;border-radius:4px;color:var(--accent-green)">cup</code>,
+                    <code
+                        style="font-family:monospace;font-size:0.8em;background:var(--bg-editor);padding:1px 5px;border-radius:4px;color:var(--accent-green)">brew</code>,
+                    <code
+                        style="font-family:monospace;font-size:0.8em;background:var(--bg-editor);padding:1px 5px;border-radius:4px;color:var(--accent-green)">sip</code>
+                    make coding feel warm, approachable and fun.</div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🌐</span>
+                <div class="feature-title">Browser-Based IDE</div>
+                <div class="feature-desc">A full-featured Monaco Editor experience in your browser. Syntax highlighting,
+                    multi-tab editing, and live output — no install needed.</div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔐</span>
+                <div class="feature-title">Google Sign-In</div>
+                <div class="feature-desc">Sign up and log in instantly with your Google account. One click and you're
+                    brewing your first script.</div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <div class="feature-title">Visual Debugger</div>
+                <div class="feature-desc">Watch variables change in real time, trace execution step by step, and
+                    visualize your call stack while your code runs.</div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🔗</span>
+                <div class="feature-title">Share Your Code</div>
+                <div class="feature-desc">Generate a unique link for any snippet and share it with anyone. Collaboration
+                    made effortless — just send the URL.</div>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📚</span>
+                <div class="feature-title">Full Documentation</div>
+                <div class="feature-desc">Comprehensive docs covering every keyword, built-in, and concept — with live
+                    examples you can copy and run directly.</div>
+            </div>
         </div>
-        <div class="feature-card">
-            <span class="feature-icon">📊</span>
-            <div class="feature-title">Visual Debugger</div>
-            <div class="feature-desc">Watch variables change in real time, trace execution step by step, and visualize your call stack while your code runs.</div>
+    </section>
+
+    <!-- ==================== SYNTAX COMPARISON ==================== -->
+    <section id="syntax-section">
+        <div class="section-header">
+            <div class="section-tag">Familiar yet Fresh</div>
+            <h2 class="section-title">Python-inspired, <span style="color:var(--accent-green)">chai-flavored</span></h2>
+            <p class="section-sub">If you know Python, you already know ChaiScript.</p>
         </div>
-        <div class="feature-card">
-            <span class="feature-icon">🔗</span>
-            <div class="feature-title">Share Your Code</div>
-            <div class="feature-desc">Generate a unique link for any snippet and share it with anyone. Collaboration made effortless — just send the URL.</div>
+
+        <div class="compare-grid">
+            <div class="compare-col">
+                <h3>Standard → Python</h3>
+                <div class="compare-row"><span class="pk">variable</span></div>
+                <div class="compare-row"><span class="pk">def function()</span></div>
+                <div class="compare-row"><span class="pk">if / elif / else</span></div>
+                <div class="compare-row"><span class="pk">for i in range()</span></div>
+                <div class="compare-row"><span class="pk">while condition:</span></div>
+                <div class="compare-row"><span class="pk">print()</span></div>
+                <div class="compare-row"><span class="pk">return</span></div>
+                <div class="compare-row"><span class="pk">try / except</span></div>
+            </div>
+            <div class="compare-col">
+                <h3>☕ ChaiScript</h3>
+                <div class="compare-row"><span class="arrow">→</span><span class="ck">cup</span></div>
+                <div class="compare-row"><span class="arrow">→</span><span class="ck">brew function()</span></div>
+                <div class="compare-row"><span class="arrow">→</span><span class="ck">hot / mild / chilled</span></div>
+                <div class="compare-row"><span class="arrow">→</span><span class="ck">for_chai i = 0 to_chai n</span>
+                </div>
+                <div class="compare-row"><span class="arrow">→</span><span class="ck">while_chai condition</span></div>
+                <div class="compare-row"><span class="arrow">→</span><span class="ck">serveChai()</span></div>
+                <div class="compare-row"><span class="arrow">→</span><span class="ck">return_chai</span></div>
+                <div class="compare-row"><span class="arrow">→</span><span class="ck">try_chai / catch_chai</span></div>
+            </div>
         </div>
-        <div class="feature-card">
-            <span class="feature-icon">📚</span>
-            <div class="feature-title">Full Documentation</div>
-            <div class="feature-desc">Comprehensive docs covering every keyword, built-in, and concept — with live examples you can copy and run directly.</div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section id="cta-section">
+        <h2 class="cta-title">Ready to <span style="color:var(--accent-green)">brew</span> some code? ☕</h2>
+        <p class="cta-sub">Join ChaiScript today. No installation. No friction. Just pure creativity.</p>
+        <div class="cta-buttons">
+            <a class="cta-big" href="/accounts/signup/">🚀 &nbsp;Create Free Account</a>
+            <a class="cta-secondary" href="/engine/"
+                style="padding:16px 40px;font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:600;border-radius:12px;text-decoration:none;color:var(--accent-green);border:1.5px solid var(--accent-green);transition:all 0.25s;display:inline-block;">▶
+                &nbsp;Try Without Signing Up</a>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- ==================== SYNTAX COMPARISON ==================== -->
-<section id="syntax-section">
-    <div class="section-header">
-        <div class="section-tag">Familiar yet Fresh</div>
-        <h2 class="section-title">Python-inspired, <span style="color:var(--accent-green)">chai-flavored</span></h2>
-        <p class="section-sub">If you know Python, you already know ChaiScript.</p>
-    </div>
-
-    <div class="compare-grid">
-        <div class="compare-col">
-            <h3>Standard → Python</h3>
-            <div class="compare-row"><span class="pk">variable</span></div>
-            <div class="compare-row"><span class="pk">def function()</span></div>
-            <div class="compare-row"><span class="pk">if / elif / else</span></div>
-            <div class="compare-row"><span class="pk">for i in range()</span></div>
-            <div class="compare-row"><span class="pk">while condition:</span></div>
-            <div class="compare-row"><span class="pk">print()</span></div>
-            <div class="compare-row"><span class="pk">return</span></div>
-            <div class="compare-row"><span class="pk">try / except</span></div>
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="footer-brand">
+            <img class="footer-logo" src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
+            <span class="footer-brand-text">ChaiScript</span>
         </div>
-        <div class="compare-col">
-            <h3>☕ ChaiScript</h3>
-            <div class="compare-row"><span class="arrow">→</span><span class="ck">cup</span></div>
-            <div class="compare-row"><span class="arrow">→</span><span class="ck">brew function()</span></div>
-            <div class="compare-row"><span class="arrow">→</span><span class="ck">hot / mild / chilled</span></div>
-            <div class="compare-row"><span class="arrow">→</span><span class="ck">for_chai i = 0 to_chai n</span></div>
-            <div class="compare-row"><span class="arrow">→</span><span class="ck">while_chai condition</span></div>
-            <div class="compare-row"><span class="arrow">→</span><span class="ck">serveChai()</span></div>
-            <div class="compare-row"><span class="arrow">→</span><span class="ck">return_chai</span></div>
-            <div class="compare-row"><span class="arrow">→</span><span class="ck">try_chai / catch_chai</span></div>
+        <div class="footer-links">
+            <a href="/engine/">Playground</a>
+            <a href="/docs/">Documentation</a>
+            <a href="/accounts/signup/">Sign Up</a>
+            <a href="/accounts/login/">Log In</a>
         </div>
-    </div>
-</section>
-
-<!-- ==================== CTA ==================== -->
-<section id="cta-section">
-    <h2 class="cta-title">Ready to <span style="color:var(--accent-green)">brew</span> some code? ☕</h2>
-    <p class="cta-sub">Join ChaiScript today. No installation. No friction. Just pure creativity.</p>
-    <div class="cta-buttons">
-        <a class="cta-big" href="/accounts/signup/">🚀 &nbsp;Create Free Account</a>
-        <a class="cta-secondary" href="/engine/" style="padding:16px 40px;font-family:'JetBrains Mono',monospace;font-size:1.05rem;font-weight:600;border-radius:12px;text-decoration:none;color:var(--accent-green);border:1.5px solid var(--accent-green);transition:all 0.25s;display:inline-block;">▶ &nbsp;Try Without Signing Up</a>
-    </div>
-</section>
-
-<!-- ==================== FOOTER ==================== -->
-<footer>
-    <div class="footer-brand">
-        <img class="footer-logo" src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
-        <span class="footer-brand-text">ChaiScript</span>
-    </div>
-    <div class="footer-links">
-        <a href="/engine/">Playground</a>
-        <a href="/docs/">Documentation</a>
-        <a href="/accounts/signup/">Sign Up</a>
-        <a href="/accounts/login/">Log In</a>
-    </div>
-    <div class="footer-copy">Made with <span>☕</span> by ChaiScript — A chai-flavored interpreted language.</div>
-</footer>
+        <div class="footer-copy">Made with <span>☕</span> by ChaiScript — A chai-flavored interpreted language.</div>
+    </footer>
 
 
-<script>
-    /* ==================== THEME ==================== */
-    const savedTheme = localStorage.getItem('chaiTheme') || 'light';
-    if (savedTheme === 'dark') document.body.classList.add('dark');
+    <script>
+        /* ==================== THEME ==================== */
+        (function () {
+            const saved = localStorage.getItem('chai_theme');
+            if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark');
+            }
+        })();
 
-    function toggleTheme() {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('chaiTheme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    }
-
-    /* ==================== PARTICLE CANVAS ==================== */
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    const N = 90;
-
-    function resize() {
-        canvas.width  = window.innerWidth;
-        canvas.height = document.getElementById('hero').offsetHeight;
-    }
-    resize();
-    window.addEventListener('resize', () => { resize(); initParticles(); });
-
-    function rand(a, b) { return Math.random() * (b - a) + a; }
-
-    function initParticles() {
-        particles = [];
-        for (let i = 0; i < N; i++) {
-            particles.push({
-                x: rand(0, canvas.width),
-                y: rand(0, canvas.height),
-                vx: rand(-0.4, 0.4),
-                vy: rand(-0.4, 0.4),
-                r: rand(1.5, 3.5),
-            });
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('chai_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
         }
-    }
-    initParticles();
 
-    function getColor(alpha) {
-        return document.body.classList.contains('dark')
-            ? `rgba(79,209,165,${alpha})`
-            : `rgba(47,133,90,${alpha})`;
-    }
+        /* ==================== PARTICLE CANVAS ==================== */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const N = 90;
 
-    function drawParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (const p of particles) {
-            p.x += p.vx; p.y += p.vy;
-            if (p.x < 0 || p.x > canvas.width)  p.vx *= -1;
-            if (p.y < 0 || p.y > canvas.height)  p.vy *= -1;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = getColor(0.55);
-            ctx.fill();
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = document.getElementById('hero').offsetHeight;
         }
-        // draw connecting lines
-        for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-                const dx = particles[i].x - particles[j].x;
-                const dy = particles[i].y - particles[j].y;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                if (dist < 120) {
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.strokeStyle = getColor(0.12 * (1 - dist/120));
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
+        resize();
+        window.addEventListener('resize', () => { resize(); initParticles(); });
+
+        function rand(a, b) { return Math.random() * (b - a) + a; }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < N; i++) {
+                particles.push({
+                    x: rand(0, canvas.width),
+                    y: rand(0, canvas.height),
+                    vx: rand(-0.4, 0.4),
+                    vy: rand(-0.4, 0.4),
+                    r: rand(1.5, 3.5),
+                });
+            }
+        }
+        initParticles();
+
+        function getColor(alpha) {
+            return document.body.classList.contains('dark')
+                ? `rgba(79,209,165,${alpha})`
+                : `rgba(47,133,90,${alpha})`;
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const p of particles) {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = getColor(0.55);
+                ctx.fill();
+            }
+            // draw connecting lines
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = getColor(0.12 * (1 - dist / 120));
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
                 }
             }
+            requestAnimationFrame(drawParticles);
         }
-        requestAnimationFrame(drawParticles);
-    }
-    drawParticles();
+        drawParticles();
 
-    /* ==================== TYPEWRITER SUBTITLE ==================== */
-    const lines = [
-        "An interpreted language with chai-flavored keywords.",
-        "Write code. Run it in your browser. Share it instantly.",
-        "Variables are cups. Functions are brewed. Code is sipped.",
-        "Learn programming — the chai way. ☕",
-    ];
-    let li = 0, ci = 0, deleting = false;
-    const typedEl = document.getElementById('typed-text');
+        /* ==================== TYPEWRITER SUBTITLE ==================== */
+        const lines = [
+            "An interpreted language with chai-flavored keywords.",
+            "Write code. Run it in your browser. Share it instantly.",
+            "Variables are cups. Functions are brewed. Code is sipped.",
+            "Learn programming — the chai way. ☕",
+        ];
+        let li = 0, ci = 0, deleting = false;
+        const typedEl = document.getElementById('typed-text');
 
-    function typeLoop() {
-        const line = lines[li];
-        if (!deleting) {
-            typedEl.textContent = line.slice(0, ++ci);
-            if (ci === line.length) {
-                deleting = true;
-                setTimeout(typeLoop, 2200);
-                return;
+        function typeLoop() {
+            const line = lines[li];
+            if (!deleting) {
+                typedEl.textContent = line.slice(0, ++ci);
+                if (ci === line.length) {
+                    deleting = true;
+                    setTimeout(typeLoop, 2200);
+                    return;
+                }
+                setTimeout(typeLoop, 40);
+            } else {
+                typedEl.textContent = line.slice(0, --ci);
+                if (ci === 0) {
+                    deleting = false;
+                    li = (li + 1) % lines.length;
+                    setTimeout(typeLoop, 400);
+                    return;
+                }
+                setTimeout(typeLoop, 22);
             }
-            setTimeout(typeLoop, 40);
-        } else {
-            typedEl.textContent = line.slice(0, --ci);
-            if (ci === 0) {
-                deleting = false;
-                li = (li + 1) % lines.length;
-                setTimeout(typeLoop, 400);
-                return;
+        }
+        typeLoop();
+
+        /* ==================== CODE TYPEWRITER ==================== */
+        const codeLines = [
+            { text: '# ☕ Welcome to ChaiScript!\n', cls: 'cmt' },
+            { text: '\n' },
+            { text: 'cup ', cls: 'kw' },
+            { text: 'name = ' },
+            { text: '"Zishan"', cls: 'str' },
+            { text: '\ncup ', cls: 'kw' },
+            { text: 'age = ' },
+            { text: '20', cls: 'num' },
+            { text: '\n\n' },
+            { text: 'brew ', cls: 'kw' },
+            { text: 'greet(person)\n' },
+            { text: '    ' },
+            { text: 'serveChai', cls: 'fn' },
+            { text: '(' },
+            { text: '"Hello, "', cls: 'str' },
+            { text: ' + person)\n' },
+            { text: 'sip', cls: 'kw' },
+            { text: '\n\n' },
+            { text: 'greet', cls: 'fn' },
+            { text: '(name)\n\n' },
+            { text: 'hot ', cls: 'kw' },
+            { text: 'age > ' },
+            { text: '18', cls: 'num' },
+            { text: ' ' },
+            { text: 'then_chai', cls: 'kw' },
+            { text: '\n    ' },
+            { text: 'serveChai', cls: 'fn' },
+            { text: '(' },
+            { text: '"Adult!"', cls: 'str' },
+            { text: ')\n' },
+            { text: 'sip', cls: 'kw' },
+        ];
+
+        const codeBody = document.getElementById('code-body');
+        let tokenIdx = 0;
+
+        function typeCode() {
+            if (tokenIdx >= codeLines.length) return;
+            const tok = codeLines[tokenIdx++];
+            if (tok.cls) {
+                const span = document.createElement('span');
+                span.className = tok.cls;
+                span.textContent = tok.text;
+                codeBody.appendChild(span);
+            } else {
+                codeBody.appendChild(document.createTextNode(tok.text));
             }
-            setTimeout(typeLoop, 22);
+            setTimeout(typeCode, tok.text === '\n' || tok.text === '\n\n' ? 60 : 55);
         }
-    }
-    typeLoop();
 
-    /* ==================== CODE TYPEWRITER ==================== */
-    const codeLines = [
-        {text: '# ☕ Welcome to ChaiScript!\n', cls: 'cmt'},
-        {text: '\n'},
-        {text: 'cup ', cls: 'kw'},
-        {text: 'name = '},
-        {text: '"Zishan"', cls: 'str'},
-        {text: '\ncup ', cls: 'kw'},
-        {text: 'age = '},
-        {text: '20', cls: 'num'},
-        {text: '\n\n'},
-        {text: 'brew ', cls: 'kw'},
-        {text: 'greet(person)\n'},
-        {text: '    '},
-        {text: 'serveChai', cls: 'fn'},
-        {text: '('},
-        {text: '"Hello, "', cls: 'str'},
-        {text: ' + person)\n'},
-        {text: 'sip', cls: 'kw'},
-        {text: '\n\n'},
-        {text: 'greet', cls: 'fn'},
-        {text: '(name)\n\n'},
-        {text: 'hot ', cls: 'kw'},
-        {text: 'age > '},
-        {text: '18', cls: 'num'},
-        {text: ' '},
-        {text: 'then_chai', cls: 'kw'},
-        {text: '\n    '},
-        {text: 'serveChai', cls: 'fn'},
-        {text: '('},
-        {text: '"Adult!"', cls: 'str'},
-        {text: ')\n'},
-        {text: 'sip', cls: 'kw'},
-    ];
+        /* ==================== INTERSECTION OBSERVER ==================== */
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
 
-    const codeBody = document.getElementById('code-body');
-    let tokenIdx = 0;
+        document.querySelectorAll('.feature-card, .stat-item, .compare-row, .code-window').forEach(el => io.observe(el));
 
-    function typeCode() {
-        if (tokenIdx >= codeLines.length) return;
-        const tok = codeLines[tokenIdx++];
-        if (tok.cls) {
-            const span = document.createElement('span');
-            span.className = tok.cls;
-            span.textContent = tok.text;
-            codeBody.appendChild(span);
-        } else {
-            codeBody.appendChild(document.createTextNode(tok.text));
-        }
-        setTimeout(typeCode, tok.text === '\n' || tok.text === '\n\n' ? 60 : 55);
-    }
+        // stagger feature cards
+        document.querySelectorAll('.feature-card').forEach((el, i) => {
+            el.style.transitionDelay = `${i * 0.08}s`;
+        });
 
-    /* ==================== INTERSECTION OBSERVER ==================== */
-    const io = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-                e.target.classList.add('visible');
+        // stagger compare rows
+        document.querySelectorAll('.compare-row').forEach((el, i) => {
+            el.style.transitionDelay = `${i * 0.06}s`;
+        });
+
+        // start code typewriter when code window becomes visible
+        const codeWindowIo = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                setTimeout(typeCode, 600);
+                codeWindowIo.disconnect();
+            }
+        }, { threshold: 0.3 });
+        codeWindowIo.observe(document.getElementById('code-window'));
+
+        /* ==================== STAT COUNTER ==================== */
+        const statIo = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const el = e.target;
+                    const numEl = el.querySelector('.stat-num');
+                    const target = parseInt(el.querySelector('.stat-num').dataset.target);
+                    if (isNaN(target)) return;
+                    let cur = 0;
+                    const step = Math.ceil(target / 50);
+                    const timer = setInterval(() => {
+                        cur = Math.min(cur + step, target);
+                        numEl.textContent = cur + (numEl.dataset.target === '100' ? '%' : '+');
+                        if (cur >= target) clearInterval(timer);
+                    }, 30);
+                    statIo.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.stat-item').forEach(el => statIo.observe(el));
+
+        /* ==================== NAVBAR SCROLL SHADOW ==================== */
+        window.addEventListener('scroll', () => {
+            const nb = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nb.style.boxShadow = '0 4px 30px rgba(0,0,0,0.12)';
+            } else {
+                nb.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)';
             }
         });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll('.feature-card, .stat-item, .compare-row, .code-window').forEach(el => io.observe(el));
-
-    // stagger feature cards
-    document.querySelectorAll('.feature-card').forEach((el, i) => {
-        el.style.transitionDelay = `${i * 0.08}s`;
-    });
-
-    // stagger compare rows
-    document.querySelectorAll('.compare-row').forEach((el, i) => {
-        el.style.transitionDelay = `${i * 0.06}s`;
-    });
-
-    // start code typewriter when code window becomes visible
-    const codeWindowIo = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-            setTimeout(typeCode, 600);
-            codeWindowIo.disconnect();
-        }
-    }, { threshold: 0.3 });
-    codeWindowIo.observe(document.getElementById('code-window'));
-
-    /* ==================== STAT COUNTER ==================== */
-    const statIo = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-            if (e.isIntersecting) {
-                const el = e.target;
-                const numEl = el.querySelector('.stat-num');
-                const target = parseInt(el.querySelector('.stat-num').dataset.target);
-                if (isNaN(target)) return;
-                let cur = 0;
-                const step = Math.ceil(target / 50);
-                const timer = setInterval(() => {
-                    cur = Math.min(cur + step, target);
-                    numEl.textContent = cur + (numEl.dataset.target === '100' ? '%' : '+');
-                    if (cur >= target) clearInterval(timer);
-                }, 30);
-                statIo.unobserve(el);
-            }
-        });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('.stat-item').forEach(el => statIo.observe(el));
-
-    /* ==================== NAVBAR SCROLL SHADOW ==================== */
-    window.addEventListener('scroll', () => {
-        const nb = document.getElementById('navbar');
-        if (window.scrollY > 20) {
-            nb.style.boxShadow = '0 4px 30px rgba(0,0,0,0.12)';
-        } else {
-            nb.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)';
-        }
-    });
-</script>
+    </script>
 </body>
+
 </html>

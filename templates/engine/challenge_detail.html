@@ -1,0 +1,724 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ challenge.title }} — ChaiScript</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #f6fff5;
+            --bg-navbar: #ffffffee;
+            --bg-panel: #ffffff;
+            --bg-editor: #f0fff4;
+            --border-soft: #d9e7d8;
+            --border-strong: #b7d7b0;
+            --text-main: #1f2933;
+            --text-muted: #5f6f5f;
+            --accent-green: #2f855a;
+            --button-bg: #2f855a;
+            --button-hover: #276749;
+            --glow: rgba(47, 133, 90, .35);
+        }
+
+        body.dark {
+            --bg-page: #0f1412;
+            --bg-navbar: #141a17ee;
+            --bg-panel: #141a17;
+            --bg-editor: #101614;
+            --border-soft: #2f855a44;
+            --border-strong: #4fd1a555;
+            --text-main: #e6f4ea;
+            --text-muted: #9bbfb0;
+            --accent-green: #4fd1a5;
+            --button-bg: #2f855a;
+            --button-hover: #38a169;
+            --glow: rgba(79, 209, 165, .4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            transition: background .3s, color .3s;
+        }
+
+        nav {
+            height: 64px;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 30px;
+        }
+
+        .brand-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--accent-green);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .88rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 7px;
+            transition: background .2s, color .2s;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-editor);
+            color: var(--accent-green);
+        }
+
+        .theme-toggle {
+            width: 52px;
+            height: 26px;
+            background: var(--border-soft);
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: background .3s;
+        }
+
+        .theme-toggle::after {
+            content: "☀️";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-panel);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: all .3s;
+        }
+
+        body.dark .theme-toggle {
+            background: var(--accent-green);
+        }
+
+        body.dark .theme-toggle::after {
+            content: "🌙";
+            left: 28px;
+            background: #0f1412;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            height: calc(100vh - 64px);
+            margin-top: 64px;
+        }
+
+        /* left panel */
+        .left-panel {
+            border-right: 1px solid var(--border-soft);
+            overflow-y: auto;
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .back-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--accent-green);
+        }
+
+        .badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-bottom: 4px;
+        }
+
+        .easy {
+            background: #c6f6d5;
+            color: #276749;
+        }
+
+        .medium {
+            background: #fefcbf;
+            color: #744210;
+        }
+
+        .hard {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        body.dark .easy {
+            background: #1c4532;
+            color: #9ae6b4;
+        }
+
+        body.dark .medium {
+            background: #3d2e00;
+            color: #f6e05e;
+        }
+
+        body.dark .hard {
+            background: #3d0000;
+            color: #fc8181;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .desc {
+            font-size: .92rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .best-box {
+            background: var(--bg-editor);
+            border: 1px solid var(--border-strong);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .82rem;
+            color: var(--accent-green);
+        }
+
+        /* right panel */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor-area {
+            flex: 1;
+            position: relative;
+        }
+
+        textarea#code-input {
+            width: 100%;
+            height: 100%;
+            resize: none;
+            background: var(--bg-editor);
+            color: var(--text-main);
+            border: none;
+            outline: none;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .bottom-bar {
+            height: 48px;
+            background: var(--bg-navbar);
+            border-top: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            gap: 12px;
+        }
+
+        .btn-submit {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: .9rem;
+            color: #fff;
+            background: var(--button-bg);
+            border: none;
+            padding: 9px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background .2s;
+            box-shadow: 0 0 14px var(--glow);
+        }
+
+        .btn-submit:hover {
+            background: var(--button-hover);
+        }
+
+        .btn-submit:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .btn-run {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            font-size: .9rem;
+            color: var(--accent-green);
+            background: transparent;
+            border: 1.5px solid var(--accent-green);
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-run:hover {
+            background: var(--accent-green);
+            color: #fff;
+        }
+
+        .btn-run:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+        }
+
+        .output-panel {
+            height: 180px;
+            background: var(--bg-panel);
+            border-top: 1px solid var(--border-soft);
+            overflow-y: auto;
+            padding: 14px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--text-main);
+            white-space: pre-wrap;
+        }
+
+
+        .result-pass {
+            color: #2f855a;
+            font-weight: 700;
+        }
+
+        .result-fail {
+            color: #c53030;
+            font-weight: 700;
+        }
+
+        #monaco-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .monaco-editor,
+        .monaco-editor-background,
+        .monaco-editor .margin {
+            background-color: var(--bg-editor) !important;
+        }
+
+        @media(max-width:700px) {
+            .layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+
+            .left-panel {
+                max-height: 260px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a class="nav-brand" href="/">
+            <img src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
+            <span class="brand-text">ChaiScript</span>
+        </a>
+        <div class="nav-links">
+            <a class="nav-link" href="/engine/">Playground</a>
+            <a class="nav-link active" href="/engine/challenges/">Challenges</a>
+            <a class="nav-link" href="/engine/leaderboard/">Leaderboard</a>
+            <div class="theme-toggle" onclick="toggleTheme()"></div>
+            {% if request.user.is_authenticated %}
+            <a class="nav-link" href="/engine/profile/" style="display:flex;align-items:center;gap:6px;">
+                {% with request.user.socialaccount_set.all|first as sa %}{% if sa %}<img
+                    src="{{ sa.extra_data.picture }}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"
+                    onerror="this.style.display='none'">{% endif %}{% endwith %}
+                {{ request.user.username }}
+            </a>
+            {% else %}
+            <a class="btn-login" href="/accounts/login/" id="login-btn">Log in</a>
+            <a class="btn-signup" href="/accounts/signup/" id="signup-btn">Sign up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="layout">
+        <div class="left-panel">
+            <a class="back-link" href="/engine/challenges/">← All Challenges</a>
+            <div>
+                <span class="badge {{ challenge.difficulty }}">{{ challenge.get_difficulty_display }}</span>
+                <h1>{{ challenge.title }}</h1>
+            </div>
+            <div class="desc">{{ challenge.description }}</div>
+            {% if best %}
+            <div class="best-box">✓ Your best: {{ best.exec_time }}s</div>
+            {% endif %}
+        </div>
+
+        <div class="right-panel">
+            <div class="editor-area">
+                <div id="monaco-container"></div>
+            </div>
+            <div class="output-panel" id="output">Run your code to see output…</div>
+            <div class="bottom-bar">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text-muted);"
+                    id="status"></span>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <button class="btn-run" id="run-btn" onclick="runCode()">▷ Run</button>
+                    {% if request.user.is_authenticated %}
+                    <button class="btn-submit" id="submit-btn" onclick="submitCode()">✓ Submit</button>
+                    {% else %}
+                    <a href="/accounts/login/" class="btn-submit" style="text-decoration:none;padding:9px 28px;">Log in
+                        to Submit</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script>
+        // ── THEME ──
+        (function () { const s = localStorage.getItem('chai_theme'); if (s === 'dark' || (s === null && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.body.classList.add('dark'); })();
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('chai_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+            if (window.challengeEditor) {
+                monaco.editor.setTheme(document.body.classList.contains('dark') ? 'vs-dark' : 'vs');
+            }
+        }
+
+        // ── MONACO INIT ──
+        require.config({ paths: { vs: 'https://unpkg.com/monaco-editor@0.45.0/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+
+            monaco.languages.register({ id: 'chaiscript' });
+
+            const CHAI_KEYWORDS = [
+                'cup', 'and', 'or', 'not', 'hot', 'mild', 'chilled',
+                'for_chai', 'to_chai', 'STEP', 'while_chai', 'brew', 'then_chai',
+                'sip', 'return_chai', 'continue_chai', 'break_chai',
+                'try_chai', 'catch_chai', 'true', 'false'
+            ];
+            const CHAI_FUNCTIONS = [
+                'serveChai', 'serve_ret', 'orderChai', 'orderChai_int',
+                'clean', 'cls', 'type_chai', 'current_date_time',
+                'list_len', 'str_len', 'len', 'int', 'str', 'float', 'time_freeze',
+                'is_chai_num', 'is_chai_str', 'is_chai_list', 'is_brew', 'is_empty',
+                'to_lower', 'to_upper', 'char_at', 'index_of', 'slice',
+                'starts_with', 'ends_with', 'trim', 'replace',
+                'split_to_list', 'capitalize', 'title', 'is_equals',
+                'append', 'pop', 'extend', 'sort_list', 'reverse_list',
+                'range', 'element_at', 'join_to_str',
+                'Math_PI', 'Math_E', 'Math_mod_div', 'Math_factorial', 'Math_sqrt',
+                'Math_floor', 'Math_ceil', 'Math_round', 'Math_absoluteval', 'Math_random_chai',
+                'Math_sin', 'Math_cos', 'Math_tan', 'Math_sec', 'Math_cosec', 'Math_cot',
+                'Math_arcsin', 'Math_arccos', 'Math_arctan',
+                'Math_arcsec', 'Math_arccosec', 'Math_arccot',
+                'Math_sinh', 'Math_cosh', 'Math_tanh', 'Math_sech', 'Math_cosech', 'Math_coth',
+                'Math_arcsinh', 'Math_arccosh', 'Math_arctanh',
+                'Math_arcsech', 'Math_arccosech', 'Math_arccoth'
+            ];
+
+            monaco.languages.setMonarchTokensProvider('chaiscript', {
+                keywords: CHAI_KEYWORDS,
+                functions: CHAI_FUNCTIONS,
+                tokenizer: {
+                    root: [
+                        [/[a-zA-Z_][\w_]*/, {
+                            cases: {
+                                '@keywords': 'keyword',
+                                '@functions': 'type.identifier',
+                                '@default': 'identifier'
+                            }
+                        }],
+                        [/\d+(\.\d+)?/, 'number'],
+                        [/".*?"/, 'string'],
+                        [/[{}()\[\]]/, '@brackets'],
+                        [/[+\-*\/^=<>!]+/, 'operator'],
+                        [/#.*$/, 'comment']
+                    ]
+                }
+            });
+
+            monaco.languages.registerCompletionItemProvider('chaiscript', {
+                triggerCharacters: ['f', 'w', 'b', 'h', 'c', 'm', 's', 'r', 'n'],
+                provideCompletionItems: () => ({
+                    suggestions: [
+
+                        // 🔁 FOR LOOP
+                        {
+                            label: 'for',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `for_chai \${1:i} = \${2:start} to_chai \${3:end} then_chai
+    \${4:# code block}
+sip`,
+                            documentation: 'ChaiScript for loop'
+                        },
+
+                        // 🔄 WHILE LOOP
+                        {
+                            label: 'while',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `while_chai \${1:condition} then_chai
+    \${2:# code block}
+sip`,
+                            documentation: 'ChaiScript while loop'
+                        },
+
+                        // 🍵 FUNCTION
+                        {
+                            label: 'brew',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `brew \${1:functionName}(\${2:params})
+    \${3:# code block}
+sip`,
+                            documentation: 'ChaiScript function'
+                        },
+
+                        // 🌡️ HOT-MILD-CHILLED
+                        {
+                            label: 'hot-mild-chilled',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `hot \${1:statement1} > \${2:statement2} then_chai
+    \${3:# code block}
+mild \${4:statement1} < \${5:statement2} then_chai
+    \${6:# code block}
+chilled
+    \${7:# code block}
+sip`,
+                            documentation: 'ChaiScript hot–mild–chilled conditional'
+                        },
+
+                        // 🌡️ HOT-CHILLED
+                        {
+                            label: 'hot-chilled',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `hot \${1:statement1} > \${2:statement2} then_chai
+    \${3:# code block}
+chilled
+    \${4:# code block}
+sip`,
+                            documentation: 'ChaiScript hot–chilled conditional'
+                        },
+
+                        // 🌡️ HOT only
+                        {
+                            label: 'hot',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `hot \${1:condition} then_chai
+    \${2:# code block}
+sip`,
+                            documentation: 'ChaiScript if'
+                        },
+
+                        // 📦 VARIABLE
+                        {
+                            label: 'cup',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText: 'cup \${1:name} = \${2:value}',
+                            documentation: 'ChaiScript variable declaration'
+                        },
+
+                        // 🔁 FOR WITH STEP
+                        {
+                            label: 'for-step',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `for_chai \${1:i} = \${2:start} to_chai \${3:end} STEP \${4:step} then_chai
+    \${5:# code block}
+sip`,
+                            documentation: 'ChaiScript for loop with step'
+                        },
+
+                        // 🔁 RETURN
+                        {
+                            label: 'return_chai',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText: 'return_chai \${1:value}',
+                            documentation: 'Return from function'
+                        },
+
+                        // 🛡️ TRY-CATCH
+                        {
+                            label: 'try_chai',
+                            kind: monaco.languages.CompletionItemKind.Snippet,
+                            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+                            insertText:
+                                `try_chai
+    \${1:# code block}
+catch_chai
+    \${2:# handle error}
+sip`,
+                            documentation: 'ChaiScript try-catch'
+                        },
+
+                        // ✨ ALL KEYWORDS
+                        ...CHAI_KEYWORDS.map(k => ({
+                            label: k,
+                            kind: monaco.languages.CompletionItemKind.Keyword,
+                            insertText: k
+                        })),
+
+                        // 🧠 ALL FUNCTIONS
+                        ...CHAI_FUNCTIONS.map(fn => ({
+                            label: fn,
+                            kind: monaco.languages.CompletionItemKind.Function,
+                            insertText: fn + '('
+                        }))
+                    ]
+                })
+            });
+
+            const isDark = document.body.classList.contains('dark');
+            const starterCode = `{{ challenge.starter|escapejs }}`;
+
+            window.challengeEditor = monaco.editor.create(
+                document.getElementById('monaco-container'), {
+                value: starterCode,
+                language: 'chaiscript',
+                theme: isDark ? 'vs-dark' : 'vs',
+                fontSize: 14,
+                fontFamily: "'JetBrains Mono', monospace",
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                lineNumbers: 'on',
+                automaticLayout: true,
+                padding: { top: 16, bottom: 16 },
+            }
+            );
+        });
+
+        // ── RUN (no test evaluation, just execute) ──
+        async function runCode() {
+            const btn = document.getElementById('run-btn');
+            const out = document.getElementById('output');
+            const status = document.getElementById('status');
+            btn.disabled = true;
+            btn.textContent = '⏳…';
+            status.textContent = '';
+            out.textContent = '';
+            try {
+                const code = window.challengeEditor ? window.challengeEditor.getValue() : '';
+                const res = await fetch('/engine/run/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ code })
+                });
+                const data = await res.json();
+                out.textContent = data.output || '(no output)';
+            } catch (e) {
+                out.textContent = 'Error: ' + e.message;
+            }
+            btn.disabled = false;
+            btn.textContent = '▷ Run';
+        }
+
+        // ── SUBMIT ──
+        async function submitCode() {
+            const btn = document.getElementById('submit-btn');
+            const out = document.getElementById('output');
+            const status = document.getElementById('status');
+            btn.disabled = true;
+            btn.textContent = '⏳ Running…';
+            status.textContent = '';
+            out.textContent = '';
+            try {
+                const code = window.challengeEditor ? window.challengeEditor.getValue() : '';
+                const res = await fetch('/engine/challenges/{{ challenge.slug }}/submit/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ code })
+                });
+                const data = await res.json();
+                out.textContent = data.output || '(no output)';
+                if (data.passed) {
+                    status.innerHTML = '<span class="result-pass">✓ All tests passed! (' + data.exec_time + 's)</span>';
+                } else {
+                    status.innerHTML = '<span class="result-fail">✗ Tests failed. Check your output.</span>';
+                }
+            } catch (e) {
+                out.textContent = 'Error: ' + e.message;
+            }
+            btn.disabled = false;
+            btn.textContent = '▶ Submit';
+        }
+
+        // ── CSRF ──
+        function getCookie(name) {
+            const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
+        }
+    </script>
+</body>
+
+</html>

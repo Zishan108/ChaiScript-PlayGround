@@ -1,0 +1,378 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ request.user.username }} — ChaiScript</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #f6fff5;
+            --bg-navbar: #ffffffee;
+            --bg-panel: #ffffff;
+            --bg-editor: #f0fff4;
+            --border-soft: #d9e7d8;
+            --border-strong: #b7d7b0;
+            --text-main: #1f2933;
+            --text-muted: #5f6f5f;
+            --accent-green: #2f855a;
+            --button-bg: #2f855a;
+            --button-hover: #276749;
+            --glow: rgba(47, 133, 90, 0.35);
+        }
+
+        body.dark {
+            --bg-page: #0f1412;
+            --bg-navbar: #141a17ee;
+            --bg-panel: #141a17;
+            --bg-editor: #101614;
+            --border-soft: #2f855a44;
+            --border-strong: #4fd1a555;
+            --text-main: #e6f4ea;
+            --text-muted: #9bbfb0;
+            --accent-green: #4fd1a5;
+            --button-bg: #2f855a;
+            --button-hover: #38a169;
+            --glow: rgba(79, 209, 165, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            transition: background .3s, color .3s;
+        }
+
+        /* navbar */
+        nav {
+            height: 64px;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, .06);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 30px;
+        }
+
+        .brand-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--accent-green);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .88rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 7px;
+            transition: background .2s, color .2s;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-editor);
+            color: var(--accent-green);
+        }
+
+        .theme-toggle {
+            width: 52px;
+            height: 26px;
+            background: var(--border-soft);
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: background .3s;
+            flex-shrink: 0;
+        }
+
+        .theme-toggle::after {
+            content: "☀️";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-panel);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: all .3s;
+        }
+
+        body.dark .theme-toggle {
+            background: var(--accent-green);
+        }
+
+        body.dark .theme-toggle::after {
+            content: "🌙";
+            left: 28px;
+            background: #0f1412;
+        }
+
+        /* layout */
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 96px 24px 60px;
+        }
+
+        /* profile card */
+        .profile-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 16px;
+            padding: 36px;
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, .04);
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--bg-editor);
+            border: 2px solid var(--border-strong);
+            object-fit: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .profile-info .joined {
+            font-size: .85rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .profile-bio {
+            font-size: .95rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* stats row */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-box {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-box .num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent-green);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .stat-box .lbl {
+            font-size: .8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* section */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-green);
+        }
+
+        .project-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+
+        .project-row {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 10px;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: border-color .2s;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .project-row:hover {
+            border-color: var(--accent-green);
+        }
+
+        .project-row .proj-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .92rem;
+            font-weight: 600;
+        }
+
+        .project-row .proj-date {
+            font-size: .78rem;
+            color: var(--text-muted);
+        }
+
+        .empty {
+            color: var(--text-muted);
+            font-size: .9rem;
+            padding: 12px 0;
+        }
+
+        .btn-logout {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .85rem;
+            color: #fff;
+            background: #c53030;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background .2s;
+        }
+
+        .btn-logout:hover {
+            background: #9b2c2c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a class="nav-brand" href="/">
+            <img src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
+            <span class="brand-text">ChaiScript</span>
+        </a>
+        <div class="nav-links">
+            <a class="nav-link" href="/engine/">Playground</a>
+            <a class="nav-link" href="/engine/challenges/">Challenges</a>
+            <a class="nav-link" href="/engine/leaderboard/">Leaderboard</a>
+            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></div>
+            <a class="btn-logout" href="/accounts/logout/">Log out</a>
+        </div>
+    </nav>
+
+    <div class="page">
+
+        <div class="profile-card">
+            <div class="avatar">
+                {% if avatar %}
+                <img src="{{ avatar }}" alt="avatar">
+                {% else %}
+                {{ request.user.username|first|upper }}
+                {% endif %}
+            </div>
+            <div class="profile-info">
+                <h1>{{ request.user.username }}</h1>
+                <div class="joined">Joined {{ profile.created_at|date:"M Y" }}</div>
+                {% if profile.bio %}<p class="profile-bio">{{ profile.bio }}</p>{% endif %}
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="num">{{ profile.total_runs }}</div>
+                <div class="lbl">Total Runs</div>
+            </div>
+            <div class="stat-box">
+                <div class="num">{{ request.user.projects.count }}</div>
+                <div class="lbl">Projects</div>
+            </div>
+            <div class="stat-box">
+                <div class="num">{{ solved }}</div>
+                <div class="lbl">Challenges Solved</div>
+            </div>
+        </div>
+
+        <div class="section-title">☕ My Projects</div>
+        <div class="project-list">
+            {% for proj in projects %}
+            <a class="project-row" href="/engine/?project={{ proj.id }}">
+                <span class="proj-title">{{ proj.title }}</span>
+                <span class="proj-date">{{ proj.updated_at|date:"M d, Y" }}</span>
+            </a>
+            {% empty %}
+            <div class="empty">No projects yet. Save your first one from the Playground!</div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    <script>
+        (function () { const s = localStorage.getItem('chai_theme'); if (s === 'dark' || (s === null && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.body.classList.add('dark'); })();
+        function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('chai_theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+    </script>
+</body>
+
+</html>

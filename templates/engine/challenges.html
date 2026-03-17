@@ -1,0 +1,314 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenges — ChaiScript</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #f6fff5;
+            --bg-navbar: #ffffffee;
+            --bg-panel: #ffffff;
+            --bg-editor: #f0fff4;
+            --border-soft: #d9e7d8;
+            --border-strong: #b7d7b0;
+            --text-main: #1f2933;
+            --text-muted: #5f6f5f;
+            --accent-green: #2f855a;
+            --button-bg: #2f855a;
+            --button-hover: #276749;
+        }
+
+        body.dark {
+            --bg-page: #0f1412;
+            --bg-navbar: #141a17ee;
+            --bg-panel: #141a17;
+            --bg-editor: #101614;
+            --border-soft: #2f855a44;
+            --border-strong: #4fd1a555;
+            --text-main: #e6f4ea;
+            --text-muted: #9bbfb0;
+            --accent-green: #4fd1a5;
+            --button-bg: #2f855a;
+            --button-hover: #38a169;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            transition: background .3s, color .3s;
+        }
+
+        nav {
+            height: 64px;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 30px;
+        }
+
+        .brand-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--accent-green);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .88rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 7px;
+            transition: background .2s, color .2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--bg-editor);
+            color: var(--accent-green);
+        }
+
+        .theme-toggle {
+            width: 52px;
+            height: 26px;
+            background: var(--border-soft);
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: background .3s;
+        }
+
+        .theme-toggle::after {
+            content: "☀️";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-panel);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: all .3s;
+        }
+
+        body.dark .theme-toggle {
+            background: var(--accent-green);
+        }
+
+        body.dark .theme-toggle::after {
+            content: "🌙";
+            left: 28px;
+            background: #0f1412;
+        }
+
+        .page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 96px 24px 60px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .sub {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-soft);
+            border-radius: 14px;
+            padding: 24px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: border-color .2s, transform .2s;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .card.solved {
+            border-color: var(--accent-green);
+        }
+
+        .card.solved::after {
+            content: "✓ Solved";
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .72rem;
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .card-desc {
+            font-size: .85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+        }
+
+        .easy {
+            background: #c6f6d5;
+            color: #276749;
+        }
+
+        .medium {
+            background: #fefcbf;
+            color: #744210;
+        }
+
+        .hard {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        body.dark .easy {
+            background: #1c4532;
+            color: #9ae6b4;
+        }
+
+        body.dark .medium {
+            background: #3d2e00;
+            color: #f6e05e;
+        }
+
+        body.dark .hard {
+            background: #3d0000;
+            color: #fc8181;
+        }
+
+        .empty {
+            color: var(--text-muted);
+            font-size: .95rem;
+            padding: 32px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a class="nav-brand" href="/">
+            <img src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
+            <span class="brand-text">ChaiScript</span>
+        </a>
+        <div class="nav-links">
+            <a class="nav-link" href="/engine/">Playground</a>
+            <a class="nav-link active" href="/engine/challenges/">Challenges</a>
+            <a class="nav-link" href="/engine/leaderboard/">Leaderboard</a>
+            <div class="theme-toggle" onclick="toggleTheme()"></div>
+            {% if request.user.is_authenticated %}
+            <a class="nav-link" href="/engine/profile/" style="display:flex;align-items:center;gap:6px;">
+                {% with request.user.socialaccount_set.all|first as sa %}{% if sa %}<img
+                    src="{{ sa.extra_data.picture }}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"
+                    onerror="this.style.display='none'">{% endif %}{% endwith %}
+                {{ request.user.username }}
+            </a>
+            {% else %}
+            <a class="btn-login" href="/accounts/login/" id="login-btn">Log in</a>
+            <a class="btn-signup" href="/accounts/signup/" id="signup-btn">Sign up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="page">
+        <h1>☕ Challenges</h1>
+        <p class="sub">Solve ChaiScript puzzles and climb the leaderboard.</p>
+
+        {% if challenges %}
+        <div class="grid">
+            {% for c in challenges %}
+            <a class="card {% if c.id in solved_ids %}solved{% endif %}" href="/engine/challenges/{{ c.slug }}/">
+                <span class="badge {{ c.difficulty }}">{{ c.get_difficulty_display }}</span>
+                <div class="card-title">{{ c.title }}</div>
+                <div class="card-desc">{{ c.description|truncatechars:100 }}</div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty">🚧 Challenges coming soon! Check back after your next cup of chai.</div>
+        {% endif %}
+    </div>
+
+    <script>
+        (function () { const s = localStorage.getItem('chai_theme'); if (s === 'dark' || (s === null && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.body.classList.add('dark'); })();
+        function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('chai_theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+    </script>
+</body>
+
+</html>

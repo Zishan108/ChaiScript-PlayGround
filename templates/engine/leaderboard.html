@@ -1,0 +1,355 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard — ChaiScript</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #f6fff5;
+            --bg-navbar: #ffffffee;
+            --bg-panel: #ffffff;
+            --bg-editor: #f0fff4;
+            --border-soft: #d9e7d8;
+            --border-strong: #b7d7b0;
+            --text-main: #1f2933;
+            --text-muted: #5f6f5f;
+            --accent-green: #2f855a;
+            --button-bg: #2f855a;
+            --button-hover: #276749;
+            --glow: rgba(47, 133, 90, 0.35);
+        }
+
+        body.dark {
+            --bg-page: #0f1412;
+            --bg-navbar: #141a17ee;
+            --bg-panel: #141a17;
+            --bg-editor: #101614;
+            --border-soft: #2f855a44;
+            --border-strong: #4fd1a555;
+            --text-main: #e6f4ea;
+            --text-muted: #9bbfb0;
+            --accent-green: #4fd1a5;
+            --button-bg: #2f855a;
+            --button-hover: #38a169;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+            transition: background .3s, color .3s;
+        }
+
+        nav {
+            height: 64px;
+            background: var(--bg-navbar);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 30px;
+        }
+
+        .brand-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--accent-green);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .88rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 7px;
+            transition: background .2s, color .2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--bg-editor);
+            color: var(--accent-green);
+        }
+
+        .theme-toggle {
+            width: 52px;
+            height: 26px;
+            background: var(--border-soft);
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: background .3s;
+        }
+
+        .theme-toggle::after {
+            content: "☀️";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-panel);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: all .3s;
+        }
+
+        body.dark .theme-toggle {
+            background: var(--accent-green);
+        }
+
+        body.dark .theme-toggle::after {
+            content: "🌙";
+            left: 28px;
+            background: #0f1412;
+        }
+
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 96px 24px 60px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .sub {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: .95rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .tab {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .88rem;
+            padding: 8px 20px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border-strong);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .tab.active {
+            background: var(--accent-green);
+            color: #fff;
+            border-color: var(--accent-green);
+        }
+
+        .board {
+            display: none;
+        }
+
+        .board.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .78rem;
+            color: var(--text-muted);
+            text-align: left;
+            padding: 10px 16px;
+            border-bottom: 2px solid var(--border-strong);
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-soft);
+            font-size: .92rem;
+        }
+
+        tr:hover td {
+            background: var(--bg-editor);
+        }
+
+        .rank {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--accent-green);
+            width: 48px;
+        }
+
+        .medal {
+            font-size: 1.1rem;
+        }
+
+        .username {
+            font-weight: 600;
+        }
+
+        .score {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <a class="nav-brand" href="/">
+            <img src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
+            <span class="brand-text">ChaiScript</span>
+        </a>
+        <div class="nav-links">
+            <a class="nav-link" href="/engine/">Playground</a>
+            <a class="nav-link" href="/engine/challenges/">Challenges</a>
+            <a class="nav-link active" href="/engine/leaderboard/">Leaderboard</a>
+            <div class="theme-toggle" onclick="toggleTheme()"></div>
+            {% if request.user.is_authenticated %}
+            <a class="nav-link" href="/engine/profile/" style="display:flex;align-items:center;gap:6px;">
+                {% with request.user.socialaccount_set.all|first as sa %}{% if sa %}<img
+                    src="{{ sa.extra_data.picture }}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"
+                    onerror="this.style.display='none'">{% endif %}{% endwith %}
+                {{ request.user.username }}
+            </a>
+            {% else %}
+            <a class="btn-login" href="/accounts/login/" id="login-btn">Log in</a>
+            <a class="btn-signup" href="/accounts/signup/" id="signup-btn">Sign up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="page">
+        <h1>🏆 Leaderboard</h1>
+        <p class="sub">The top ChaiScript brewers.</p>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('runs', this)">Most Runs</button>
+            <button class="tab" onclick="switchTab('solved', this)">Most Solved</button>
+        </div>
+
+        <div id="board-runs" class="board active">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Total Runs</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in top_runners %}
+                    <tr>
+                        <td class="rank">
+                            {% if forloop.counter == 1 %}<span class="medal">🥇</span>
+                            {% elif forloop.counter == 2 %}<span class="medal">🥈</span>
+                            {% elif forloop.counter == 3 %}<span class="medal">🥉</span>
+                            {% else %}{{ forloop.counter }}{% endif %}
+                        </td>
+                        <td class="username">{{ entry.user.username }}</td>
+                        <td class="score">{{ entry.total_runs }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="color:var(--text-muted);padding:24px 16px;">No data yet. Start running
+                            code! ☕</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div id="board-solved" class="board">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>User</th>
+                        <th>Challenges Solved</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in top_solvers %}
+                    <tr>
+                        <td class="rank">
+                            {% if forloop.counter == 1 %}<span class="medal">🥇</span>
+                            {% elif forloop.counter == 2 %}<span class="medal">🥈</span>
+                            {% elif forloop.counter == 3 %}<span class="medal">🥉</span>
+                            {% else %}{{ forloop.counter }}{% endif %}
+                        </td>
+                        <td class="username">{{ entry.user__username }}</td>
+                        <td class="score">{{ entry.solved }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" style="color:var(--text-muted);padding:24px 16px;">No challenges solved yet!
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        (function () { const s = localStorage.getItem('chai_theme'); if (s === 'dark' || (s === null && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.body.classList.add('dark'); })();
+        function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('chai_theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+        function switchTab(name, btn) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.board').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('board-' + name).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

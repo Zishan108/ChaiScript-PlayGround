@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,10 @@
     <link rel="icon" type="image/x-icon" href="{% static 'engine/img/ChaiScript.ico' %}">
     <link rel="icon" type="image/png" href="{% static 'engine/img/ChaiScript.png' %}">
     <link rel="shortcut icon" href="{% static 'engine/img/ChaiScript.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 
     <style>
         /* ===============================
@@ -48,13 +53,18 @@
             --border-strong: #4fd1a5;
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
-        html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 76px;
+        }
 
         body {
             margin: 0;
-            font-family: "JetBrains Mono", monospace;
+            font-family: 'Inter', sans-serif;
             background: var(--bg-page);
             color: var(--text-main);
             transition: background 0.3s, color 0.3s;
@@ -65,53 +75,114 @@
            NAVBAR
            =============================== */
         #navbar {
-            height: 60px;
+            height: 64px;
             background: var(--bg-navbar);
-            border-bottom: 2px solid var(--border-strong);
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
             align-items: center;
-            padding: 0 24px;
+            justify-content: space-between;
+            padding: 0 32px;
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+            transition: background 0.3s, border-color 0.3s;
         }
-        .nav-left { display: flex; align-items: center; }
-        .nav-center { display: flex; align-items: center; gap: 10px; justify-self: center; }
-        .nav-right { display: flex; gap: 14px; justify-self: end; align-items: center; }
 
-        #nav-img { height: 32px; width: auto; }
-        .brand { font-size: 1.3rem; letter-spacing: 1.5px; color: var(--accent-green); line-height: 1; }
-
-        .nav-btn {
-            background: none; border: none; color: var(--text-muted); font-size: 0.95rem;
-            cursor: pointer; padding: 6px 10px; border-radius: 6px; text-decoration: none;
-            transition: background 0.2s, color 0.2s; font-family: "JetBrains Mono", monospace;
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
         }
-        .nav-btn:hover { background: var(--bg-editor); color: var(--accent-green); }
-        .nav-btn.active { color: var(--accent-green); font-weight: 600; border-bottom: 2px solid var(--accent-yellow); }
+
+        #nav-img {
+            height: 30px;
+            width: auto;
+        }
+
+        .brand-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--accent-green);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 7px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-editor);
+            color: var(--accent-green);
+        }
+
+        .nav-link.active {
+            background: var(--bg-editor);
+            color: var(--accent-green);
+            font-weight: 600;
+        }
 
         .theme-toggle {
-            width: 56px; height: 28px; background: var(--border-soft);
-            border-radius: 999px; position: relative; cursor: pointer; transition: background 0.3s;
+            width: 52px;
+            height: 26px;
+            background: var(--border-soft);
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
         }
+
         .theme-toggle::after {
-            content: "☀️"; position: absolute; top: 3px; left: 3px;
-            width: 22px; height: 22px; background: var(--bg-navbar); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.3s;
+            content: "☀️";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 22px;
+            height: 22px;
+            background: var(--bg-panel);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            transition: all 0.3s;
         }
-        body.dark .theme-toggle { background: var(--accent-green); }
-        body.dark .theme-toggle::after { content: "🌙"; left: 31px; background: #0f1412; }
+
+        body.dark .theme-toggle {
+            background: var(--accent-green);
+        }
+
+        body.dark .theme-toggle::after {
+            content: "🌙";
+            left: 28px;
+            background: #0f1412;
+        }
 
         /* ===============================
            LAYOUT
            =============================== */
         #docs-wrap {
             display: flex;
-            margin-top: 60px;
-            min-height: calc(100vh - 60px);
+            margin-top: 64px;
+            min-height: calc(100vh - 64px);
         }
 
         /* ===============================
@@ -123,29 +194,61 @@
             background: var(--bg-navbar);
             border-right: 1px solid var(--border-soft);
             position: fixed;
-            top: 60px;
-            height: calc(100vh - 60px);
+            top: 64px;
+            height: calc(100vh - 64px);
             overflow-y: auto;
             padding: 24px 0 40px;
             scrollbar-width: thin;
             scrollbar-color: var(--border-strong) transparent;
         }
-        #sidebar::-webkit-scrollbar { width: 4px; }
-        #sidebar::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
 
-        .sidebar-section { margin-bottom: 8px; }
+        #sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #sidebar::-webkit-scrollbar-thumb {
+            background: var(--border-strong);
+            border-radius: 999px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 8px;
+        }
+
         .sidebar-heading {
-            font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-            color: var(--text-muted); padding: 10px 20px 4px; opacity: 0.7;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 10px 20px 4px;
+            opacity: 0.7;
         }
+
         .sidebar-link {
-            display: block; padding: 7px 20px; font-size: 12.5px; color: var(--text-muted);
-            text-decoration: none; border-left: 3px solid transparent;
+            display: block;
+            padding: 7px 20px;
+            font-size: 12.5px;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-left: 3px solid transparent;
             transition: color 0.15s, border-color 0.15s, background 0.15s;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .sidebar-link:hover { color: var(--accent-green); background: var(--bg-editor); }
-        .sidebar-link.active { color: var(--accent-green); border-left-color: var(--accent-green); background: var(--bg-editor); font-weight: 600; }
+
+        .sidebar-link:hover {
+            color: var(--accent-green);
+            background: var(--bg-editor);
+        }
+
+        .sidebar-link.active {
+            color: var(--accent-green);
+            border-left-color: var(--accent-green);
+            background: var(--bg-editor);
+            font-weight: 600;
+        }
 
         /* ===============================
            MAIN CONTENT
@@ -161,28 +264,83 @@
            TYPOGRAPHY
            =============================== */
         h1.doc-title {
-            font-size: 2rem; color: var(--accent-green); margin: 0 0 8px;
-            letter-spacing: 1px;
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            color: var(--accent-green);
+            margin: 0 0 8px;
+            letter-spacing: -0.5px;
+            font-weight: 800;
         }
-        h2.section-title {
-            font-size: 1.4rem; color: var(--accent-green); margin: 48px 0 12px;
-            padding-bottom: 8px; border-bottom: 2px solid var(--border-soft);
-        }
-        h3 { font-size: 1rem; color: var(--text-main); margin: 24px 0 8px; }
-        h4 { font-size: 0.9rem; color: var(--text-main); margin: 20px 0 6px; font-weight: 600; }
-        p { font-size: 14px; line-height: 1.8; color: var(--text-main); margin: 8px 0 12px; }
-        ul, ol { font-size: 14px; line-height: 1.9; color: var(--text-main); padding-left: 20px; }
-        li { margin-bottom: 4px; }
 
-        hr.title-hr { border: none; border-top: 1.5px solid var(--border-strong); margin: 40px 0; }
-        hr.sub-hr { border: none; border-top: 1px solid var(--border-soft); margin: 24px 0; }
+        h2.section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.35rem;
+            color: var(--accent-green);
+            margin: 48px 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border-soft);
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: var(--text-main);
+            margin: 24px 0 8px;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin: 20px 0 6px;
+            font-weight: 600;
+        }
+
+        p {
+            font-family: 'Inter', sans-serif;
+            font-size: 14.5px;
+            line-height: 1.8;
+            color: var(--text-main);
+            margin: 8px 0 12px;
+        }
+
+        ul,
+        ol {
+            font-family: 'Inter', sans-serif;
+            font-size: 14.5px;
+            line-height: 1.9;
+            color: var(--text-main);
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 4px;
+        }
+
+        hr.title-hr {
+            border: none;
+            border-top: 1.5px solid var(--border-strong);
+            margin: 40px 0;
+        }
+
+        hr.sub-hr {
+            border: none;
+            border-top: 1px solid var(--border-soft);
+            margin: 24px 0;
+        }
 
         /* ===============================
            INLINE CODE
            =============================== */
         code {
-            background: var(--bg-editor); color: var(--accent-green);
-            padding: 2px 6px; border-radius: 4px; font-size: 13px;
+            background: var(--bg-editor);
+            color: var(--accent-green);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 13px;
             font-family: "JetBrains Mono", monospace;
             border: 1px solid var(--border-soft);
         }
@@ -206,863 +364,1479 @@
         }
 
         .copy-btn {
-            background: var(--button-bg); color: #fff; border: none;
-            padding: 5px 14px; border-radius: 6px; font-size: 12px;
-            cursor: pointer; font-family: "JetBrains Mono", monospace;
-            transition: background 0.2s; margin: 6px 0 12px;
+            background: var(--button-bg);
+            color: #fff;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: "JetBrains Mono", monospace;
+            transition: background 0.2s;
+            margin: 6px 0 12px;
         }
-        .copy-btn:hover { background: var(--button-hover); }
-        .copy-btn.copied { background: var(--accent-yellow); color: #1f2933; }
+
+        .copy-btn:hover {
+            background: var(--button-hover);
+        }
+
+        .copy-btn.copied {
+            background: var(--accent-yellow);
+            color: #1f2933;
+        }
 
         /* ===============================
            OUTPUT BLOCK
            =============================== */
         .output-block {
-            background: var(--bg-output); border: 1px solid var(--border-soft);
+            background: var(--bg-output);
+            border: 1px solid var(--border-soft);
             border-left: 4px solid var(--accent-yellow);
-            border-radius: 0 8px 8px 0; padding: 10px 16px;
-            font-family: "JetBrains Mono", monospace; font-size: 13px;
-            color: var(--text-muted); margin: 4px 0 16px;
+            border-radius: 0 8px 8px 0;
+            padding: 10px 16px;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 4px 0 16px;
         }
-        .output-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 4px; opacity: 0.6; }
+
+        .output-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            opacity: 0.6;
+        }
 
         /* ===============================
            NOTE / ALERT
            =============================== */
         .note {
-            background: rgba(246,196,83,0.15); border: 1px solid var(--accent-yellow);
-            border-left: 4px solid var(--accent-yellow); border-radius: 0 8px 8px 0;
-            padding: 12px 16px; font-size: 13px; margin: 12px 0; line-height: 1.7;
+            background: rgba(246, 196, 83, 0.15);
+            border: 1px solid var(--accent-yellow);
+            border-left: 4px solid var(--accent-yellow);
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            font-size: 13px;
+            margin: 12px 0;
+            line-height: 1.7;
         }
-        .note b { color: var(--accent-yellow); }
+
+        .note b {
+            color: var(--accent-yellow);
+        }
 
         /* ===============================
            VERSION BADGE
            =============================== */
         .version-badge {
-            display: inline-block; background: var(--accent-green); color: #fff;
-            font-size: 11px; padding: 2px 8px; border-radius: 999px;
-            font-weight: 700; letter-spacing: 0.5px; margin-left: 6px;
+            display: inline-block;
+            background: var(--accent-green);
+            color: #fff;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-left: 6px;
         }
 
         /* ===============================
            TABLE
            =============================== */
         .doc-table {
-            width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0;
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin: 12px 0;
         }
+
         .doc-table th {
-            background: var(--bg-editor); color: var(--accent-green);
-            padding: 9px 12px; text-align: left; border: 1px solid var(--border-soft);
-            font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase;
+            background: var(--bg-editor);
+            color: var(--accent-green);
+            padding: 9px 12px;
+            text-align: left;
+            border: 1px solid var(--border-soft);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
+
         .doc-table td {
-            padding: 8px 12px; border: 1px solid var(--border-soft); vertical-align: middle;
+            padding: 8px 12px;
+            border: 1px solid var(--border-soft);
+            vertical-align: middle;
             background: var(--bg-panel);
         }
-        .doc-table tr:hover td { background: var(--bg-editor); }
+
+        .doc-table tr:hover td {
+            background: var(--bg-editor);
+        }
 
         /* ===============================
            KEYWORD PILL
            =============================== */
         .kw {
-            display: inline-block; background: var(--bg-editor); color: var(--accent-green);
-            border: 1px solid var(--border-soft); border-radius: 4px;
-            padding: 1px 8px; font-size: 12px; font-family: "JetBrains Mono", monospace;
+            display: inline-block;
+            background: var(--bg-editor);
+            color: var(--accent-green);
+            border: 1px solid var(--border-soft);
+            border-radius: 4px;
+            padding: 1px 8px;
+            font-size: 12px;
+            font-family: "JetBrains Mono", monospace;
         }
 
         /* ===============================
            FOOTER
            =============================== */
         footer {
-            background: var(--bg-navbar); border-top: 1px solid var(--border-soft);
-            padding: 24px; text-align: center; font-size: 12px; color: var(--text-muted);
+            background: var(--bg-navbar);
+            border-top: 1px solid var(--border-soft);
+            padding: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
             margin-left: 240px;
         }
-        footer a { color: var(--accent-green); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+
+        footer a {
+            color: var(--accent-green);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
 
         /* ===============================
            RESPONSIVE
            =============================== */
         @media (max-width: 768px) {
-            #sidebar { display: none; }
-            #main { margin-left: 0; padding: 24px 20px 60px; max-width: 100%; }
-            footer { margin-left: 0; }
-            #navbar { padding: 0 12px; }
-            .brand { font-size: 1rem; }
-            .nav-right .nav-btn:not(.nav-btn-editor) { display: none; }
+            #sidebar {
+                display: none;
+            }
+
+            #main {
+                margin-left: 0;
+                padding: 24px 20px 60px;
+                max-width: 100%;
+            }
+
+            footer {
+                margin-left: 0;
+            }
+
+            #navbar {
+                padding: 0 16px;
+            }
+
+            .nav-link:not(.active) {
+                display: none;
+            }
         }
 
         /* ===============================
            CUSTOM SCROLLBAR
            =============================== */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-page); }
-        ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 999px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-page);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-strong);
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-green);
+        }
+
+        .btn-login {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--accent-green);
+            border: 1.5px solid var(--accent-green);
+            background: transparent;
+            padding: 7px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            background: var(--accent-green);
+            color: #fff;
+        }
+
+        .btn-signup {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--button-bg);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: 0 0 14px var(--glow);
+        }
+
+        .btn-signup:hover {
+            background: var(--button-hover);
+            box-shadow: 0 0 24px var(--glow);
+            transform: translateY(-1px);
+        }
     </style>
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav id="navbar">
-    <div class="nav-left">
-        <div class="theme-toggle" onclick="toggleTheme()"></div>
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <a class="nav-brand" href="/">
+            <img id="nav-img" src="{% static 'engine/img/ChaiScript.png' %}" alt="ChaiScript Logo">
+            <span class="brand-text">ChaiScript</span>
+        </a>
+
+        <div class="nav-links">
+            <a class="nav-link" href="/">Home</a>
+            <a class="nav-link" href="/engine/">Playground</a>
+            <a class="nav-link active" href="/docs/">Docs</a>
+            <a class="nav-link" href="/downloads/">Downloads</a>
+            {% if request.user.is_authenticated %}
+            <a class="nav-link" href="/engine/profile/" style="display:flex;align-items:center;gap:6px;">
+                {% with request.user.socialaccount_set.all|first as sa %}{% if sa %}<img
+                    src="{{ sa.extra_data.picture }}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"
+                    onerror="this.style.display='none'">{% endif %}{% endwith %}
+                {{ request.user.username }}
+            </a>
+            {% else %}
+            <a class="btn-login" href="/accounts/login/" id="login-btn">Log in</a>
+            <a class="btn-signup" href="/accounts/signup/" id="signup-btn">Sign up</a>
+            {% endif %}
+            <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></div>
+        </div>
+    </nav>
+
+    <div id="docs-wrap">
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-heading">Getting Started</div>
+                <a class="sidebar-link" href="#introduction">Introduction</a>
+                <a class="sidebar-link" href="#getting-started">Getting Started</a>
+                <a class="sidebar-link" href="#whats-new">🚀 What's New</a>
+                <a class="sidebar-link" href="#syntax">Basic Syntax</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-heading">Data</div>
+                <a class="sidebar-link" href="#variables">Variables</a>
+                <a class="sidebar-link" href="#data-types">Data Types</a>
+                <a class="sidebar-link" href="#numbers">Numbers</a>
+                <a class="sidebar-link" href="#strings">Strings</a>
+                <a class="sidebar-link" href="#lists">Lists</a>
+                <a class="sidebar-link" href="#dictionaries">Dictionaries</a>
+                <a class="sidebar-link" href="#booleans">Booleans</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-heading">Logic</div>
+                <a class="sidebar-link" href="#operators">Operators</a>
+                <a class="sidebar-link" href="#conditionals">Conditionals</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-heading">Code Blocks</div>
+                <a class="sidebar-link" href="#functions">Functions</a>
+                <a class="sidebar-link" href="#for-loop">For Loop</a>
+                <a class="sidebar-link" href="#while-loop">While Loop</a>
+                <a class="sidebar-link" href="#break-continue">Break & Continue</a>
+                <a class="sidebar-link" href="#exceptions">Exception Handling</a>
+                <a class="sidebar-link" href="#file-handling">File Handling</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-heading">Built-ins</div>
+                <a class="sidebar-link" href="#builtin-utility">Utility</a>
+                <a class="sidebar-link" href="#builtin-boolean">Boolean</a>
+                <a class="sidebar-link" href="#builtin-string">String</a>
+                <a class="sidebar-link" href="#builtin-list">List</a>
+                <a class="sidebar-link" href="#builtin-dict">Dictionary</a>
+                <a class="sidebar-link" href="#builtin-math">Math</a>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main id="main">
+
+            <!-- =============================== INTRODUCTION =============================== -->
+            <h1 class="doc-title" id="introduction">☕ ChaiScript Docs</h1>
+            <p style="font-size:15px; color:var(--text-muted);">A chai-flavored interpreted programming language.</p>
+            <hr class="title-hr">
+
+            <p>ChaiScript is an interpreted language best suited for learning coding. It is compatible with every
+                operating system and runs inside your browser via the ChaiScript Playground.</p>
+            <p>The language has a similar syntax and flow to Python, JavaScript and shell programming — it is highly
+                inspired by Python — with a twist of chai-oriented keywords that make it fun to write.</p>
+            <p>Like Python, you can code in ChaiScript by both <strong>interactive mode</strong> (directly through
+                command line) and <strong>Script mode</strong> (by making a <code>.chai</code> extension file and
+                running it through the command line).</p>
+
+            <hr class="title-hr">
+
+            <!-- =============================== GETTING STARTED =============================== -->
+            <h2 class="section-title" id="getting-started">Getting Started</h2>
+            <p>The easiest way to use ChaiScript is the <strong>online playground</strong> — no installation needed.
+                Just open the editor and start writing code.</p>
+            <a href="/engine/" class="copy-btn"
+                style="text-decoration:none; display:inline-block; margin-bottom:16px;">▶ Open Playground</a>
+            <p>You can also download the ChaiScript Interpreter and run <code>.chai</code> files locally. A VS Code
+                extension is available for syntax highlighting and autocomplete.</p>
+
+            <hr class="title-hr">
+
+            <!-- =============================== WHAT'S NEW =============================== -->
+            <h2 class="section-title" id="whats-new">🚀 What's New</h2>
+
+            <h3>Version 1.2.0</h3>
+            <ul>
+                <li>☕ <strong>File Handling:</strong> Read, write, and append files using <code>brew_file</code>,
+                    <code>pour_file</code>, <code>sip_file</code>, <code>seal_file</code>.</li>
+            </ul>
+
+            <h3>Version 1.1.0</h3>
+            <ul>
+                <li>✨ <strong>Dictionary Support:</strong> Store and access data as key-value pairs using
+                    <code>{}</code> syntax.</li>
+                <li>⚡ <strong>Exception Handling:</strong> Gracefully catch runtime errors with <code>try_chai</code> /
+                    <code>catch_chai</code> blocks.</li>
+            </ul>
+
+            <hr class="title-hr">
+
+            <!-- =============================== SYNTAX =============================== -->
+            <h2 class="section-title" id="syntax">Basic Syntax</h2>
+            <p>ChaiScript uses new lines to complete commands. You can also use semicolons <code>;</code> (paying
+                tribute to Java).</p>
+            <p>There is no use of indentation or curly braces for separating code blocks — blocks are opened with
+                <code>then_chai</code> and closed with <code>sip</code>.</p>
+
+            <h3>Hello World</h3>
+            <div class="code-block">serveChai("Hello, World!")</div>
+            <button class="copy-btn" onclick="cp('serveChai(\" Hello, World!\")')">Copy</button>
+
+            <hr class="title-hr">
+
+            <!-- =============================== VARIABLES =============================== -->
+            <h2 class="section-title" id="variables">Variables</h2>
+            <p>Variables are containers for storing data. Use the <code>cup</code> keyword to create one.</p>
+            <p>ChaiScript is a <strong>dynamically typed</strong> language — no need to declare a type. A variable is
+                created when you first assign a value to it, and can change type at any time.</p>
+
+            <div class="code-block">cup a = 12
+                cup name = "Zishan"
+                cup flag = true</div>
+            <button class="copy-btn" onclick="cp('cup a = 12\ncup name = \" Zishan\"\ncup flag=true')">Copy</button>
+
+            <h3>Case Sensitive</h3>
+            <p>Variable names are case-sensitive. <code>cup x = 5</code> and <code>cup X = "hello"</code> are two
+                completely separate variables.</p>
+
+            <h3>Type Casting</h3>
+            <div class="code-block">cup x = int("42")
+                cup y = str(100)
+                cup z = float("3.14")</div>
+            <button class="copy-btn" onclick="cp('cup x = int(\" 42\")\ncup y=str(100)\ncup
+                z=float(\"3.14\")')">Copy</button>
+
+            <h3>Get the Type</h3>
+            <div class="code-block">serveChai(type_chai(42)) # Output: Number
+                serveChai(type_chai("hi")) # Output: String</div>
+            <button class="copy-btn" onclick="cp('serveChai(type_chai(42))\nserveChai(type_chai(\"
+                hi\"))')">Copy</button>
+
+            <hr class="title-hr">
+
+            <!-- =============================== DATA TYPES =============================== -->
+            <h2 class="section-title" id="data-types">Data Types</h2>
+            <p>ChaiScript has the following built-in data types:</p>
+
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>Example</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>cup x = 42</code></td>
+                        <td>Number (int)</td>
+                    </tr>
+                    <tr>
+                        <td><code>cup y = 3.14</code></td>
+                        <td>Number (float)</td>
+                    </tr>
+                    <tr>
+                        <td><code>cup s = "Alice"</code></td>
+                        <td>String</td>
+                    </tr>
+                    <tr>
+                        <td><code>cup l = [1, 2, 3]</code></td>
+                        <td>List</td>
+                    </tr>
+                    <tr>
+                        <td><code>cup d = {"key": "val"}</code></td>
+                        <td>Dictionary</td>
+                    </tr>
+                    <tr>
+                        <td><code>cup b = true</code></td>
+                        <td>Boolean</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr class="title-hr">
+
+            <!-- =============================== NUMBERS =============================== -->
+            <h2 class="section-title" id="numbers">Numbers</h2>
+            <p>There are two numeric types: <code>int</code> (whole numbers) and <code>float</code> (decimals).</p>
+
+            <h3>Int</h3>
+            <div class="code-block">cup x = 1
+                cup y = 35656222554887711
+                cup z = -3255522
+
+                serveChai(type_chai(x)) # Number</div>
+            <button class="copy-btn"
+                onclick="cp('cup x = 1\ncup y = 35656222554887711\ncup z = -3255522\n\nserveChai(type_chai(x))')">Copy</button>
+
+            <h3>Float</h3>
+            <div class="code-block">cup x = 1.10
+                cup y = 1.0
+                cup z = -35.59
+
+                serveChai(type_chai(x)) # Number</div>
+            <button class="copy-btn"
+                onclick="cp('cup x = 1.10\ncup y = 1.0\ncup z = -35.59\n\nserveChai(type_chai(x))')">Copy</button>
+
+            <hr class="title-hr">
+
+            <!-- =============================== STRINGS =============================== -->
+            <h2 class="section-title" id="strings">Strings</h2>
+            <p>Strings in ChaiScript are surrounded by double quotation marks.</p>
+
+            <div class="code-block">serveChai("Hello")
+                serveChai("World!")</div>
+            <button class="copy-btn" onclick="cp('serveChai(\" Hello\")\nserveChai(\"World!\")')">Copy</button>
+
+            <h3>Assign to a Variable</h3>
+            <div class="code-block">cup a = "Zishan"
+                serveChai(a)</div>
+            <button class="copy-btn" onclick="cp('cup a = \" Zishan\"\nserveChai(a)')">Copy</button>
+
+            <h3>String Length</h3>
+            <div class="code-block">cup a = "ChaiScript"
+                serveChai(str_len(a)) # 10
+                serveChai(len(a)) # 10</div>
+            <button class="copy-btn" onclick="cp('cup a = \"
+                ChaiScript\"\nserveChai(str_len(a))\nserveChai(len(a))')">Copy</button>
+
+            <hr class="title-hr">
+
+            <!-- =============================== LISTS =============================== -->
+            <h2 class="section-title" id="lists">Lists</h2>
+            <p>Lists store multiple items in a single variable. Created using square brackets.</p>
+
+            <div class="code-block">cup my_list = ["apple", "banana", "cherry"]
+                serveChai(my_list)
+                # Output: ["apple", "banana", "cherry"]</div>
+            <button class="copy-btn" onclick="cp('cup my_list = [\" apple\", \"banana\",
+                \"cherry\"]\nserveChai(my_list)')">Copy</button>
+
+            <p>List items are <strong>ordered</strong>, <strong>changeable</strong>, and allow
+                <strong>duplicates</strong>. Items can be of any data type.</p>
+
+            <h3>List Length</h3>
+            <div class="code-block">cup my_list = ["apple", "banana", "cherry"]
+                serveChai(list_len(my_list)) # 3
+                serveChai(len(my_list)) # 3</div>
+            <button class="copy-btn" onclick="cp('cup my_list = [\" apple\", \"banana\",
+                \"cherry\"]\nserveChai(list_len(my_list))\nserveChai(len(my_list))')">Copy</button>
+
+            <hr class="title-hr">
+
+            <!-- =============================== DICTIONARIES =============================== -->
+            <h2 class="section-title" id="dictionaries">Dictionaries <span class="version-badge">v1.1.0</span></h2>
+            <p>Dictionaries store <strong>key–value pairs</strong>, letting you organize data and fetch values quickly
+                by their keys.</p>
+
+            <div class="code-block">cup student = {"name": "Zishan", "age": 20, "course": "IT"}
+                serveChai(dict_get(student, "name")) # Output: Zishan
+                serveChai(dict_get(student, "age")) # Output: 20</div>
+            <button class="copy-btn" onclick="cp('cup student = {\" name\": \"Zishan\", \"age\": 20, \"course\":
+                \"IT\"}\nserveChai(dict_get(student, \"name\"))\nserveChai(dict_get(student, \"age\"))')">Copy</button>
+
+            <h3>Dictionary Functions</h3>
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>dict_get(d, key)</code></td>
+                        <td>Returns the value for the given key</td>
+                    </tr>
+                    <tr>
+                        <td><code>dict_set(d, key, val)</code></td>
+                        <td>Sets or updates a key-value pair</td>
+                    </tr>
+                    <tr>
+                        <td><code>dict_del(d, key)</code></td>
+                        <td>Removes a key-value pair</td>
+                    </tr>
+                    <tr>
+                        <td><code>dict_keys(d)</code></td>
+                        <td>Returns a list of all keys</td>
+                    </tr>
+                    <tr>
+                        <td><code>dict_values(d)</code></td>
+                        <td>Returns a list of all values</td>
+                    </tr>
+                    <tr>
+                        <td><code>dict_has(d, key)</code></td>
+                        <td>Returns true if key exists</td>
+                    </tr>
+                    <tr>
+                        <td><code>dict_len(d)</code></td>
+                        <td>Returns number of key-value pairs</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr class="title-hr">
+
+            <!-- =============================== BOOLEANS =============================== -->
+            <h2 class="section-title" id="booleans">Booleans</h2>
+            <p>Only <code>true</code> and <code>false</code> are Boolean types (not 0 and 1).</p>
+            <div class="code-block">cup isActive = true
+                cup isComplete = false
+                serveChai(type_chai(isActive)) # Number (true = 1 internally)</div>
+            <button class="copy-btn"
+                onclick="cp('cup isActive = true\ncup isComplete = false\nserveChai(type_chai(isActive))')">Copy</button>
+
+            <hr class="title-hr">
+
+            <!-- =============================== OPERATORS =============================== -->
+            <h2 class="section-title" id="operators">Operators</h2>
+
+            <h3>Arithmetic</h3>
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>Operator</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>+</code></td>
+                        <td>Addition</td>
+                        <td><code>x + y</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>-</code></td>
+                        <td>Subtraction</td>
+                        <td><code>x - y</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>*</code></td>
+                        <td>Multiplication</td>
+                        <td><code>x * y</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/</code></td>
+                        <td>Division</td>
+                        <td><code>x / y</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>^</code></td>
+                        <td>Power</td>
+                        <td><code>x ^ 2</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Comparison</h3>
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>Operator</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>==</code></td>
+                        <td>Equal to</td>
+                    </tr>
+                    <tr>
+                        <td><code>!=</code></td>
+                        <td>Not equal to</td>
+                    </tr>
+                    <tr>
+                        <td><code>&gt;</code></td>
+                        <td>Greater than</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;</code></td>
+                        <td>Less than</td>
+                    </tr>
+                    <tr>
+                        <td><code>&gt;=</code></td>
+                        <td>Greater than or equal</td>
+                    </tr>
+                    <tr>
+                        <td><code>&lt;=</code></td>
+                        <td>Less than or equal</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Logical</h3>
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>Keyword</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>and</code></td>
+                        <td>True if both conditions are true</td>
+                    </tr>
+                    <tr>
+                        <td><code>or</code></td>
+                        <td>True if at least one condition is true</td>
+                    </tr>
+                    <tr>
+                        <td><code>not</code></td>
+                        <td>Reverses the result</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <hr class="title-hr">
+
+            <!-- =============================== CONDITIONALS =============================== -->
+            <h2 class="section-title" id="conditionals">Conditionals</h2>
+            <p>ChaiScript uses <code>hot</code> (if), <code>mild</code> (else if), and <code>chilled</code> (else).
+                Blocks open with <code>then_chai</code> and close with <code>sip</code>.</p>
+
+            <h3>Syntax</h3>
+            <div class="code-block">hot condition then_chai
+                # code
+                mild other_condition then_chai
+                # code
+                chilled
+                # code
+                sip</div>
+
+            <h3>Example</h3>
+            <div class="code-block">cup a = 12
+                cup b = 1212
+
+                hot b > a then_chai
+                serveChai("b is greater than a")
+                mild b == a then_chai
+                serveChai("b is equal to a")
+                chilled
+                serveChai("a is greater than b")
+                sip</div>
+            <button class="copy-btn" onclick="cp('cup a = 12\ncup b = 1212\n\nhot b > a then_chai\n\tserveChai(\" b is
+                greater than a\")\nmild b==a then_chai\n\tserveChai(\"b is equal to a\")\nchilled\n\tserveChai(\"a is
+                greater than b\")\nsip')">Copy</button>
+
+            <div class="note"><b>Note:</b> <code>sip</code> is written only once for the entire hot/mild/chilled block —
+                it closes the whole conditional scope.</div>
+
+            <h3>and / or / not examples</h3>
+            <div class="code-block">cup a = 19
+
+                hot a > 18 and a < 100 then_chai serveChai("Valid age!") sip hot a> 18 or a <= 19 then_chai
+                        serveChai("Passes at least one check") sip hot not a < 18 then_chai serveChai("Not underage")
+                        sip</div>
+                        <button class="copy-btn"
+                            onclick="cp('cup a = 19\n\nhot a > 18 and a < 100 then_chai\n\tserveChai(\" Valid
+                            age!\")\nsip\n\nhot a> 18 or a <= 19 then_chai\n\tserveChai(\"Passes at least one
+                                check\")\nsip\n\nhot not a < 18 then_chai\n\tserveChai(\"Not underage\")\nsip')">
+                                Copy</button>
+
+                        <hr class="title-hr">
+
+                        <!-- =============================== FUNCTIONS =============================== -->
+                        <h2 class="section-title" id="functions">Functions</h2>
+                        <p>Functions are defined using the <code>brew</code> keyword and closed with <code>sip</code>.
+                        </p>
+
+                        <h3>Declaration</h3>
+                        <div class="code-block">brew greet(name)
+                            serveChai("Hello " + name)
+                            sip
+
+                            greet("Zishan") # Output: Hello Zishan</div>
+                        <button class="copy-btn" onclick="cp('brew greet(name)\n\tserveChai(\" Hello \" +
+                            name)\nsip\n\ngreet(\"Zishan\")')">Copy</button>
+
+                        <h3>One-line Function (Arrow syntax)</h3>
+                        <div class="code-block">brew square(x) -> x * x
+
+                            serveChai(square(5)) # Output: 25</div>
+                        <button class="copy-btn"
+                            onclick="cp('brew square(x) -> x * x\n\nserveChai(square(5))')">Copy</button>
+                        <div class="note"><b>Note:</b> One-line functions using arrow syntax do not need
+                            <code>sip</code>.</div>
+
+                        <h3>Return Statement</h3>
+                        <p>Use <code>return_chai</code> to return a value.</p>
+                        <div class="code-block">brew add(a, b)
+                            return_chai a + b
+                            sip
+
+                            cup result = add(3, 4)
+                            serveChai(result) # Output: 7</div>
+                        <button class="copy-btn"
+                            onclick="cp('brew add(a, b)\n\treturn_chai a + b\nsip\n\ncup result = add(3, 4)\nserveChai(result)')">Copy</button>
+
+                        <hr class="title-hr">
+
+                        <!-- =============================== FOR LOOP =============================== -->
+                        <h2 class="section-title" id="for-loop">For Loop</h2>
+                        <p>Used to iterate a code block a specific number of times. Keyword: <code>for_chai</code>.</p>
+
+                        <h3>Syntax</h3>
+                        <div class="code-block">for_chai i = start to_chai end then_chai
+                            # code block
+                            sip</div>
+
+                        <h3>Example</h3>
+                        <div class="code-block">for_chai i = 0 to_chai 7 then_chai
+                            serveChai(i)
+                            sip</div>
+                        <button class="copy-btn"
+                            onclick="cp('for_chai i = 0 to_chai 7 then_chai\n\tserveChai(i)\nsip')">Copy</button>
+                        <div class="output-block">
+                            <div class="output-label">Output</div>0<br>1<br>2<br>3<br>4<br>5<br>6
+                        </div>
+
+                        <div class="note"><b>Note:</b> <code>to_chai</code> is exclusive — the loop runs up to but does
+                            not include the end value.</div>
+
+                        <h3>Using STEP</h3>
+                        <div class="code-block">for_chai i = 5 to_chai 0 STEP -1 then_chai
+                            serveChai(i)
+                            sip</div>
+                        <button class="copy-btn"
+                            onclick="cp('for_chai i = 5 to_chai 0 STEP -1 then_chai\n\tserveChai(i)\nsip')">Copy</button>
+                        <div class="output-block">
+                            <div class="output-label">Output</div>5<br>4<br>3<br>2<br>1
+                        </div>
+
+                        <hr class="title-hr">
+
+                        <!-- =============================== WHILE LOOP =============================== -->
+                        <h2 class="section-title" id="while-loop">While Loop</h2>
+                        <p>Executes a block as long as a condition is true. Keyword: <code>while_chai</code>.</p>
+
+                        <div class="code-block">while_chai condition then_chai
+                            # code block
+                            sip</div>
+
+                        <h3>Example</h3>
+                        <div class="code-block">cup a = 1
+
+                            while_chai a <= 5 then_chai serveChai(a) cup a=a + 1 sip</div>
+                                <button class="copy-btn"
+                                    onclick="cp('cup a = 1\n\nwhile_chai a <= 5 then_chai\n\tserveChai(a)\n\tcup a = a + 1\nsip')">Copy</button>
+                                <div class="output-block">
+                                    <div class="output-label">Output</div>1<br>2<br>3<br>4<br>5
+                                </div>
+
+                                <hr class="title-hr">
+
+                                <!-- =============================== BREAK & CONTINUE =============================== -->
+                                <h2 class="section-title" id="break-continue">Break & Continue</h2>
+                                <p><code>break_chai</code> exits a loop early. <code>continue_chai</code> skips the
+                                    current iteration.</p>
+
+                                <h3>Break Example</h3>
+                                <div class="code-block">for_chai i = 0 to_chai 5 then_chai
+                                    hot i == 3 then_chai
+                                    break_chai
+                                    sip
+                                    serveChai(i)
+                                    sip</div>
+                                <button class="copy-btn"
+                                    onclick="cp('for_chai i = 0 to_chai 5 then_chai\n\thot i == 3 then_chai\n\t\tbreak_chai\n\tsip\n\tserveChai(i)\nsip')">Copy</button>
+                                <div class="output-block">
+                                    <div class="output-label">Output</div>0<br>1<br>2
+                                </div>
+
+                                <h3>Continue Example</h3>
+                                <div class="code-block">for_chai i = 0 to_chai 5 then_chai
+                                    hot i == 3 then_chai
+                                    continue_chai
+                                    sip
+                                    serveChai(i)
+                                    sip</div>
+                                <button class="copy-btn"
+                                    onclick="cp('for_chai i = 0 to_chai 5 then_chai\n\thot i == 3 then_chai\n\t\tcontinue_chai\n\tsip\n\tserveChai(i)\nsip')">Copy</button>
+                                <div class="output-block">
+                                    <div class="output-label">Output</div>0<br>1<br>2<br>4
+                                </div>
+
+                                <hr class="title-hr">
+
+                                <!-- =============================== EXCEPTIONS =============================== -->
+                                <h2 class="section-title" id="exceptions">Exception Handling <span
+                                        class="version-badge">v1.1.0</span></h2>
+                                <p>Use <code>try_chai</code> / <code>catch_chai</code> to handle runtime errors
+                                    gracefully.</p>
+
+                                <h3>Basic Structure</h3>
+                                <div class="code-block">try_chai then_chai
+                                    # code that may throw an error
+                                    catch_chai then_chai
+                                    # handle the error here
+                                    sip</div>
+
+                                <h3>Division By Zero</h3>
+                                <div class="code-block">try_chai then_chai
+                                    cup x = 5 / 0
+                                    catch_chai then_chai
+                                    serveChai("Error: Division By Zero")
+                                    sip</div>
+                                <button class="copy-btn"
+                                    onclick="cp('try_chai then_chai\n\tcup x = 5 / 0\ncatch_chai then_chai\n\tserveChai(\"
+                                    Error: Division By Zero\")\nsip')">Copy</button>
+
+                                <h3>Capture the Error Object</h3>
+                                <div class="code-block">try_chai then_chai
+                                    cup x = 10 / 0
+                                    catch_chai e then_chai
+                                    serveChai("Caught: " + e)
+                                    sip</div>
+                                <button class="copy-btn"
+                                    onclick="cp('try_chai then_chai\n\tcup x = 10 / 0\ncatch_chai e then_chai\n\tserveChai(\"
+                                    Caught: \" + e)\nsip')">Copy</button>
+
+                                <div class="note">
+                                    <b>Best Practices:</b><br>
+                                    • Use <code>try_chai</code> to wrap code that might fail.<br>
+                                    • Keep try blocks small — only wrap the risky statements.<br>
+                                    • <code>sip</code> always closes the try/catch block.
+                                </div>
+
+                                <hr class="title-hr">
+
+                                <!-- =============================== FILE HANDLING =============================== -->
+                                <h2 class="section-title" id="file-handling">File Handling <span
+                                        class="version-badge">v1.2.0</span></h2>
+                                <p>Read, write, and append files using chai-inspired file functions.</p>
+
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Function</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>brew_file(path, mode)</code></td>
+                                            <td>Opens a file. Mode: <code>"r"</code>, <code>"w"</code>, <code>"a"</code>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>pour_file(handle, text)</code></td>
+                                            <td>Writes text to the file</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>sip_file(handle)</code></td>
+                                            <td>Reads the file content</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>seal_file(handle)</code></td>
+                                            <td>Closes the file</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <h3>Write to a file</h3>
+                                <div class="code-block">cup f = brew_file("test.txt", "w")
+                                    pour_file(f, "Hello from ChaiScript!")
+                                    seal_file(f)</div>
+                                <button class="copy-btn" onclick="cp('cup f = brew_file(\" test.txt\",
+                                    \"w\")\npour_file(f, \"Hello from ChaiScript!\")\nseal_file(f)')">Copy</button>
+
+                                <div class="note"><b>Important:</b> Always pass the <strong>file handle</strong>
+                                    returned by <code>brew_file</code> to <code>pour_file</code>, <code>sip_file</code>,
+                                    and <code>seal_file</code> — not the file name string.</div>
+
+                                <hr class="title-hr">
+
+                                <!-- =============================== BUILT-IN FUNCTIONS =============================== -->
+                                <h2 class="section-title" id="builtin-utility">Built-in Functions — Utility</h2>
+
+                                <h4><code>serveChai(arg)</code></h4>
+                                <p>Prints the argument to the screen.</p>
+                                <div class="code-block">serveChai("Hello, Chai!") # Output: Hello, Chai!</div>
+                                <button class="copy-btn" onclick="cp('serveChai(\" Hello, Chai!\")')">Copy</button>
+                                <hr class="sub-hr">
+
+                                <h4><code>serve_ret(arg)</code></h4>
+                                <p>Prints and returns the argument.</p>
+                                <div class="code-block">cup x = serve_ret("Hi") # Prints: Hi, assigns "Hi" to x</div>
+                                <button class="copy-btn" onclick="cp('cup x = serve_ret(\" Hi\")')">Copy</button>
+                                <hr class="sub-hr">
+
+                                <h4><code>orderChai(prompt)</code></h4>
+                                <p>Prompts for string input.</p>
+                                <div class="code-block">cup name = orderChai("Enter name: ")</div>
+                                <button class="copy-btn" onclick="cp('cup name = orderChai(\" Enter name:
+                                    \")')">Copy</button>
+                                <hr class="sub-hr">
+
+                                <h4><code>orderChai_int(prompt)</code></h4>
+                                <p>Prompts for integer input.</p>
+                                <div class="code-block">cup age = orderChai_int("Enter age: ")</div>
+                                <button class="copy-btn" onclick="cp('cup age = orderChai_int(\" Enter age:
+                                    \")')">Copy</button>
+                                <hr class="sub-hr">
+
+                                <h4><code>clean() / cls()</code></h4>
+                                <p>Clears the terminal.</p>
+                                <hr class="sub-hr">
+
+                                <h4><code>type_chai(arg)</code></h4>
+                                <p>Returns the type of the argument.</p>
+                                <div class="code-block">serveChai(type_chai(42)) # Output: Number</div>
+                                <button class="copy-btn" onclick="cp('serveChai(type_chai(42))')">Copy</button>
+                                <hr class="sub-hr">
+
+                                <h4><code>current_date_time()</code></h4>
+                                <p>Returns the current date and time as a string.</p>
+                                <div class="code-block">serveChai(current_date_time()) # e.g., "2025-02-21 10:00:00"
+                                </div>
+                                <button class="copy-btn" onclick="cp('serveChai(current_date_time())')">Copy</button>
+                                <hr class="sub-hr">
+
+                                <h4><code>int(arg)</code> / <code>str(arg)</code> / <code>float(arg)</code></h4>
+                                <p>Convert between types.</p>
+                                <div class="code-block">cup n = int("123") # 123
+                                    cup s = str(42) # "42"
+                                    cup f = float("3.14") # 3.14</div>
+                                <button class="copy-btn" onclick="cp('cup n = int(\" 123\")\ncup s=str(42)\ncup
+                                    f=float(\"3.14\")')">Copy</button>
+                                <hr class="sub-hr">
+
+                                <h4><code>time_freeze(seconds)</code></h4>
+                                <p>Pauses execution for the specified number of seconds.</p>
+                                <div class="code-block">serveChai("Waiting...")
+                                    time_freeze(2)
+                                    serveChai("Done!")</div>
+                                <button class="copy-btn" onclick="cp('serveChai(\"
+                                    Waiting...\")\ntime_freeze(2)\nserveChai(\"Done!\")')">Copy</button>
+
+                                <hr class="title-hr">
+
+                                <!-- BOOLEAN BUILT-INS -->
+                                <h2 class="section-title" id="builtin-boolean">Built-in Functions — Boolean</h2>
+
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Function</th>
+                                            <th>Description</th>
+                                            <th>Example</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>is_chai_num(arg)</code></td>
+                                            <td>True if arg is a number</td>
+                                            <td><code>is_chai_num(42)</code> → true</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>is_chai_str(arg)</code></td>
+                                            <td>True if arg is a string</td>
+                                            <td><code>is_chai_str("hi")</code> → true</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>is_chai_list(arg)</code></td>
+                                            <td>True if arg is a list</td>
+                                            <td><code>is_chai_list([1,2])</code> → true</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>is_brew(arg)</code></td>
+                                            <td>True if arg is a function</td>
+                                            <td><code>is_brew(myFn)</code> → true</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>is_empty(arg)</code></td>
+                                            <td>True if arg is empty</td>
+                                            <td><code>is_empty("")</code> → true</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <hr class="title-hr">
+
+                                <!-- STRING BUILT-INS -->
+                                <h2 class="section-title" id="builtin-string">Built-in Functions — String</h2>
+
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Function</th>
+                                            <th>Description</th>
+                                            <th>Example</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>to_lower(s)</code></td>
+                                            <td>Lowercase</td>
+                                            <td><code>"CHAI"</code> → <code>"chai"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>to_upper(s)</code></td>
+                                            <td>Uppercase</td>
+                                            <td><code>"chai"</code> → <code>"CHAI"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>char_at(s, i)</code></td>
+                                            <td>Char at index</td>
+                                            <td><code>char_at("Chai", 1)</code> → <code>"h"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>index_of(s1, s2)</code></td>
+                                            <td>Index of s2 in s1</td>
+                                            <td><code>index_of("ChaiScript", "Script")</code> → 4</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>slice(s, start, end, step)</code></td>
+                                            <td>Substring</td>
+                                            <td><code>slice("ChaiScript", 0, 4, 1)</code> → <code>"Chai"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>starts_with(s1, s2)</code></td>
+                                            <td>Starts with check</td>
+                                            <td><code>starts_with("Chai", "Ch")</code> → true</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>ends_with(s1, s2)</code></td>
+                                            <td>Ends with check</td>
+                                            <td><code>ends_with("Chai", "ai")</code> → true</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>trim(s)</code></td>
+                                            <td>Remove trailing spaces</td>
+                                            <td><code>trim(" Chai ")</code> → <code>"Chai"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>replace(s, old, new)</code></td>
+                                            <td>Replace all occurrences</td>
+                                            <td><code>replace("Tea Tea", "Tea", "Chai")</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>split_to_list(s, delim)</code></td>
+                                            <td>Split into list</td>
+                                            <td><code>split_to_list("a,b,c", ",")</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>capitalize(s)</code></td>
+                                            <td>Capitalize first letter</td>
+                                            <td><code>capitalize("chai")</code> → <code>"Chai"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>title(s)</code></td>
+                                            <td>Title case</td>
+                                            <td><code>title("chai script")</code> → <code>"Chai Script"</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>is_equals(s1, s2)</code></td>
+                                            <td>String equality check</td>
+                                            <td><code>is_equals("a", "a")</code> → true</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>str_len(s)</code></td>
+                                            <td>String length</td>
+                                            <td><code>str_len("Chai")</code> → 4</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <hr class="title-hr">
+
+                                <!-- LIST BUILT-INS -->
+                                <h2 class="section-title" id="builtin-list">Built-in Functions — List</h2>
+
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Function</th>
+                                            <th>Description</th>
+                                            <th>Example</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>append(lst, val)</code></td>
+                                            <td>Adds element to end</td>
+                                            <td><code>append(lst, 3)</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>pop(lst, i)</code></td>
+                                            <td>Removes and returns element at index</td>
+                                            <td><code>pop(lst, 1)</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>extend(lst1, lst2)</code></td>
+                                            <td>Adds lst1 elements to lst2</td>
+                                            <td><code>extend(lst1, lst2)</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>sort_list(lst)</code></td>
+                                            <td>Returns sorted list</td>
+                                            <td><code>sort_list([3,1,2])</code> → [1,2,3]</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>reverse_list(lst)</code></td>
+                                            <td>Returns reversed list</td>
+                                            <td><code>reverse_list([1,2,3])</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>range(start, end, step)</code></td>
+                                            <td>Creates list of numbers</td>
+                                            <td><code>range(1, 5, 1)</code> → [1,2,3,4]</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>element_at(lst, i)</code></td>
+                                            <td>Returns element at index</td>
+                                            <td><code>element_at(lst, 1)</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>join_to_str(lst, delim)</code></td>
+                                            <td>Joins list into string</td>
+                                            <td><code>join_to_str(lst, "-")</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>list_len(lst)</code></td>
+                                            <td>Length of list</td>
+                                            <td><code>list_len(lst)</code></td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>len(arg)</code></td>
+                                            <td>Length of any iterable</td>
+                                            <td><code>len(lst)</code></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <hr class="title-hr">
+
+                                <!-- DICT BUILT-INS -->
+                                <h2 class="section-title" id="builtin-dict">Built-in Functions — Dictionary</h2>
+
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Function</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>dict_get(d, key)</code></td>
+                                            <td>Returns value for key</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>dict_set(d, key, val)</code></td>
+                                            <td>Sets or updates a key</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>dict_del(d, key)</code></td>
+                                            <td>Removes a key</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>dict_keys(d)</code></td>
+                                            <td>Returns list of all keys</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>dict_values(d)</code></td>
+                                            <td>Returns list of all values</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>dict_has(d, key)</code></td>
+                                            <td>True if key exists</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>dict_len(d)</code></td>
+                                            <td>Number of key-value pairs</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <hr class="title-hr">
+
+                                <!-- MATH BUILT-INS -->
+                                <h2 class="section-title" id="builtin-math">Built-in Functions — Math</h2>
+
+                                <h3>Constants</h3>
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Constant</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>Math_PI</code></td>
+                                            <td>3.14159...</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_E</code></td>
+                                            <td>2.71828...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <h3>Core Math</h3>
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Function</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>Math_sqrt(x)</code></td>
+                                            <td>Square root</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_floor(x)</code></td>
+                                            <td>Floor (round down)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_ceil(x)</code></td>
+                                            <td>Ceiling (round up)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_round(x)</code></td>
+                                            <td>Round to nearest int</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_absoluteval(x)</code></td>
+                                            <td>Absolute value</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_factorial(x)</code></td>
+                                            <td>Factorial</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_mod_div(x, y)</code></td>
+                                            <td>Modulo</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_random_chai()</code></td>
+                                            <td>Random float 0–1</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <h3>Trigonometry</h3>
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Function</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>Math_sin(x)</code></td>
+                                            <td>Sine</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_cos(x)</code></td>
+                                            <td>Cosine</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_tan(x)</code></td>
+                                            <td>Tangent</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_sec(x)</code></td>
+                                            <td>Secant</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_cosec(x)</code></td>
+                                            <td>Cosecant</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_cot(x)</code></td>
+                                            <td>Cotangent</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arcsin(x)</code></td>
+                                            <td>Inverse sine</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arccos(x)</code></td>
+                                            <td>Inverse cosine</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arctan(x)</code></td>
+                                            <td>Inverse tangent</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <h3>Hyperbolic</h3>
+                                <table class="doc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Function</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><code>Math_sinh(x)</code></td>
+                                            <td>Hyperbolic sine</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_cosh(x)</code></td>
+                                            <td>Hyperbolic cosine</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_tanh(x)</code></td>
+                                            <td>Hyperbolic tangent</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_sech(x)</code></td>
+                                            <td>Hyperbolic secant</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_cosech(x)</code></td>
+                                            <td>Hyperbolic cosecant</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_coth(x)</code></td>
+                                            <td>Hyperbolic cotangent</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arcsinh(x)</code></td>
+                                            <td>Inverse hyperbolic sine</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arccosh(x)</code></td>
+                                            <td>Inverse hyperbolic cosine</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arctanh(x)</code></td>
+                                            <td>Inverse hyperbolic tangent</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arcsech(x)</code></td>
+                                            <td>Inverse hyperbolic secant</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arccosech(x)</code></td>
+                                            <td>Inverse hyperbolic cosecant</td>
+                                        </tr>
+                                        <tr>
+                                            <td><code>Math_arccoth(x)</code></td>
+                                            <td>Inverse hyperbolic cotangent</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+        </main>
     </div>
-    <div class="nav-center">
-        <img id="nav-img" src="{% static 'engine/img/ChaiScript.png' %}" alt="Logo">
-        <span class="brand">ChaiScript</span>
-    </div>
-    <div class="nav-right">
-        <a class="nav-btn nav-btn-editor" href="/engine/">Editor</a>
-        <a class="nav-btn active" href="/engine/docs/">Docs</a>
-    </div>
-</nav>
 
-<div id="docs-wrap">
-
-    <!-- SIDEBAR -->
-    <aside id="sidebar">
-        <div class="sidebar-section">
-            <div class="sidebar-heading">Getting Started</div>
-            <a class="sidebar-link" href="#introduction">Introduction</a>
-            <a class="sidebar-link" href="#getting-started">Getting Started</a>
-            <a class="sidebar-link" href="#whats-new">🚀 What's New</a>
-            <a class="sidebar-link" href="#syntax">Basic Syntax</a>
-        </div>
-        <div class="sidebar-section">
-            <div class="sidebar-heading">Data</div>
-            <a class="sidebar-link" href="#variables">Variables</a>
-            <a class="sidebar-link" href="#data-types">Data Types</a>
-            <a class="sidebar-link" href="#numbers">Numbers</a>
-            <a class="sidebar-link" href="#strings">Strings</a>
-            <a class="sidebar-link" href="#lists">Lists</a>
-            <a class="sidebar-link" href="#dictionaries">Dictionaries</a>
-            <a class="sidebar-link" href="#booleans">Booleans</a>
-        </div>
-        <div class="sidebar-section">
-            <div class="sidebar-heading">Logic</div>
-            <a class="sidebar-link" href="#operators">Operators</a>
-            <a class="sidebar-link" href="#conditionals">Conditionals</a>
-        </div>
-        <div class="sidebar-section">
-            <div class="sidebar-heading">Code Blocks</div>
-            <a class="sidebar-link" href="#functions">Functions</a>
-            <a class="sidebar-link" href="#for-loop">For Loop</a>
-            <a class="sidebar-link" href="#while-loop">While Loop</a>
-            <a class="sidebar-link" href="#break-continue">Break & Continue</a>
-            <a class="sidebar-link" href="#exceptions">Exception Handling</a>
-            <a class="sidebar-link" href="#file-handling">File Handling</a>
-        </div>
-        <div class="sidebar-section">
-            <div class="sidebar-heading">Built-ins</div>
-            <a class="sidebar-link" href="#builtin-utility">Utility</a>
-            <a class="sidebar-link" href="#builtin-boolean">Boolean</a>
-            <a class="sidebar-link" href="#builtin-string">String</a>
-            <a class="sidebar-link" href="#builtin-list">List</a>
-            <a class="sidebar-link" href="#builtin-dict">Dictionary</a>
-            <a class="sidebar-link" href="#builtin-math">Math</a>
-        </div>
-    </aside>
-
-    <!-- MAIN CONTENT -->
-    <main id="main">
-
-        <!-- =============================== INTRODUCTION =============================== -->
-        <h1 class="doc-title" id="introduction">☕ ChaiScript Docs</h1>
-        <p style="font-size:15px; color:var(--text-muted);">A chai-flavored interpreted programming language.</p>
-        <hr class="title-hr">
-
-        <p>ChaiScript is an interpreted language best suited for learning coding. It is compatible with every operating system and runs inside your browser via the ChaiScript Playground.</p>
-        <p>The language has a similar syntax and flow to Python, JavaScript and shell programming — it is highly inspired by Python — with a twist of chai-oriented keywords that make it fun to write.</p>
-        <p>Like Python, you can code in ChaiScript by both <strong>interactive mode</strong> (directly through command line) and <strong>Script mode</strong> (by making a <code>.chai</code> extension file and running it through the command line).</p>
-
-        <hr class="title-hr">
-
-        <!-- =============================== GETTING STARTED =============================== -->
-        <h2 class="section-title" id="getting-started">Getting Started</h2>
-        <p>The easiest way to use ChaiScript is the <strong>online playground</strong> — no installation needed. Just open the editor and start writing code.</p>
-        <a href="/engine/" class="copy-btn" style="text-decoration:none; display:inline-block; margin-bottom:16px;">▶ Open Playground</a>
-        <p>You can also download the ChaiScript Interpreter and run <code>.chai</code> files locally. A VS Code extension is available for syntax highlighting and autocomplete.</p>
-
-        <hr class="title-hr">
-
-        <!-- =============================== WHAT'S NEW =============================== -->
-        <h2 class="section-title" id="whats-new">🚀 What's New</h2>
-
-        <h3>Version 1.2.0</h3>
-        <ul>
-            <li>☕ <strong>File Handling:</strong> Read, write, and append files using <code>brew_file</code>, <code>pour_file</code>, <code>sip_file</code>, <code>seal_file</code>.</li>
-        </ul>
-
-        <h3>Version 1.1.0</h3>
-        <ul>
-            <li>✨ <strong>Dictionary Support:</strong> Store and access data as key-value pairs using <code>{}</code> syntax.</li>
-            <li>⚡ <strong>Exception Handling:</strong> Gracefully catch runtime errors with <code>try_chai</code> / <code>catch_chai</code> blocks.</li>
-        </ul>
-
-        <hr class="title-hr">
-
-        <!-- =============================== SYNTAX =============================== -->
-        <h2 class="section-title" id="syntax">Basic Syntax</h2>
-        <p>ChaiScript uses new lines to complete commands. You can also use semicolons <code>;</code> (paying tribute to Java).</p>
-        <p>There is no use of indentation or curly braces for separating code blocks — blocks are opened with <code>then_chai</code> and closed with <code>sip</code>.</p>
-
-        <h3>Hello World</h3>
-        <div class="code-block">serveChai("Hello, World!")</div>
-        <button class="copy-btn" onclick="cp('serveChai(\"Hello, World!\")')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- =============================== VARIABLES =============================== -->
-        <h2 class="section-title" id="variables">Variables</h2>
-        <p>Variables are containers for storing data. Use the <code>cup</code> keyword to create one.</p>
-        <p>ChaiScript is a <strong>dynamically typed</strong> language — no need to declare a type. A variable is created when you first assign a value to it, and can change type at any time.</p>
-
-        <div class="code-block">cup a = 12
-cup name = "Zishan"
-cup flag = true</div>
-        <button class="copy-btn" onclick="cp('cup a = 12\ncup name = \"Zishan\"\ncup flag = true')">Copy</button>
-
-        <h3>Case Sensitive</h3>
-        <p>Variable names are case-sensitive. <code>cup x = 5</code> and <code>cup X = "hello"</code> are two completely separate variables.</p>
-
-        <h3>Type Casting</h3>
-        <div class="code-block">cup x = int("42")
-cup y = str(100)
-cup z = float("3.14")</div>
-        <button class="copy-btn" onclick="cp('cup x = int(\"42\")\ncup y = str(100)\ncup z = float(\"3.14\")')">Copy</button>
-
-        <h3>Get the Type</h3>
-        <div class="code-block">serveChai(type_chai(42))      # Output: Number
-serveChai(type_chai("hi"))    # Output: String</div>
-        <button class="copy-btn" onclick="cp('serveChai(type_chai(42))\nserveChai(type_chai(\"hi\"))')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- =============================== DATA TYPES =============================== -->
-        <h2 class="section-title" id="data-types">Data Types</h2>
-        <p>ChaiScript has the following built-in data types:</p>
-
-        <table class="doc-table">
-            <thead><tr><th>Example</th><th>Type</th></tr></thead>
-            <tbody>
-                <tr><td><code>cup x = 42</code></td><td>Number (int)</td></tr>
-                <tr><td><code>cup y = 3.14</code></td><td>Number (float)</td></tr>
-                <tr><td><code>cup s = "Alice"</code></td><td>String</td></tr>
-                <tr><td><code>cup l = [1, 2, 3]</code></td><td>List</td></tr>
-                <tr><td><code>cup d = {"key": "val"}</code></td><td>Dictionary</td></tr>
-                <tr><td><code>cup b = true</code></td><td>Boolean</td></tr>
-            </tbody>
-        </table>
-
-        <hr class="title-hr">
-
-        <!-- =============================== NUMBERS =============================== -->
-        <h2 class="section-title" id="numbers">Numbers</h2>
-        <p>There are two numeric types: <code>int</code> (whole numbers) and <code>float</code> (decimals).</p>
-
-        <h3>Int</h3>
-        <div class="code-block">cup x = 1
-cup y = 35656222554887711
-cup z = -3255522
-
-serveChai(type_chai(x))   # Number</div>
-        <button class="copy-btn" onclick="cp('cup x = 1\ncup y = 35656222554887711\ncup z = -3255522\n\nserveChai(type_chai(x))')">Copy</button>
-
-        <h3>Float</h3>
-        <div class="code-block">cup x = 1.10
-cup y = 1.0
-cup z = -35.59
-
-serveChai(type_chai(x))   # Number</div>
-        <button class="copy-btn" onclick="cp('cup x = 1.10\ncup y = 1.0\ncup z = -35.59\n\nserveChai(type_chai(x))')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- =============================== STRINGS =============================== -->
-        <h2 class="section-title" id="strings">Strings</h2>
-        <p>Strings in ChaiScript are surrounded by double quotation marks.</p>
-
-        <div class="code-block">serveChai("Hello")
-serveChai("World!")</div>
-        <button class="copy-btn" onclick="cp('serveChai(\"Hello\")\nserveChai(\"World!\")')">Copy</button>
-
-        <h3>Assign to a Variable</h3>
-        <div class="code-block">cup a = "Zishan"
-serveChai(a)</div>
-        <button class="copy-btn" onclick="cp('cup a = \"Zishan\"\nserveChai(a)')">Copy</button>
-
-        <h3>String Length</h3>
-        <div class="code-block">cup a = "ChaiScript"
-serveChai(str_len(a))   # 10
-serveChai(len(a))        # 10</div>
-        <button class="copy-btn" onclick="cp('cup a = \"ChaiScript\"\nserveChai(str_len(a))\nserveChai(len(a))')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- =============================== LISTS =============================== -->
-        <h2 class="section-title" id="lists">Lists</h2>
-        <p>Lists store multiple items in a single variable. Created using square brackets.</p>
-
-        <div class="code-block">cup my_list = ["apple", "banana", "cherry"]
-serveChai(my_list)
-# Output: ["apple", "banana", "cherry"]</div>
-        <button class="copy-btn" onclick="cp('cup my_list = [\"apple\", \"banana\", \"cherry\"]\nserveChai(my_list)')">Copy</button>
-
-        <p>List items are <strong>ordered</strong>, <strong>changeable</strong>, and allow <strong>duplicates</strong>. Items can be of any data type.</p>
-
-        <h3>List Length</h3>
-        <div class="code-block">cup my_list = ["apple", "banana", "cherry"]
-serveChai(list_len(my_list))   # 3
-serveChai(len(my_list))         # 3</div>
-        <button class="copy-btn" onclick="cp('cup my_list = [\"apple\", \"banana\", \"cherry\"]\nserveChai(list_len(my_list))\nserveChai(len(my_list))')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- =============================== DICTIONARIES =============================== -->
-        <h2 class="section-title" id="dictionaries">Dictionaries <span class="version-badge">v1.1.0</span></h2>
-        <p>Dictionaries store <strong>key–value pairs</strong>, letting you organize data and fetch values quickly by their keys.</p>
-
-        <div class="code-block">cup student = {"name": "Zishan", "age": 20, "course": "IT"}
-serveChai(dict_get(student, "name"))   # Output: Zishan
-serveChai(dict_get(student, "age"))    # Output: 20</div>
-        <button class="copy-btn" onclick="cp('cup student = {\"name\": \"Zishan\", \"age\": 20, \"course\": \"IT\"}\nserveChai(dict_get(student, \"name\"))\nserveChai(dict_get(student, \"age\"))')">Copy</button>
-
-        <h3>Dictionary Functions</h3>
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>dict_get(d, key)</code></td><td>Returns the value for the given key</td></tr>
-                <tr><td><code>dict_set(d, key, val)</code></td><td>Sets or updates a key-value pair</td></tr>
-                <tr><td><code>dict_del(d, key)</code></td><td>Removes a key-value pair</td></tr>
-                <tr><td><code>dict_keys(d)</code></td><td>Returns a list of all keys</td></tr>
-                <tr><td><code>dict_values(d)</code></td><td>Returns a list of all values</td></tr>
-                <tr><td><code>dict_has(d, key)</code></td><td>Returns true if key exists</td></tr>
-                <tr><td><code>dict_len(d)</code></td><td>Returns number of key-value pairs</td></tr>
-            </tbody>
-        </table>
-
-        <hr class="title-hr">
-
-        <!-- =============================== BOOLEANS =============================== -->
-        <h2 class="section-title" id="booleans">Booleans</h2>
-        <p>Only <code>true</code> and <code>false</code> are Boolean types (not 0 and 1).</p>
-        <div class="code-block">cup isActive = true
-cup isComplete = false
-serveChai(type_chai(isActive))   # Number (true = 1 internally)</div>
-        <button class="copy-btn" onclick="cp('cup isActive = true\ncup isComplete = false\nserveChai(type_chai(isActive))')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- =============================== OPERATORS =============================== -->
-        <h2 class="section-title" id="operators">Operators</h2>
-
-        <h3>Arithmetic</h3>
-        <table class="doc-table">
-            <thead><tr><th>Operator</th><th>Description</th><th>Example</th></tr></thead>
-            <tbody>
-                <tr><td><code>+</code></td><td>Addition</td><td><code>x + y</code></td></tr>
-                <tr><td><code>-</code></td><td>Subtraction</td><td><code>x - y</code></td></tr>
-                <tr><td><code>*</code></td><td>Multiplication</td><td><code>x * y</code></td></tr>
-                <tr><td><code>/</code></td><td>Division</td><td><code>x / y</code></td></tr>
-                <tr><td><code>^</code></td><td>Power</td><td><code>x ^ 2</code></td></tr>
-            </tbody>
-        </table>
-
-        <h3>Comparison</h3>
-        <table class="doc-table">
-            <thead><tr><th>Operator</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>==</code></td><td>Equal to</td></tr>
-                <tr><td><code>!=</code></td><td>Not equal to</td></tr>
-                <tr><td><code>&gt;</code></td><td>Greater than</td></tr>
-                <tr><td><code>&lt;</code></td><td>Less than</td></tr>
-                <tr><td><code>&gt;=</code></td><td>Greater than or equal</td></tr>
-                <tr><td><code>&lt;=</code></td><td>Less than or equal</td></tr>
-            </tbody>
-        </table>
-
-        <h3>Logical</h3>
-        <table class="doc-table">
-            <thead><tr><th>Keyword</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>and</code></td><td>True if both conditions are true</td></tr>
-                <tr><td><code>or</code></td><td>True if at least one condition is true</td></tr>
-                <tr><td><code>not</code></td><td>Reverses the result</td></tr>
-            </tbody>
-        </table>
-
-        <hr class="title-hr">
-
-        <!-- =============================== CONDITIONALS =============================== -->
-        <h2 class="section-title" id="conditionals">Conditionals</h2>
-        <p>ChaiScript uses <code>hot</code> (if), <code>mild</code> (else if), and <code>chilled</code> (else). Blocks open with <code>then_chai</code> and close with <code>sip</code>.</p>
-
-        <h3>Syntax</h3>
-        <div class="code-block">hot condition then_chai
-    # code
-mild other_condition then_chai
-    # code
-chilled
-    # code
-sip</div>
-
-        <h3>Example</h3>
-        <div class="code-block">cup a = 12
-cup b = 1212
-
-hot b > a then_chai
-    serveChai("b is greater than a")
-mild b == a then_chai
-    serveChai("b is equal to a")
-chilled
-    serveChai("a is greater than b")
-sip</div>
-        <button class="copy-btn" onclick="cp('cup a = 12\ncup b = 1212\n\nhot b > a then_chai\n\tserveChai(\"b is greater than a\")\nmild b == a then_chai\n\tserveChai(\"b is equal to a\")\nchilled\n\tserveChai(\"a is greater than b\")\nsip')">Copy</button>
-
-        <div class="note"><b>Note:</b> <code>sip</code> is written only once for the entire hot/mild/chilled block — it closes the whole conditional scope.</div>
-
-        <h3>and / or / not examples</h3>
-        <div class="code-block">cup a = 19
-
-hot a > 18 and a < 100 then_chai
-    serveChai("Valid age!")
-sip
-
-hot a > 18 or a <= 19 then_chai
-    serveChai("Passes at least one check")
-sip
-
-hot not a < 18 then_chai
-    serveChai("Not underage")
-sip</div>
-        <button class="copy-btn" onclick="cp('cup a = 19\n\nhot a > 18 and a < 100 then_chai\n\tserveChai(\"Valid age!\")\nsip\n\nhot a > 18 or a <= 19 then_chai\n\tserveChai(\"Passes at least one check\")\nsip\n\nhot not a < 18 then_chai\n\tserveChai(\"Not underage\")\nsip')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- =============================== FUNCTIONS =============================== -->
-        <h2 class="section-title" id="functions">Functions</h2>
-        <p>Functions are defined using the <code>brew</code> keyword and closed with <code>sip</code>.</p>
-
-        <h3>Declaration</h3>
-        <div class="code-block">brew greet(name)
-    serveChai("Hello " + name)
-sip
-
-greet("Zishan")   # Output: Hello Zishan</div>
-        <button class="copy-btn" onclick="cp('brew greet(name)\n\tserveChai(\"Hello \" + name)\nsip\n\ngreet(\"Zishan\")')">Copy</button>
-
-        <h3>One-line Function (Arrow syntax)</h3>
-        <div class="code-block">brew square(x) -> x * x
-
-serveChai(square(5))   # Output: 25</div>
-        <button class="copy-btn" onclick="cp('brew square(x) -> x * x\n\nserveChai(square(5))')">Copy</button>
-        <div class="note"><b>Note:</b> One-line functions using arrow syntax do not need <code>sip</code>.</div>
-
-        <h3>Return Statement</h3>
-        <p>Use <code>return_chai</code> to return a value.</p>
-        <div class="code-block">brew add(a, b)
-    return_chai a + b
-sip
-
-cup result = add(3, 4)
-serveChai(result)   # Output: 7</div>
-        <button class="copy-btn" onclick="cp('brew add(a, b)\n\treturn_chai a + b\nsip\n\ncup result = add(3, 4)\nserveChai(result)')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- =============================== FOR LOOP =============================== -->
-        <h2 class="section-title" id="for-loop">For Loop</h2>
-        <p>Used to iterate a code block a specific number of times. Keyword: <code>for_chai</code>.</p>
-
-        <h3>Syntax</h3>
-        <div class="code-block">for_chai i = start to_chai end then_chai
-    # code block
-sip</div>
-
-        <h3>Example</h3>
-        <div class="code-block">for_chai i = 0 to_chai 7 then_chai
-    serveChai(i)
-sip</div>
-        <button class="copy-btn" onclick="cp('for_chai i = 0 to_chai 7 then_chai\n\tserveChai(i)\nsip')">Copy</button>
-        <div class="output-block"><div class="output-label">Output</div>0<br>1<br>2<br>3<br>4<br>5<br>6</div>
-
-        <div class="note"><b>Note:</b> <code>to_chai</code> is exclusive — the loop runs up to but does not include the end value.</div>
-
-        <h3>Using STEP</h3>
-        <div class="code-block">for_chai i = 5 to_chai 0 STEP -1 then_chai
-    serveChai(i)
-sip</div>
-        <button class="copy-btn" onclick="cp('for_chai i = 5 to_chai 0 STEP -1 then_chai\n\tserveChai(i)\nsip')">Copy</button>
-        <div class="output-block"><div class="output-label">Output</div>5<br>4<br>3<br>2<br>1</div>
-
-        <hr class="title-hr">
-
-        <!-- =============================== WHILE LOOP =============================== -->
-        <h2 class="section-title" id="while-loop">While Loop</h2>
-        <p>Executes a block as long as a condition is true. Keyword: <code>while_chai</code>.</p>
-
-        <div class="code-block">while_chai condition then_chai
-    # code block
-sip</div>
-
-        <h3>Example</h3>
-        <div class="code-block">cup a = 1
-
-while_chai a <= 5 then_chai
-    serveChai(a)
-    cup a = a + 1
-sip</div>
-        <button class="copy-btn" onclick="cp('cup a = 1\n\nwhile_chai a <= 5 then_chai\n\tserveChai(a)\n\tcup a = a + 1\nsip')">Copy</button>
-        <div class="output-block"><div class="output-label">Output</div>1<br>2<br>3<br>4<br>5</div>
-
-        <hr class="title-hr">
-
-        <!-- =============================== BREAK & CONTINUE =============================== -->
-        <h2 class="section-title" id="break-continue">Break & Continue</h2>
-        <p><code>break_chai</code> exits a loop early. <code>continue_chai</code> skips the current iteration.</p>
-
-        <h3>Break Example</h3>
-        <div class="code-block">for_chai i = 0 to_chai 5 then_chai
-    hot i == 3 then_chai
-        break_chai
-    sip
-    serveChai(i)
-sip</div>
-        <button class="copy-btn" onclick="cp('for_chai i = 0 to_chai 5 then_chai\n\thot i == 3 then_chai\n\t\tbreak_chai\n\tsip\n\tserveChai(i)\nsip')">Copy</button>
-        <div class="output-block"><div class="output-label">Output</div>0<br>1<br>2</div>
-
-        <h3>Continue Example</h3>
-        <div class="code-block">for_chai i = 0 to_chai 5 then_chai
-    hot i == 3 then_chai
-        continue_chai
-    sip
-    serveChai(i)
-sip</div>
-        <button class="copy-btn" onclick="cp('for_chai i = 0 to_chai 5 then_chai\n\thot i == 3 then_chai\n\t\tcontinue_chai\n\tsip\n\tserveChai(i)\nsip')">Copy</button>
-        <div class="output-block"><div class="output-label">Output</div>0<br>1<br>2<br>4</div>
-
-        <hr class="title-hr">
-
-        <!-- =============================== EXCEPTIONS =============================== -->
-        <h2 class="section-title" id="exceptions">Exception Handling <span class="version-badge">v1.1.0</span></h2>
-        <p>Use <code>try_chai</code> / <code>catch_chai</code> to handle runtime errors gracefully.</p>
-
-        <h3>Basic Structure</h3>
-        <div class="code-block">try_chai then_chai
-    # code that may throw an error
-catch_chai then_chai
-    # handle the error here
-sip</div>
-
-        <h3>Division By Zero</h3>
-        <div class="code-block">try_chai then_chai
-    cup x = 5 / 0
-catch_chai then_chai
-    serveChai("Error: Division By Zero")
-sip</div>
-        <button class="copy-btn" onclick="cp('try_chai then_chai\n\tcup x = 5 / 0\ncatch_chai then_chai\n\tserveChai(\"Error: Division By Zero\")\nsip')">Copy</button>
-
-        <h3>Capture the Error Object</h3>
-        <div class="code-block">try_chai then_chai
-    cup x = 10 / 0
-catch_chai e then_chai
-    serveChai("Caught: " + e)
-sip</div>
-        <button class="copy-btn" onclick="cp('try_chai then_chai\n\tcup x = 10 / 0\ncatch_chai e then_chai\n\tserveChai(\"Caught: \" + e)\nsip')">Copy</button>
-
-        <div class="note">
-            <b>Best Practices:</b><br>
-            • Use <code>try_chai</code> to wrap code that might fail.<br>
-            • Keep try blocks small — only wrap the risky statements.<br>
-            • <code>sip</code> always closes the try/catch block.
-        </div>
-
-        <hr class="title-hr">
-
-        <!-- =============================== FILE HANDLING =============================== -->
-        <h2 class="section-title" id="file-handling">File Handling <span class="version-badge">v1.2.0</span></h2>
-        <p>Read, write, and append files using chai-inspired file functions.</p>
-
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>brew_file(path, mode)</code></td><td>Opens a file. Mode: <code>"r"</code>, <code>"w"</code>, <code>"a"</code></td></tr>
-                <tr><td><code>pour_file(handle, text)</code></td><td>Writes text to the file</td></tr>
-                <tr><td><code>sip_file(handle)</code></td><td>Reads the file content</td></tr>
-                <tr><td><code>seal_file(handle)</code></td><td>Closes the file</td></tr>
-            </tbody>
-        </table>
-
-        <h3>Write to a file</h3>
-        <div class="code-block">cup f = brew_file("test.txt", "w")
-pour_file(f, "Hello from ChaiScript!")
-seal_file(f)</div>
-        <button class="copy-btn" onclick="cp('cup f = brew_file(\"test.txt\", \"w\")\npour_file(f, \"Hello from ChaiScript!\")\nseal_file(f)')">Copy</button>
-
-        <div class="note"><b>Important:</b> Always pass the <strong>file handle</strong> returned by <code>brew_file</code> to <code>pour_file</code>, <code>sip_file</code>, and <code>seal_file</code> — not the file name string.</div>
-
-        <hr class="title-hr">
-
-        <!-- =============================== BUILT-IN FUNCTIONS =============================== -->
-        <h2 class="section-title" id="builtin-utility">Built-in Functions — Utility</h2>
-
-        <h4><code>serveChai(arg)</code></h4>
-        <p>Prints the argument to the screen.</p>
-        <div class="code-block">serveChai("Hello, Chai!")   # Output: Hello, Chai!</div>
-        <button class="copy-btn" onclick="cp('serveChai(\"Hello, Chai!\")')">Copy</button>
-        <hr class="sub-hr">
-
-        <h4><code>serve_ret(arg)</code></h4>
-        <p>Prints and returns the argument.</p>
-        <div class="code-block">cup x = serve_ret("Hi")   # Prints: Hi, assigns "Hi" to x</div>
-        <button class="copy-btn" onclick="cp('cup x = serve_ret(\"Hi\")')">Copy</button>
-        <hr class="sub-hr">
-
-        <h4><code>orderChai(prompt)</code></h4>
-        <p>Prompts for string input.</p>
-        <div class="code-block">cup name = orderChai("Enter name: ")</div>
-        <button class="copy-btn" onclick="cp('cup name = orderChai(\"Enter name: \")')">Copy</button>
-        <hr class="sub-hr">
-
-        <h4><code>orderChai_int(prompt)</code></h4>
-        <p>Prompts for integer input.</p>
-        <div class="code-block">cup age = orderChai_int("Enter age: ")</div>
-        <button class="copy-btn" onclick="cp('cup age = orderChai_int(\"Enter age: \")')">Copy</button>
-        <hr class="sub-hr">
-
-        <h4><code>clean() / cls()</code></h4>
-        <p>Clears the terminal.</p>
-        <hr class="sub-hr">
-
-        <h4><code>type_chai(arg)</code></h4>
-        <p>Returns the type of the argument.</p>
-        <div class="code-block">serveChai(type_chai(42))   # Output: Number</div>
-        <button class="copy-btn" onclick="cp('serveChai(type_chai(42))')">Copy</button>
-        <hr class="sub-hr">
-
-        <h4><code>current_date_time()</code></h4>
-        <p>Returns the current date and time as a string.</p>
-        <div class="code-block">serveChai(current_date_time())   # e.g., "2025-02-21 10:00:00"</div>
-        <button class="copy-btn" onclick="cp('serveChai(current_date_time())')">Copy</button>
-        <hr class="sub-hr">
-
-        <h4><code>int(arg)</code> / <code>str(arg)</code> / <code>float(arg)</code></h4>
-        <p>Convert between types.</p>
-        <div class="code-block">cup n = int("123")     # 123
-cup s = str(42)        # "42"
-cup f = float("3.14")  # 3.14</div>
-        <button class="copy-btn" onclick="cp('cup n = int(\"123\")\ncup s = str(42)\ncup f = float(\"3.14\")')">Copy</button>
-        <hr class="sub-hr">
-
-        <h4><code>time_freeze(seconds)</code></h4>
-        <p>Pauses execution for the specified number of seconds.</p>
-        <div class="code-block">serveChai("Waiting...")
-time_freeze(2)
-serveChai("Done!")</div>
-        <button class="copy-btn" onclick="cp('serveChai(\"Waiting...\")\ntime_freeze(2)\nserveChai(\"Done!\")')">Copy</button>
-
-        <hr class="title-hr">
-
-        <!-- BOOLEAN BUILT-INS -->
-        <h2 class="section-title" id="builtin-boolean">Built-in Functions — Boolean</h2>
-
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th><th>Example</th></tr></thead>
-            <tbody>
-                <tr><td><code>is_chai_num(arg)</code></td><td>True if arg is a number</td><td><code>is_chai_num(42)</code> → true</td></tr>
-                <tr><td><code>is_chai_str(arg)</code></td><td>True if arg is a string</td><td><code>is_chai_str("hi")</code> → true</td></tr>
-                <tr><td><code>is_chai_list(arg)</code></td><td>True if arg is a list</td><td><code>is_chai_list([1,2])</code> → true</td></tr>
-                <tr><td><code>is_brew(arg)</code></td><td>True if arg is a function</td><td><code>is_brew(myFn)</code> → true</td></tr>
-                <tr><td><code>is_empty(arg)</code></td><td>True if arg is empty</td><td><code>is_empty("")</code> → true</td></tr>
-            </tbody>
-        </table>
-
-        <hr class="title-hr">
-
-        <!-- STRING BUILT-INS -->
-        <h2 class="section-title" id="builtin-string">Built-in Functions — String</h2>
-
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th><th>Example</th></tr></thead>
-            <tbody>
-                <tr><td><code>to_lower(s)</code></td><td>Lowercase</td><td><code>"CHAI"</code> → <code>"chai"</code></td></tr>
-                <tr><td><code>to_upper(s)</code></td><td>Uppercase</td><td><code>"chai"</code> → <code>"CHAI"</code></td></tr>
-                <tr><td><code>char_at(s, i)</code></td><td>Char at index</td><td><code>char_at("Chai", 1)</code> → <code>"h"</code></td></tr>
-                <tr><td><code>index_of(s1, s2)</code></td><td>Index of s2 in s1</td><td><code>index_of("ChaiScript", "Script")</code> → 4</td></tr>
-                <tr><td><code>slice(s, start, end, step)</code></td><td>Substring</td><td><code>slice("ChaiScript", 0, 4, 1)</code> → <code>"Chai"</code></td></tr>
-                <tr><td><code>starts_with(s1, s2)</code></td><td>Starts with check</td><td><code>starts_with("Chai", "Ch")</code> → true</td></tr>
-                <tr><td><code>ends_with(s1, s2)</code></td><td>Ends with check</td><td><code>ends_with("Chai", "ai")</code> → true</td></tr>
-                <tr><td><code>trim(s)</code></td><td>Remove trailing spaces</td><td><code>trim(" Chai ")</code> → <code>"Chai"</code></td></tr>
-                <tr><td><code>replace(s, old, new)</code></td><td>Replace all occurrences</td><td><code>replace("Tea Tea", "Tea", "Chai")</code></td></tr>
-                <tr><td><code>split_to_list(s, delim)</code></td><td>Split into list</td><td><code>split_to_list("a,b,c", ",")</code></td></tr>
-                <tr><td><code>capitalize(s)</code></td><td>Capitalize first letter</td><td><code>capitalize("chai")</code> → <code>"Chai"</code></td></tr>
-                <tr><td><code>title(s)</code></td><td>Title case</td><td><code>title("chai script")</code> → <code>"Chai Script"</code></td></tr>
-                <tr><td><code>is_equals(s1, s2)</code></td><td>String equality check</td><td><code>is_equals("a", "a")</code> → true</td></tr>
-                <tr><td><code>str_len(s)</code></td><td>String length</td><td><code>str_len("Chai")</code> → 4</td></tr>
-            </tbody>
-        </table>
-
-        <hr class="title-hr">
-
-        <!-- LIST BUILT-INS -->
-        <h2 class="section-title" id="builtin-list">Built-in Functions — List</h2>
-
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th><th>Example</th></tr></thead>
-            <tbody>
-                <tr><td><code>append(lst, val)</code></td><td>Adds element to end</td><td><code>append(lst, 3)</code></td></tr>
-                <tr><td><code>pop(lst, i)</code></td><td>Removes and returns element at index</td><td><code>pop(lst, 1)</code></td></tr>
-                <tr><td><code>extend(lst1, lst2)</code></td><td>Adds lst1 elements to lst2</td><td><code>extend(lst1, lst2)</code></td></tr>
-                <tr><td><code>sort_list(lst)</code></td><td>Returns sorted list</td><td><code>sort_list([3,1,2])</code> → [1,2,3]</td></tr>
-                <tr><td><code>reverse_list(lst)</code></td><td>Returns reversed list</td><td><code>reverse_list([1,2,3])</code></td></tr>
-                <tr><td><code>range(start, end, step)</code></td><td>Creates list of numbers</td><td><code>range(1, 5, 1)</code> → [1,2,3,4]</td></tr>
-                <tr><td><code>element_at(lst, i)</code></td><td>Returns element at index</td><td><code>element_at(lst, 1)</code></td></tr>
-                <tr><td><code>join_to_str(lst, delim)</code></td><td>Joins list into string</td><td><code>join_to_str(lst, "-")</code></td></tr>
-                <tr><td><code>list_len(lst)</code></td><td>Length of list</td><td><code>list_len(lst)</code></td></tr>
-                <tr><td><code>len(arg)</code></td><td>Length of any iterable</td><td><code>len(lst)</code></td></tr>
-            </tbody>
-        </table>
-
-        <hr class="title-hr">
-
-        <!-- DICT BUILT-INS -->
-        <h2 class="section-title" id="builtin-dict">Built-in Functions — Dictionary</h2>
-
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>dict_get(d, key)</code></td><td>Returns value for key</td></tr>
-                <tr><td><code>dict_set(d, key, val)</code></td><td>Sets or updates a key</td></tr>
-                <tr><td><code>dict_del(d, key)</code></td><td>Removes a key</td></tr>
-                <tr><td><code>dict_keys(d)</code></td><td>Returns list of all keys</td></tr>
-                <tr><td><code>dict_values(d)</code></td><td>Returns list of all values</td></tr>
-                <tr><td><code>dict_has(d, key)</code></td><td>True if key exists</td></tr>
-                <tr><td><code>dict_len(d)</code></td><td>Number of key-value pairs</td></tr>
-            </tbody>
-        </table>
-
-        <hr class="title-hr">
-
-        <!-- MATH BUILT-INS -->
-        <h2 class="section-title" id="builtin-math">Built-in Functions — Math</h2>
-
-        <h3>Constants</h3>
-        <table class="doc-table">
-            <thead><tr><th>Constant</th><th>Value</th></tr></thead>
-            <tbody>
-                <tr><td><code>Math_PI</code></td><td>3.14159...</td></tr>
-                <tr><td><code>Math_E</code></td><td>2.71828...</td></tr>
-            </tbody>
-        </table>
-
-        <h3>Core Math</h3>
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>Math_sqrt(x)</code></td><td>Square root</td></tr>
-                <tr><td><code>Math_floor(x)</code></td><td>Floor (round down)</td></tr>
-                <tr><td><code>Math_ceil(x)</code></td><td>Ceiling (round up)</td></tr>
-                <tr><td><code>Math_round(x)</code></td><td>Round to nearest int</td></tr>
-                <tr><td><code>Math_absoluteval(x)</code></td><td>Absolute value</td></tr>
-                <tr><td><code>Math_factorial(x)</code></td><td>Factorial</td></tr>
-                <tr><td><code>Math_mod_div(x, y)</code></td><td>Modulo</td></tr>
-                <tr><td><code>Math_random_chai()</code></td><td>Random float 0–1</td></tr>
-            </tbody>
-        </table>
-
-        <h3>Trigonometry</h3>
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>Math_sin(x)</code></td><td>Sine</td></tr>
-                <tr><td><code>Math_cos(x)</code></td><td>Cosine</td></tr>
-                <tr><td><code>Math_tan(x)</code></td><td>Tangent</td></tr>
-                <tr><td><code>Math_sec(x)</code></td><td>Secant</td></tr>
-                <tr><td><code>Math_cosec(x)</code></td><td>Cosecant</td></tr>
-                <tr><td><code>Math_cot(x)</code></td><td>Cotangent</td></tr>
-                <tr><td><code>Math_arcsin(x)</code></td><td>Inverse sine</td></tr>
-                <tr><td><code>Math_arccos(x)</code></td><td>Inverse cosine</td></tr>
-                <tr><td><code>Math_arctan(x)</code></td><td>Inverse tangent</td></tr>
-            </tbody>
-        </table>
-
-        <h3>Hyperbolic</h3>
-        <table class="doc-table">
-            <thead><tr><th>Function</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>Math_sinh(x)</code></td><td>Hyperbolic sine</td></tr>
-                <tr><td><code>Math_cosh(x)</code></td><td>Hyperbolic cosine</td></tr>
-                <tr><td><code>Math_tanh(x)</code></td><td>Hyperbolic tangent</td></tr>
-                <tr><td><code>Math_sech(x)</code></td><td>Hyperbolic secant</td></tr>
-                <tr><td><code>Math_cosech(x)</code></td><td>Hyperbolic cosecant</td></tr>
-                <tr><td><code>Math_coth(x)</code></td><td>Hyperbolic cotangent</td></tr>
-                <tr><td><code>Math_arcsinh(x)</code></td><td>Inverse hyperbolic sine</td></tr>
-                <tr><td><code>Math_arccosh(x)</code></td><td>Inverse hyperbolic cosine</td></tr>
-                <tr><td><code>Math_arctanh(x)</code></td><td>Inverse hyperbolic tangent</td></tr>
-                <tr><td><code>Math_arcsech(x)</code></td><td>Inverse hyperbolic secant</td></tr>
-                <tr><td><code>Math_arccosech(x)</code></td><td>Inverse hyperbolic cosecant</td></tr>
-                <tr><td><code>Math_arccoth(x)</code></td><td>Inverse hyperbolic cotangent</td></tr>
-            </tbody>
-        </table>
-
-    </main>
-</div>
-
-<footer>
-    <p>Publisher and author: <a href="https://github.com/Zishan108" target="_blank">Zishan</a></p>
-    <p>&copy; 2025 ChaiScript &nbsp;|&nbsp; <a href="/engine/">Playground</a> &nbsp;|&nbsp; <a href="/engine/docs/">Docs</a></p>
-</footer>
-
-<script>
-    // Theme toggle (matches IDE)
-    function toggleTheme() {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('chai_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    }
-    if (localStorage.getItem('chai_theme') === 'dark') {
-        document.body.classList.add('dark');
-    }
-
-    // Copy to clipboard
-    function cp(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            const btns = document.querySelectorAll('.copy-btn');
-            // find which button triggered (use event if possible)
-        });
-    }
-
-    // Better copy with feedback
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const orig = this.textContent;
-            this.textContent = '✓ Copied';
-            this.classList.add('copied');
-            setTimeout(() => {
-                this.textContent = orig;
-                this.classList.remove('copied');
-            }, 1500);
-        });
-    });
-
-    // Active sidebar link on scroll
-    const sections = document.querySelectorAll('[id]');
-    const links = document.querySelectorAll('.sidebar-link');
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                links.forEach(l => l.classList.remove('active'));
-                const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
-                if (active) active.classList.add('active');
+    <footer>
+        <p>Publisher and author: <a href="https://github.com/Zishan108" target="_blank">Zishan</a></p>
+        <p>&copy; 2025 ChaiScript &nbsp;|&nbsp; <a href="/engine/">Playground</a> &nbsp;|&nbsp; <a
+                href="/engine/docs/">Docs</a></p>
+    </footer>
+
+    <script>
+        // Theme toggle — unified key 'chai_theme' across all pages
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('chai_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+        (function () {
+            const saved = localStorage.getItem('chai_theme');
+            if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.body.classList.add('dark');
             }
-        });
-    }, { rootMargin: '-20% 0px -70% 0px' });
+        })();
 
-    sections.forEach(s => observer.observe(s));
-</script>
+        // Copy to clipboard
+        function cp(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btns = document.querySelectorAll('.copy-btn');
+                // find which button triggered (use event if possible)
+            });
+        }
+
+        // Better copy with feedback
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const orig = this.textContent;
+                this.textContent = '✓ Copied';
+                this.classList.add('copied');
+                setTimeout(() => {
+                    this.textContent = orig;
+                    this.classList.remove('copied');
+                }, 1500);
+            });
+        });
+
+        // Active sidebar link on scroll
+        const sections = document.querySelectorAll('[id]');
+        const links = document.querySelectorAll('.sidebar-link');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    links.forEach(l => l.classList.remove('active'));
+                    const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+                    if (active) active.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-20% 0px -70% 0px' });
+
+        sections.forEach(s => observer.observe(s));
+    </script>
 
 </body>
+
 </html>
