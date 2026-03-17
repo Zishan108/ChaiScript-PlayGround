@@ -1361,6 +1361,42 @@
         #rtab-stack {
             padding: 14px;
         }
+        /* LOGIN GATE */
+        #login-gate-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: 9999;
+            align-items: center; justify-content: center;
+        }
+        #login-gate-overlay.open { display: flex; }
+        #login-gate-box {
+            background: var(--bg-panel); border: 1px solid var(--border-strong);
+            border-radius: 18px; padding: 40px 32px; max-width: 380px; width: 90%;
+            text-align: center; display: flex; flex-direction: column;
+            gap: 14px; box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+        }
+        #login-gate-box h2 { font-size: 1.3rem; font-weight: 800; margin: 0; }
+        #login-gate-box p { color: var(--text-muted); font-size: .93rem; margin: 0; line-height: 1.6; font-family: 'Inter', sans-serif; }
+        .gate-btn-primary {
+            background: var(--button-bg); color: #fff; padding: 13px;
+            border-radius: 9px; text-decoration: none;
+            font-family: 'JetBrains Mono', monospace; font-weight: 700;
+            font-size: .95rem; transition: background .2s;
+        }
+        .gate-btn-primary:hover { background: var(--button-hover); }
+        .gate-btn-secondary {
+            border: 1.5px solid var(--accent-green); color: var(--accent-green);
+            padding: 12px; border-radius: 9px; text-decoration: none;
+            font-family: 'JetBrains Mono', monospace; font-size: .9rem;
+            transition: all .2s;
+        }
+        .gate-btn-secondary:hover { background: var(--accent-green); color: #fff; }
+        .gate-btn-dismiss {
+            background: none; border: none; color: var(--text-muted);
+            cursor: pointer; font-size: .82rem; font-family: 'JetBrains Mono', monospace;
+            padding: 4px; transition: color .2s;
+        }
+        .gate-btn-dismiss:hover { color: var(--text-main); }
+
     </style>
 </head>
 
@@ -2214,6 +2250,16 @@ serveChai(fruits)`
 
         // RUN CODE (UNCHANGED)
         function runCode() {
+            // ── GUEST RUN GATE ──
+            const isLoggedIn = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+            if (!isLoggedIn) {
+                const hasRun = localStorage.getItem('chai_guest_run');
+                if (hasRun) {
+                    document.getElementById('login-gate-overlay').classList.add('open');
+                    return;
+                }
+                localStorage.setItem('chai_guest_run', '1');
+            }
 
             playBrewSound();
             const code = window.editor.getValue();
@@ -2935,6 +2981,18 @@ sip;`,
 
         });
     </script>
+
+<!-- LOGIN GATE POPUP -->
+<div id="login-gate-overlay">
+    <div id="login-gate-box">
+        <div style="font-size:2.8rem;">☕</div>
+        <h2>You've brewed your free cup!</h2>
+        <p>Log in or sign up to keep coding with unlimited runs.</p>
+        <a href="/accounts/login/" class="gate-btn-primary">Log in</a>
+        <a href="/accounts/signup/" class="gate-btn-secondary">Sign up — it's free</a>
+        <button onclick="document.getElementById('login-gate-overlay').classList.remove('open')" class="gate-btn-dismiss">Maybe later</button>
+    </div>
+</div>
 
 </body>
 
