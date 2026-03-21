@@ -133,7 +133,9 @@ import os
 import dj_database_url
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'your-fallback-key')
-ALLOWED_HOSTS = ['chaiscript-playground.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['chaiscript-playground.onrender.com', 'localhost', '127.0.0.1', '.ngrok.io', '.ngrok-free.app']
+
+CSRF_TRUSTED_ORIGINS = ['https://*.ngrok.io', 'https://*.ngrok-free.dev']
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:

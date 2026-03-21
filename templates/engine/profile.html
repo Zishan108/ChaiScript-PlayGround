@@ -304,6 +304,61 @@
         .btn-logout:hover {
             background: #9b2c2c;
         }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 201;
+        }
+        .hamburger span {
+            display: block; width: 24px; height: 3px;
+            background: var(--accent-green); border-radius: 2px;
+            transition: all 0.3s; margin: 5px 0;
+        }
+        .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .mobile-nav-overlay {
+            display: none; position: fixed; inset: 0;
+            background: var(--bg-page); z-index: 199;
+            flex-direction: column; align-items: center; justify-content: center;
+            gap: 14px; padding: 80px 24px 40px;
+        }
+        .mobile-nav-overlay.active { display: flex; }
+        .mobile-nav-overlay a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem; color: var(--text-main);
+            text-decoration: none; padding: 12px 24px;
+            border-radius: 8px; width: 100%; max-width: 300px; text-align: center;
+            transition: background 0.2s;
+        }
+        .mobile-nav-overlay a:hover { background: var(--bg-editor); color: var(--accent-green); }
+        .mobile-nav-overlay .btn-logout { display: inline-block; margin-top: 8px; }
+        body.no-scroll { overflow: hidden; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+            nav { padding: 0 16px; }
+            .page { padding: 80px 16px 40px; }
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 24px 16px;
+                gap: 16px;
+            }
+            .profile-info h1 { font-size: 1.3rem; }
+            .stats-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .stat-box { padding: 16px; }
+            .stat-box .num { font-size: 1.5rem; }
+            .project-row { padding: 12px 14px; flex-wrap: wrap; gap: 6px; }
+        }
     </style>
 </head>
 
@@ -321,7 +376,19 @@
             <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></div>
             <a class="btn-logout" href="/accounts/logout/">Log out</a>
         </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <a href="/engine/">Playground</a>
+        <a href="/engine/challenges/">Challenges</a>
+        <a href="/engine/leaderboard/">Leaderboard</a>
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" style="margin:0 auto;"></div>
+        <a class="btn-logout" href="/accounts/logout/">Log out</a>
+    </div>
 
     <div class="page">
 
@@ -372,6 +439,23 @@
     <script>
         (function () { const s = localStorage.getItem('chai_theme'); if (s === 'dark' || (s === null && window.matchMedia('(prefers-color-scheme:dark)').matches)) document.body.classList.add('dark'); })();
         function toggleTheme() { document.body.classList.toggle('dark'); localStorage.setItem('chai_theme', document.body.classList.contains('dark') ? 'dark' : 'light'); }
+        (function() {
+            var ham = document.getElementById('hamburger');
+            var overlay = document.getElementById('mobileNav');
+            if (!ham || !overlay) return;
+            ham.addEventListener('click', function() {
+                ham.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            overlay.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    ham.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        })();
     </script>
 </body>
 

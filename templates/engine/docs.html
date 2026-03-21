@@ -511,16 +511,96 @@
         }
 
         /* ===============================
+           HAMBURGER MENU
+           =============================== */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 201;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 3px;
+            background: var(--accent-green);
+            border-radius: 2px;
+            transition: all 0.3s;
+            margin: 5px 0;
+        }
+        .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .mobile-nav-overlay {
+            display: none; position: fixed; inset: 0;
+            background: var(--bg-page); z-index: 199;
+            flex-direction: column; align-items: center; justify-content: center;
+            gap: 14px; padding: 80px 24px 40px;
+        }
+        .mobile-nav-overlay.active { display: flex; }
+        .mobile-nav-overlay a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem; color: var(--text-main);
+            text-decoration: none; padding: 12px 24px;
+            border-radius: 8px; width: 100%; max-width: 300px; text-align: center;
+            transition: background 0.2s;
+        }
+        .mobile-nav-overlay a:hover { background: var(--bg-editor); color: var(--accent-green); }
+        .mobile-nav-overlay .btn-login { color: var(--accent-green); border: 1.5px solid var(--accent-green); background: transparent; }
+        .mobile-nav-overlay .btn-signup { color: #fff; background: var(--button-bg); border: none; }
+        body.no-scroll { overflow: hidden; }
+
+        /* Sidebar toggle button for mobile */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 150;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--button-bg);
+            color: #fff;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            transition: background 0.2s;
+        }
+        .sidebar-toggle:hover { background: var(--button-hover); }
+
+        /* ===============================
            RESPONSIVE
            =============================== */
         @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+
             #sidebar {
                 display: none;
+                position: fixed;
+                top: 64px;
+                left: 0;
+                width: 260px;
+                height: calc(100vh - 64px);
+                z-index: 140;
+                box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+            }
+
+            #sidebar.open {
+                display: block;
+            }
+
+            .sidebar-toggle {
+                display: block;
             }
 
             #main {
                 margin-left: 0;
-                padding: 24px 20px 60px;
+                padding: 24px 16px 60px;
                 max-width: 100%;
             }
 
@@ -529,11 +609,24 @@
             }
 
             #navbar {
-                padding: 0 16px;
+                padding: 0 12px;
             }
 
-            .nav-link:not(.active) {
-                display: none;
+            h1.doc-title {
+                font-size: 1.5rem;
+            }
+
+            h2.section-title {
+                font-size: 1.15rem;
+            }
+
+            .doc-table {
+                font-size: 11px;
+            }
+
+            .code-block {
+                font-size: 12px;
+                padding: 10px 12px;
             }
         }
 
@@ -625,7 +718,27 @@
             {% endif %}
             <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme"></div>
         </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <a href="/">Home</a>
+        <a href="/engine/">Playground</a>
+        <a href="/docs/">Docs</a>
+        <a href="/downloads/">Downloads</a>
+        {% if request.user.is_authenticated %}
+        <a href="/engine/profile/">{{ request.user.username }}</a>
+        {% else %}
+        <a class="btn-login" href="/accounts/login/">Log in</a>
+        <a class="btn-signup" href="/accounts/signup/">Sign up</a>
+        {% endif %}
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" style="margin:0 auto;"></div>
+    </div>
+
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle docs sidebar">☰</button>
 
     <div id="docs-wrap">
 
@@ -1835,6 +1948,44 @@
         }, { rootMargin: '-20% 0px -70% 0px' });
 
         sections.forEach(s => observer.observe(s));
+
+        // Hamburger menu
+        (function() {
+            var ham = document.getElementById('hamburger');
+            var overlay = document.getElementById('mobileNav');
+            if (!ham || !overlay) return;
+            ham.addEventListener('click', function() {
+                ham.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            overlay.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    ham.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        })();
+
+        // Sidebar toggle for mobile
+        (function() {
+            var toggle = document.getElementById('sidebarToggle');
+            var sidebar = document.getElementById('sidebar');
+            if (!toggle || !sidebar) return;
+            toggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                toggle.textContent = sidebar.classList.contains('open') ? '\u2715' : '\u2630';
+            });
+            sidebar.querySelectorAll('.sidebar-link').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove('open');
+                        toggle.textContent = '\u2630';
+                    }
+                });
+            });
+        })();
     </script>
 
 </body>

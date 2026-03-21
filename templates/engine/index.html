@@ -4,6 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChaiScript Engine</title>
 
     <!-- FAVICON -->
@@ -1193,7 +1194,7 @@
         }
 
         /* ===============================
-           MOBILE BOTTOM NAV
+           MOBILE BOTTOM NAV (2 tabs: Code / Output)
            =============================== */
         #mobile-nav {
             display: none;
@@ -1201,27 +1202,28 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 54px;
+            height: 52px;
             background: var(--bg-navbar);
-            border-top: 1px solid var(--border-soft);
+            border-top: 2px solid var(--border-strong);
             z-index: 50;
-            justify-content: space-around;
-            align-items: center;
+            justify-content: stretch;
+            align-items: stretch;
         }
 
         .mob-tab {
             flex: 1;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 4px 0;
-            gap: 2px;
             border: none;
             background: none;
+            transition: color 0.2s, background 0.2s;
         }
 
         .mob-tab .mob-icon {
@@ -1231,63 +1233,112 @@
 
         .mob-tab.active {
             color: var(--accent-green);
+            background: var(--bg-editor);
         }
 
         .mob-tab.active .mob-icon {
-            transform: scale(1.15);
+            transform: scale(1.1);
         }
+
+        /* ===============================
+           HAMBURGER MENU
+           =============================== */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 201;
+        }
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 3px;
+            background: var(--accent-green);
+            border-radius: 2px;
+            transition: all 0.3s;
+            margin: 4px 0;
+        }
+        .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .mobile-nav-overlay {
+            display: none; position: fixed; inset: 0;
+            background: var(--bg-page); z-index: 199;
+            flex-direction: column; align-items: center; justify-content: center;
+            gap: 14px; padding: 80px 24px 40px;
+        }
+        .mobile-nav-overlay.active { display: flex; }
+        .mobile-nav-overlay a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem; color: var(--text-main);
+            text-decoration: none; padding: 10px 20px;
+            border-radius: 8px; width: 100%; max-width: 280px; text-align: center;
+            transition: background 0.2s;
+        }
+        .mobile-nav-overlay a:hover { background: var(--bg-editor); color: var(--accent-green); }
+        .mobile-nav-overlay .btn-login { color: var(--accent-green); border: 1.5px solid var(--accent-green); background: transparent; }
+        .mobile-nav-overlay .btn-signup { color: #fff; background: var(--button-bg); border: none; }
+        .mobile-nav-overlay .theme-toggle { margin: 0 auto; }
+        body.no-scroll { overflow: hidden; }
 
         /* ===============================
            RESPONSIVE
            =============================== */
         @media (max-width: 768px) {
 
+            .hamburger { display: block; }
+            .nav-right { display: none; }
+
             #navbar {
                 padding: 0 12px;
+                display: flex;
+                justify-content: space-between;
+                height: 52px;
             }
 
             .brand {
                 font-size: 1rem;
             }
 
-            .nav-right .nav-btn:not(.active) {
-                display: none;
-            }
-
-            .btn-login,
-            .btn-signup {
-                display: none;
-            }
-
             #nav-img {
                 height: 24px;
             }
 
+            /* Runbar: simplified for mobile */
             #runbar {
-                grid-template-columns: auto 1fr auto;
-                padding: 0 8px;
+                top: 52px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 10px;
                 height: 44px;
             }
 
-            #font-slider-wrap {
-                display: none;
+            #font-slider-wrap { display: none; }
+            #exec-timer { display: none; }
+            #brew-counter { display: none; }
+            .shortcut { display: none; }
+
+            .run-center {
+                justify-self: unset;
             }
 
-            #exec-timer {
-                display: none;
+            /* hide the runbar left and right grid children, show buttons inline */
+            #runbar > div:first-child { display: none; }
+            #runbar > div:last-child {
+                display: flex;
+                padding-right: 0;
+                gap: 6px;
             }
+            #runbar > div:last-child .run-btn-top span,
+            #runbar > div:last-child button[title="Save / Load projects"] { display: none; }
 
-            #brew-counter {
-                display: none;
-            }
-
-            .shortcut {
-                display: none;
-            }
-
+            /* App layout: full-height panels stacked, toggled via JS */
             #app {
-                margin-top: 104px;
-                height: calc(100vh - 104px - 54px);
+                margin-top: 96px; /* navbar 52 + runbar 44 */
+                height: calc(100vh - 96px - 52px); /* minus bottom nav */
                 flex-direction: column;
             }
 
@@ -1295,10 +1346,6 @@
                 width: 100%;
                 flex: none;
                 height: 100%;
-            }
-
-            /* show only active mobile panel */
-            .panel {
                 display: none;
             }
 
@@ -1306,16 +1353,50 @@
                 display: flex;
             }
 
+            /* Show right-tab-bar on mobile so users can switch Output/Trace/AST/Graph/Stack */
             #right-tab-bar {
-                display: none;
+                display: flex !important;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
-            #mobile-nav {
-                display: flex;
+            #right-tab-bar .right-tab {
+                font-size: 11px;
+                padding: 5px 10px;
+                white-space: nowrap;
             }
 
-            #perf-monitor {
-                bottom: 64px;
+            /* right-tab-content sizing for mobile */
+            .right-tab-content {
+                height: calc(100vh - 96px - 52px - 38px);
+                max-height: calc(100vh - 96px - 52px - 38px);
+            }
+
+            #mobile-nav { display: flex; }
+            #perf-monitor { display: none; }
+
+            #share-modal-box,
+            #shortcuts-box,
+            #snippet-box,
+            #project-box {
+                width: 95vw;
+                max-width: 95vw;
+            }
+
+            .run-btn-top {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            /* Tab bar on mobile */
+            #tab-bar {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Intro screen sizing */
+            #intro h1 {
+                font-size: 2rem;
             }
         }
 
@@ -1437,7 +1518,27 @@
             <a class="btn-signup" href="/accounts/signup/">Sign up</a>
             {% endif %}
         </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <a href="/">Home</a>
+        <a href="/engine/">Playground</a>
+        <a href="/docs/">Docs</a>
+        <a href="/downloads/">Downloads</a>
+        <a href="#" onclick="event.preventDefault();document.getElementById('snippet-overlay').classList.add('open');closeMobileNav();">☕ Examples</a>
+        <a href="#" onclick="event.preventDefault();document.getElementById('shortcuts-overlay').classList.add('open');closeMobileNav();">⌨ Shortcuts</a>
+        {% if request.user.is_authenticated %}
+        <a href="/engine/profile/">{{ request.user.username }}</a>
+        {% else %}
+        <a class="btn-login" href="/accounts/login/">Log in</a>
+        <a class="btn-signup" href="/accounts/signup/">Sign up</a>
+        {% endif %}
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" style="margin:0 auto;"></div>
+    </div>
 
     <!-- RUN BAR (ADDED) -->
     <div id="runbar">
@@ -1633,25 +1734,13 @@
         </div>
     </div>
 
-    <!-- MOBILE BOTTOM NAV -->
+    <!-- MOBILE BOTTOM NAV (2 tabs) -->
     <div id="mobile-nav">
         <button class="mob-tab active" onclick="switchMobileTab('editor')">
-            <span class="mob-icon">✏️</span>Editor
+            <span class="mob-icon">✏️</span> Code
         </button>
         <button class="mob-tab" onclick="switchMobileTab('output')">
-            <span class="mob-icon">📤</span>Output
-        </button>
-        <button class="mob-tab" onclick="switchMobileTab('trace')">
-            <span class="mob-icon">👣</span>Trace
-        </button>
-        <button class="mob-tab" onclick="switchMobileTab('ast')">
-            <span class="mob-icon">🌳</span>AST
-        </button>
-        <button class="mob-tab" onclick="switchMobileTab('graph')">
-            <span class="mob-icon">📈</span>Graph
-        </button>
-        <button class="mob-tab" onclick="switchMobileTab('stack')">
-            <span class="mob-icon">📚</span>Stack
+            <span class="mob-icon">📤</span> Output
         </button>
     </div>
 
@@ -1764,6 +1853,26 @@
     </script>
 
     <script>
+
+        // ── HAMBURGER MENU ──
+        function closeMobileNav() {
+            document.getElementById('hamburger').classList.remove('active');
+            document.getElementById('mobileNav').classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        }
+        (function() {
+            var ham = document.getElementById('hamburger');
+            var overlay = document.getElementById('mobileNav');
+            if (!ham || !overlay) return;
+            ham.addEventListener('click', function() {
+                ham.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            overlay.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() { closeMobileNav(); });
+            });
+        })();
 
         let executionTrace = [];
         let currentStep = 0;
@@ -2191,33 +2300,29 @@ serveChai(fruits)`
             if (name === "history") loadHistory();
         }
 
-        // ── MOBILE TAB SWITCHING ──
-        const MOB_PANEL_MAP = {
-            editor: 0,   // first .panel
-            output: 1,   // second .panel — rtab-output
-            trace: 1,
-            ast: 1,
-            graph: 1,
-            stack: 1
-        };
-
+        // ── MOBILE TAB SWITCHING (2 tabs: Code / Output) ──
         function switchMobileTab(name) {
             const panels = document.querySelectorAll("#app .panel");
             const tabs = document.querySelectorAll(".mob-tab");
 
             // update bottom nav highlight
-            tabs.forEach((t, i) => {
-                const tabName = ["editor", "output", "trace", "ast", "graph", "stack"][i];
-                t.classList.toggle("active", tabName === name);
-            });
+            tabs.forEach(t => t.classList.remove("active"));
 
             if (name === "editor") {
+                tabs[0].classList.add("active");
                 panels[0].classList.add("mob-active");
                 panels[1].classList.remove("mob-active");
             } else {
+                tabs[1].classList.add("active");
                 panels[0].classList.remove("mob-active");
                 panels[1].classList.add("mob-active");
-                switchRightTab(name);
+                // trigger layout for Monaco/AST/Graph if needed
+                switchRightTab('output');
+            }
+
+            // re-layout Monaco editor when switching back to code
+            if (name === "editor" && window.editor) {
+                setTimeout(function() { window.editor.layout(); }, 50);
             }
         }
 

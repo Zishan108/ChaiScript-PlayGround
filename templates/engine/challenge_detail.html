@@ -352,15 +352,68 @@
             background-color: var(--bg-editor) !important;
         }
 
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            z-index: 201;
+        }
+        .hamburger span {
+            display: block; width: 24px; height: 3px;
+            background: var(--accent-green); border-radius: 2px;
+            transition: all 0.3s; margin: 5px 0;
+        }
+        .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .mobile-nav-overlay {
+            display: none; position: fixed; inset: 0;
+            background: var(--bg-page); z-index: 199;
+            flex-direction: column; align-items: center; justify-content: center;
+            gap: 14px; padding: 80px 24px 40px;
+        }
+        .mobile-nav-overlay.active { display: flex; }
+        .mobile-nav-overlay a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem; color: var(--text-main);
+            text-decoration: none; padding: 12px 24px;
+            border-radius: 8px; width: 100%; max-width: 300px; text-align: center;
+            transition: background 0.2s;
+        }
+        .mobile-nav-overlay a:hover { background: var(--bg-editor); color: var(--accent-green); }
+        body.no-scroll { overflow: hidden; }
+
         @media(max-width:700px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+            nav { padding: 0 16px; }
+
             .layout {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto 1fr;
             }
 
             .left-panel {
-                max-height: 260px;
+                max-height: 40vh;
+                padding: 20px 16px;
             }
+
+            .output-panel {
+                height: 120px;
+                padding: 10px 14px;
+                font-size: 12px;
+            }
+
+            .bottom-bar {
+                padding: 0 12px;
+                flex-wrap: wrap;
+                height: auto;
+                padding: 8px 12px;
+            }
+
+            h1 { font-size: 1.15rem; }
         }
     </style>
 </head>
@@ -388,7 +441,24 @@
             <a class="btn-signup" href="/accounts/signup/" id="signup-btn">Sign up</a>
             {% endif %}
         </div>
+
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+
+    <div class="mobile-nav-overlay" id="mobileNav">
+        <a href="/engine/">Playground</a>
+        <a href="/engine/challenges/">Challenges</a>
+        <a href="/engine/leaderboard/">Leaderboard</a>
+        {% if request.user.is_authenticated %}
+        <a href="/engine/profile/">{{ request.user.username }}</a>
+        {% else %}
+        <a href="/accounts/login/">Log in</a>
+        <a href="/accounts/signup/">Sign up</a>
+        {% endif %}
+        <div class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" style="margin:0 auto;"></div>
+    </div>
 
     <div class="layout">
         <div class="left-panel">
@@ -718,6 +788,25 @@ sip`,
             const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
             return v ? v[2] : null;
         }
+
+        // ── HAMBURGER ──
+        (function() {
+            var ham = document.getElementById('hamburger');
+            var overlay = document.getElementById('mobileNav');
+            if (!ham || !overlay) return;
+            ham.addEventListener('click', function() {
+                ham.classList.toggle('active');
+                overlay.classList.toggle('active');
+                document.body.classList.toggle('no-scroll');
+            });
+            overlay.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    ham.classList.remove('active');
+                    overlay.classList.remove('active');
+                    document.body.classList.remove('no-scroll');
+                });
+            });
+        })();
     </script>
 </body>
 
