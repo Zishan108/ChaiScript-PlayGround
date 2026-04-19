@@ -1702,17 +1702,22 @@
             <!-- GRAPH TAB -->
             <div id="rtab-graph" class="right-tab-content">
                 <div id="var-graph-wrap" style="margin-top:0;">
-                    <strong>📈 Variable Graph</strong>
-                    <div id="var-graph-hint">Shows how numeric variables change at each execution step. Click a chip to
-                        toggle.</div>
-                    <div id="var-graph-controls" style="color:var(--text-muted); font-size:12px; margin-top:8px;">
-                        Run code to see variable graph
-                    </div>
-                    <svg id="var-graph-svg"></svg>
-                    <div id="var-graph-legend"></div>
-                    <div id="var-graph-step-info"
-                        style="font-size:11px; color:var(--accent-green); margin-top:4px; min-height:16px;"></div>
+                <strong>📈 Variable Graph</strong>
+                <div id="var-graph-hint">Shows how numeric variables change at each execution step. Click a chip to
+                    toggle.</div>
+                <div id="var-graph-controls" style="color:var(--text-muted); font-size:12px; margin-top:8px;">
+                    Run code to see variable graph
                 </div>
+                <svg id="var-graph-svg"></svg>
+                <div id="var-graph-legend"></div>
+                <div id="var-graph-step-info"
+                    style="font-size:11px; color:var(--accent-green); margin-top:4px; min-height:16px;"></div>
+                <div id="var-graph-nav" style="display:none; gap:8px; margin-top:10px; align-items:center;">
+                    <button onclick="prevStep()" style="font-family:'JetBrains Mono',monospace; font-size:12px; padding:4px 12px; border-radius:6px; border:1px solid var(--border-strong); background:var(--bg-editor); color:var(--text-main); cursor:pointer;">⏮ Prev</button>
+                    <span id="var-graph-step-counter" style="font-size:11px; color:var(--text-muted); font-family:'JetBrains Mono',monospace;"></span>
+                    <button onclick="nextStep()" style="font-family:'JetBrains Mono',monospace; font-size:12px; padding:4px 12px; border-radius:6px; border:1px solid var(--border-strong); background:var(--bg-editor); color:var(--text-main); cursor:pointer;">Next ⏭</button>
+                </div>
+            </div>
             </div>
 
             <!-- CALL STACK TAB -->
@@ -2739,6 +2744,14 @@ serveChai(fruits)`
                 stepInfo.textContent = activeVals.length
                     ? `▶ Step ${currentStep + 1}:  ${activeVals.join("   |   ")}`
                     : "";
+            }
+
+            // show nav buttons and update counter
+            const nav = document.getElementById("var-graph-nav");
+            const counter = document.getElementById("var-graph-step-counter");
+            if (nav) {
+                nav.style.display = "flex";
+                counter.textContent = `Step ${currentStep + 1} / ${executionTrace.length}`;
             }
         }
 
